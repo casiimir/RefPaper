@@ -1,23 +1,32 @@
 "use client";
 
-// Landing page
-import { Authenticated, Unauthenticated } from "convex/react";
-import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { Unauthenticated } from "convex/react";
+import { SignInButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { isSignedIn, user, isLoaded } = useUser();
-
   return (
     <>
-      <Authenticated>
-        <UserButton />
-        <h1>
-          Welcome {user?.firstName}, user number: {}
-        </h1>
-      </Authenticated>
-      <Unauthenticated>
-        <SignInButton />
-      </Unauthenticated>
+      <div className="flex items-center justify-center py-20">
+        <div className="text-center max-w-2xl mx-auto px-4">
+          <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            RefPaper
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+            Turn any documentation into an AI knowledge assistant in 30 seconds.
+            <br />
+            Boost support, reduce costs, and scale knowledge.
+          </p>
+          <Unauthenticated>
+            <SignInButton>
+              <Button size="lg" className="text-lg px-8 py-6 font-semibold">
+                Start Free
+              </Button>
+            </SignInButton>
+          </Unauthenticated>
+        </div>
+      </div>
     </>
   );
 }
