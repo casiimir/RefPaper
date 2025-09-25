@@ -1,21 +1,19 @@
 import { Pinecone } from "@pinecone-database/pinecone";
 import OpenAI from "openai";
-import crypto from "crypto";
 import {
-  PineconeConfig,
-  ProcessedDocument,
+  Document,
   DocumentChunk,
-  PineconeVector,
-  SearchMatch,
+  DocumentVector,
+  SearchResult,
   SearchOptions,
   ChatMessage,
   ChatOptions,
   ChatResponse,
   StreamChatResponse,
-  AssistantResult,
-  IndexStats,
+  AssistantCreationResult,
   ProgressCallback,
-} from "@/types/pinecone";
+} from "@/types/document";
+import { PineconeConfig, IndexStats } from "@/types/pinecone";
 
 // Configuration
 const CONFIG: PineconeConfig = {
@@ -29,7 +27,7 @@ const CONFIG: PineconeConfig = {
   CHUNK_OVERLAP: 200,
   MIN_CHUNK_SIZE: 100,
   TOP_K_SEARCH: 10,
-  MIN_SCORE_THRESHOLD: 0.6,
+  MIN_SCORE_THRESHOLD: 0.5,
   MAX_CONCURRENT_EMBEDDINGS: 20,
   MAX_CONCURRENT_UPSERTS: 100,
 };
@@ -158,7 +156,7 @@ const smartChunk = (
   return chunks;
 };
 
-const processDocuments = (documents: ProcessedDocument[]): DocumentChunk[] => {
+const processDocuments = (documents: Document[]): DocumentChunk[] => {
   const allChunks: DocumentChunk[] = [];
 
   documents.forEach((doc, docIndex) => {
@@ -223,14 +221,14 @@ const createQueryEmbedding = async (query: string): Promise<number[]> => {
 // Pinecone operations
 export const generateNamespace = (prefix: string = "assistant"): string => {
   const timestamp = Date.now();
-  const randomId = crypto.randomBytes(4).toString("hex");
+  const randomId = Math.random().toString(36).substring(2, 8);
   return `${prefix}_${timestamp}_${randomId}`;
 };
 
 const upsertVectors = async (
   index: any,
   namespace: string,
-  vectors: PineconeVector[],
+  vectors: DocumentVector[],
   callbacks?: ProgressCallback
 ): Promise<void> => {
   const batchSize = CONFIG.MAX_CONCURRENT_UPSERTS;
@@ -246,10 +244,10 @@ const upsertVectors = async (
 
 // High-level API functions
 export const createAssistant = async (
-  documents: ProcessedDocument[],
+  documents: Document[],
   assistantName: string = "assistant",
   callbacks?: ProgressCallback
-): Promise<AssistantResult> => {
+): Promise<AssistantCreationResult> => {
   const startTime = Date.now();
   const index = await getOrCreateIndex();
   const namespace = generateNamespace(assistantName);
@@ -266,7 +264,7 @@ export const createAssistant = async (
   callbacks?.onProgress?.("processing", 2, 4);
 
   // Prepare vectors
-  const vectors: PineconeVector[] = chunks.map((chunk, idx) => ({
+  const vectors: DocumentVector[] = chunks.map((chunk, idx) => ({
     id: chunk.id,
     values: embeddings[idx],
     metadata: chunk.metadata,
@@ -290,7 +288,7 @@ export const searchDocuments = async (
   query: string,
   namespace: string,
   options: SearchOptions = {}
-): Promise<SearchMatch[]> => {
+): Promise<SearchResult[]> => {
   const {
     topK = CONFIG.TOP_K_SEARCH,
     minScore = CONFIG.MIN_SCORE_THRESHOLD,
@@ -324,7 +322,7 @@ export const searchDocuments = async (
   return relevantMatches.map(formatMatch);
 };
 
-const formatMatch = (match: any): SearchMatch => ({
+const formatMatch = (match: any): SearchResult => ({
   id: match.id,
   score: match.score,
   content: match.metadata.fullContent || match.metadata.contentPreview,
@@ -335,7 +333,7 @@ const formatMatch = (match: any): SearchMatch => ({
   },
 });
 
-const buildContext = (searchResults: SearchMatch[]): string =>
+const buildContext = (searchResults: SearchResult[]): string =>
   searchResults
     .map((result, idx) => {
       const relevance = (result.score * 100).toFixed(1);

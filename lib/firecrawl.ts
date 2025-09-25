@@ -1,7 +1,7 @@
 import FirecrawlApp from "@mendable/firecrawl-js";
+import { Document } from "@/types/document";
 import {
   CrawlConfig,
-  ProcessedPage,
   RawPage,
   CrawlResponse,
   CrawlStatus,
@@ -35,7 +35,7 @@ const DEFAULT_CONFIG: CrawlConfig = {
 export async function crawlDocumentation(
   docUrl: string,
   options: Partial<CrawlConfig> = {}
-): Promise<ProcessedPage[]> {
+): Promise<Document[]> {
   // Initialize Firecrawl client
   const firecrawl = new FirecrawlApp({
     apiKey: process.env.FIRECRAWL_API_KEY,
@@ -113,7 +113,7 @@ async function pollForResults(
 /**
  * Process and clean crawled pages
  */
-function processPages(pages: RawPage[]): ProcessedPage[] {
+function processPages(pages: RawPage[]): Document[] {
   return pages
     .filter((page) => {
       // Filter out empty or very short pages
