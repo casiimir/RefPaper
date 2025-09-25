@@ -19,22 +19,17 @@ export default defineSchema({
     totalPages: v.optional(v.number()),
     processedPages: v.optional(v.number()),
     isPublic: v.optional(v.boolean()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-  }).index("by_user", ["userId"]),
-
-  chats: defineTable({
-    assistantId: v.id("assistants"),
-    userId: v.string(),
-    title: v.optional(v.string()),
+    publicShareId: v.optional(v.string()), // For sharing: /assistant/abc123
+    lastCrawledAt: v.optional(v.number()), // For re-crawl functionality
     createdAt: v.number(),
     updatedAt: v.number(),
   })
-    .index("by_assistant", ["assistantId"])
-    .index("by_user", ["userId"]),
+    .index("by_user", ["userId"])
+    .index("by_public_share", ["publicShareId"])
+    .index("by_status", ["status"]),
 
   messages: defineTable({
-    chatId: v.id("chats"),
+    assistantId: v.id("assistants"),
     role: v.union(v.literal("user"), v.literal("assistant")),
     content: v.string(),
     sources: v.optional(
@@ -42,27 +37,24 @@ export default defineSchema({
         v.object({
           url: v.string(),
           title: v.string(),
-          content: v.string(),
-          score: v.optional(v.number()),
+          preview: v.string(),
         })
       )
     ),
     createdAt: v.number(),
-  }).index("by_chat", ["chatId"]),
+  })
+    .index("by_assistant", ["assistantId"])
+    .index("by_assistant_date", ["assistantId", "createdAt"]),
 
-  crawlJobs: defineTable({
-    assistantId: v.id("assistants"),
-    firecrawlJobId: v.string(),
-    status: v.union(
-      v.literal("active"),
-      v.literal("paused"),
-      v.literal("waiting"),
-      v.literal("completed"),
-      v.literal("failed")
-    ),
-    totalPages: v.optional(v.number()),
-    processedPages: v.optional(v.number()),
+  userUsage: defineTable({
+    userId: v.string(),
+    plan: v.union(v.literal("free"), v.literal("pro")),
+    assistantsCount: v.number(),
+    questionsThisMonth: v.number(),
+    planResetDate: v.number(), // Monthly reset for question count
     createdAt: v.number(),
     updatedAt: v.number(),
-  }).index("by_assistant", ["assistantId"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_plan", ["plan"]),
 });
