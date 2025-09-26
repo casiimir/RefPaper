@@ -2,6 +2,7 @@
 
 import { User, Bot, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MarkdownRenderer } from "./MarkdownRenderer";
 
 type Message = {
   _id: string;
@@ -46,9 +47,13 @@ export function MessageBubble({ message }: MessageBubbleProps) {
               : "bg-muted text-foreground"
           )}
         >
-          <p className="whitespace-pre-wrap leading-relaxed">
-            {message.content}
-          </p>
+          {isUser ? (
+            <p className="whitespace-pre-wrap leading-relaxed">
+              {message.content}
+            </p>
+          ) : (
+            <MarkdownRenderer content={message.content} />
+          )}
         </div>
 
         {/* Sources */}

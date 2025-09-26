@@ -7,7 +7,8 @@ import { Id } from "@/convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageBubble } from "./MessageBubble";
-import { Send, Loader2, Menu } from "lucide-react";
+import { Send, Loader2, Crown, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type Assistant = {
   _id: string;
@@ -23,6 +24,11 @@ interface ChatInterfaceProps {
 export function ChatInterface({ assistant }: ChatInterfaceProps) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [rateLimitError, setRateLimitError] = useState<{
+    message: string;
+    questionsUsed: number;
+    limit: number;
+  } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const messages = useQuery(api.messages.getMessages, {
@@ -48,6 +54,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
     const message = input.trim();
     setInput("");
     setIsLoading(true);
+    setRateLimitError(null); // Clear any previous error
 
     try {
       const response = await fetch(`/api/assistant/${assistant._id}/chat`, {
@@ -55,6 +62,17 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
       });
+
+      if (response.status === 429) {
+        // Rate limit reached
+        const errorData = await response.json();
+        setRateLimitError({
+          message: errorData.message,
+          questionsUsed: errorData.questionsUsed,
+          limit: errorData.limit,
+        });
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Failed to send message");
@@ -112,9 +130,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         {messages.length === 0 ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center max-w-md">
-              <h3 className="text-lg font-medium mb-2">
-                Start a conversation
-              </h3>
+              <h3 className="text-lg font-medium mb-2">Start a conversation</h3>
               <p className="text-muted-foreground mb-4">
                 Ask me anything about the documentation from{" "}
                 <span className="font-medium">
@@ -134,13 +150,42 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         ) : (
           <>
             {messages.map((message) => (
-              <MessageBubble
-                key={message._id}
-                message={message}
-              />
+              <MessageBubble key={message._id} message={message} />
             ))}
             <div ref={messagesEndRef} />
           </>
+        )}
+
+        {/* Rate limit error */}
+        {rateLimitError && (
+          <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
+            <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+            <AlertDescription className="text-amber-800 dark:text-amber-200">
+              <div className="space-y-2">
+                <p className="font-medium">Monthly limit reached!</p>
+                <p className="text-sm">
+                  You've used {rateLimitError.questionsUsed} of{" "}
+                  {rateLimitError.limit} free questions this month.
+                </p>
+                <div className="flex items-center gap-2 pt-2">
+                  <Button
+                    size="sm"
+                    className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
+                    onClick={() => {
+                      // TODO: Implement upgrade flow
+                      window.open("/billing", "_blank");
+                    }}
+                  >
+                    <Crown className="h-4 w-4 mr-1" />
+                    Upgrade to Pro
+                  </Button>
+                  <span className="text-xs text-amber-700 dark:text-amber-300">
+                    Get unlimited questions
+                  </span>
+                </div>
+              </div>
+            </AlertDescription>
+          </Alert>
         )}
       </div>
 
@@ -150,13 +195,17 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask a question about the documentation..."
-            disabled={isLoading}
+            placeholder={
+              rateLimitError
+                ? "Monthly limit reached - upgrade to Pro for unlimited questions"
+                : "Ask a question about the documentation..."
+            }
+            disabled={isLoading || !!rateLimitError}
             className="flex-1"
           />
           <Button
             type="submit"
-            disabled={!input.trim() || isLoading}
+            disabled={!input.trim() || isLoading || !!rateLimitError}
             size="sm"
           >
             {isLoading ? (
