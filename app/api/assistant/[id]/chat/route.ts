@@ -1,20 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
-import { ConvexHttpClient } from "convex/browser";
 import { api } from "@/convex/_generated/api";
 import { queryAssistant } from "@/lib/pinecone";
-
-// Helper to create authenticated Convex client
-const createAuthenticatedConvexClient = async (req: NextRequest) => {
-  const { getToken } = await getAuth(req);
-  const token = await getToken({ template: "convex" });
-
-  const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-  if (token) {
-    convex.setAuth(token);
-  }
-  return convex;
-};
+import { createAuthenticatedConvexClient } from "@/lib/convex-client";
 
 export async function POST(
   req: NextRequest,
@@ -60,7 +48,7 @@ export async function POST(
 
     // Check usage limits
     const usage = await convex.query(api.usage.getUserUsage, {});
-    const limit = usage.plan === "free" ? 10 : 500;
+    const limit = usage.limits.questionsPerMonth;
 
     if (usage.questionsThisMonth >= limit) {
       return NextResponse.json(
@@ -88,11 +76,13 @@ export async function POST(
     }));
 
     try {
-      // Query assistant
+      // Query assistant with Convex client for full content retrieval
       const response = await queryAssistant(
         assistant.pineconeNamespace,
         message,
-        conversationHistory
+        conversationHistory,
+        {},
+        convex
       );
 
       if ("answer" in response && response.answer) {
@@ -134,10 +124,7 @@ export async function POST(
   } catch (error) {
     console.error("Failed to send message:", error);
     return NextResponse.json(
-      {
-        error: "Failed to send message",
-        details: error instanceof Error ? error.message : String(error),
-      },
+      { error: "Failed to send message" },
       { status: 500 }
     );
   }

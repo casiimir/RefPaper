@@ -1,20 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
-import { ConvexHttpClient } from "convex/browser";
 import { api } from "@/convex/_generated/api";
-import { createAssistantFromUrl } from "@/lib/document-processor";
-
-// Helper to create authenticated Convex client
-const createAuthenticatedConvexClient = async (req: NextRequest) => {
-  const { getToken } = await getAuth(req);
-  const token = await getToken({ template: "convex" });
-
-  const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-  if (token) {
-    convex.setAuth(token);
-  }
-  return convex;
-};
+import { createAuthenticatedConvexClient } from "@/lib/convex-client";
 
 export async function POST(req: NextRequest) {
   try {
@@ -45,10 +32,12 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    // Start background processing with auth token
-    const { getToken } = await getAuth(req);
-    const authToken = await getToken({ template: "convex" });
-    processAssistantCreation(assistantId, docsUrl, name, authToken);
+    // Trigger Convex Action for background processing (20+ minute timeout)
+    await convex.mutation(api.assistants.triggerAssistantCreation, {
+      assistantId,
+      docsUrl,
+      name,
+    });
 
     return NextResponse.json({
       success: true,
@@ -58,67 +47,8 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Failed to create assistant:", error);
     return NextResponse.json(
-      {
-        error: "Failed to create assistant",
-        details: error instanceof Error ? error.message : String(error),
-      },
+      { error: "Failed to create assistant" },
       { status: 500 }
     );
-  }
-}
-
-// Background processing function
-async function processAssistantCreation(
-  assistantId: any,
-  docsUrl: string,
-  name: string,
-  authToken: string | null
-) {
-  // Create authenticated Convex client for background processing
-  const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-  if (authToken) {
-    convex.setAuth(authToken);
-  }
-
-  try {
-    // Update status to crawling
-    await convex.mutation(api.assistants.updateAssistantStatus, {
-      id: assistantId,
-      status: "crawling",
-    });
-
-    // Create assistant with progress callbacks
-    const result = await createAssistantFromUrl(docsUrl, name, {
-      onProgress: async (stage: string, completed: number, total: number) => {
-        try {
-          if (stage === "processing") {
-            await convex.mutation(api.assistants.updateAssistantStatus, {
-              id: assistantId,
-              status: "processing",
-              totalPages: total,
-              processedPages: completed,
-            });
-          }
-        } catch (error) {
-          console.error('Failed to update progress:', error);
-        }
-      },
-    });
-
-    // Update final status
-    await convex.mutation(api.assistants.updateAssistantStatus, {
-      id: assistantId,
-      status: "ready",
-      pineconeNamespace: result.namespace,
-      totalPages: result.documentsCount,
-      processedPages: result.documentsCount,
-    });
-  } catch (error) {
-    // Update status to error
-    await convex.mutation(api.assistants.updateAssistantStatus, {
-      id: assistantId,
-      status: "error",
-      errorMessage: error instanceof Error ? error.message : String(error),
-    });
   }
 }
