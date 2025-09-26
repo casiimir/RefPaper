@@ -108,7 +108,7 @@ export const deletePineconeNamespace = internalAction({
   args: {
     namespace: v.string(),
   },
-  handler: async (ctx, { namespace }) => {
+  handler: async (_, { namespace }) => {
     try {
       await deleteNamespace(namespace);
     } catch (error) {

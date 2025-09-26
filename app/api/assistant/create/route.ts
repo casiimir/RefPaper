@@ -27,12 +27,28 @@ export async function POST(req: NextRequest) {
     const assistants = await convex.query(api.assistants.getAssistants, {});
 
     if (!hasPro) {
+      // Free plan: Check monthly question limit first
+      const questionsThisMonth = await convex.query(api.usage.getCurrentMonthUsage, {});
+      if (questionsThisMonth >= 20) {
+        return NextResponse.json(
+          {
+            error: "Monthly question limit reached. Upgrade to Pro for unlimited questions.",
+            upgradeRequired: true,
+            type: "question_limit",
+            questionsUsed: questionsThisMonth,
+            limit: 20
+          },
+          { status: 403 }
+        );
+      }
+
       // Free plan: 3 assistants max
       if (assistants.length >= 3) {
         return NextResponse.json(
           {
             error: "Free plan limited to 3 assistants. Upgrade to Pro for 20 assistants.",
             upgradeRequired: true,
+            type: "assistant_limit",
           },
           { status: 403 }
         );
@@ -44,6 +60,7 @@ export async function POST(req: NextRequest) {
           {
             error: "Pro plan limited to 20 assistants total.",
             upgradeRequired: false,
+            type: "assistant_limit",
           },
           { status: 403 }
         );

@@ -28,6 +28,7 @@ import { Progress } from "@/components/ui/progress";
 import { api } from "@/convex/_generated/api";
 import { CreateAssistantModal } from "@/components/create-assistant-modal";
 import { AssistantSettingsModal } from "@/components/assistant-settings-modal";
+import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 
 type Assistant = {
   _id: string;
@@ -108,9 +109,33 @@ export default function Dashboard() {
     // Pro users can create unlimited assistants
     if (isPro) return true;
 
-    // Free users: check if under limit (3 assistants max)
+    // Free users: check if under assistant limit (3 assistants max)
     const currentCount = assistants?.length || 0;
-    return currentCount < 3;
+    if (currentCount >= 3) return false;
+
+    // Free users: check if under monthly question limit (20 questions max)
+    const questionsUsed = questionsThisMonth || 0;
+    if (questionsUsed >= 20) return false;
+
+    return true;
+  };
+
+  const getCreateAssistantBlockReason = () => {
+    if (!isLoaded || !isSignedIn) return "";
+    if (isPro) return "";
+
+    const currentCount = assistants?.length || 0;
+    const questionsUsed = questionsThisMonth || 0;
+
+    if (currentCount >= 3) {
+      return "Free plan limited to 3 assistants. Upgrade to Pro for 20 assistants.";
+    }
+
+    if (questionsUsed >= 20) {
+      return "Monthly question limit reached. Upgrade to Pro for unlimited questions.";
+    }
+
+    return "";
   };
 
   // Show loading while auth is loading or while data is loading
@@ -141,16 +166,26 @@ export default function Dashboard() {
             onClick={() => setShowCreateModal(true)}
             disabled={!canCreateAssistant()}
             className="font-semibold"
-            title={
-              !canCreateAssistant() && !isPro && (assistants?.length || 0) >= 3
-                ? "Free plan limited to 3 assistants. Upgrade to Pro for 20 assistants."
-                : ""
-            }
+            title={getCreateAssistantBlockReason()}
           >
             <Plus className="w-4 h-4 mr-2" />
             Create Assistant
           </Button>
         </div>
+
+        {/* Show upgrade prompt when free user reaches question limit */}
+        {!isPro && (questionsThisMonth || 0) >= 20 && (
+          <UpgradePrompt
+            title="Monthly question limit reached!"
+            description="You've used all 20 free questions this month. You can no longer create new assistants or ask questions until you upgrade."
+            feature="questions"
+            currentUsage={{
+              used: questionsThisMonth || 0,
+              limit: 20,
+            }}
+            className="mb-8"
+          />
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
@@ -342,6 +377,7 @@ export default function Dashboard() {
         open={showCreateModal}
         onOpenChange={setShowCreateModal}
         userPlan={isPro ? "pro" : "free"}
+        questionsThisMonth={questionsThisMonth}
       />
 
       <AssistantSettingsModal

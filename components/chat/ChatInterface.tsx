@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./TypingIndicator";
-import { Send, Loader2, Crown, AlertCircle, User } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Send, Loader2, User } from "lucide-react";
+import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 
 type Assistant = {
   _id: string;
@@ -195,34 +195,16 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
 
         {/* Rate limit error */}
         {rateLimitError && (
-          <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
-            <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-            <AlertDescription className="text-amber-800 dark:text-amber-200">
-              <div className="space-y-2">
-                <p className="font-medium">Monthly limit reached!</p>
-                <p className="text-sm">
-                  You've used {rateLimitError.questionsUsed} of{" "}
-                  {rateLimitError.limit} free questions this month.
-                </p>
-                <div className="flex items-center gap-2 pt-2">
-                  <Button
-                    size="sm"
-                    className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
-                    onClick={() => {
-                      // TODO: Implement upgrade flow
-                      window.open("/billing", "_blank");
-                    }}
-                  >
-                    <Crown className="h-4 w-4 mr-1" />
-                    Upgrade to Pro
-                  </Button>
-                  <span className="text-xs text-amber-700 dark:text-amber-300">
-                    Get unlimited questions
-                  </span>
-                </div>
-              </div>
-            </AlertDescription>
-          </Alert>
+          <UpgradePrompt
+            title="Monthly limit reached!"
+            description={rateLimitError.message}
+            feature="questions"
+            currentUsage={{
+              used: rateLimitError.questionsUsed,
+              limit: rateLimitError.limit,
+            }}
+            onUpgrade={() => window.open('/pricing', '_blank')}
+          />
         )}
       </div>
 

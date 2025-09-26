@@ -14,21 +14,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Lightbulb } from "lucide-react";
+import { Loader2, Lightbulb, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 
 interface CreateAssistantModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   userPlan?: "free" | "pro";
+  questionsThisMonth?: number;
 }
 
 export function CreateAssistantModal({
   open,
   onOpenChange,
   userPlan = "free",
+  questionsThisMonth = 0,
 }: CreateAssistantModalProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState<{
+    message: string;
+    type?: string;
+    questionsUsed?: number;
+    limit?: number;
+  } | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     docsUrl: "",
@@ -44,6 +53,7 @@ export function CreateAssistantModal({
     }
 
     setIsLoading(true);
+    setServerError(null); // Clear any previous error
 
     try {
       const response = await fetch("/api/assistant/create", {
@@ -55,8 +65,20 @@ export function CreateAssistantModal({
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create assistant");
+        const errorData = await response.json();
+
+        // Handle specific error types from API
+        if (response.status === 403 && errorData.upgradeRequired) {
+          setServerError({
+            message: errorData.error,
+            type: errorData.type,
+            questionsUsed: errorData.questionsUsed,
+            limit: errorData.limit,
+          });
+          return;
+        }
+
+        throw new Error(errorData.error || "Failed to create assistant");
       }
 
       await response.json();
@@ -64,12 +86,16 @@ export function CreateAssistantModal({
       // Close modal and reset form
       onOpenChange(false);
       setFormData({ name: "", docsUrl: "", description: "" });
+      setServerError(null);
 
       // Refresh the page to show new assistant
       router.refresh();
     } catch (error) {
       console.error("Error creating assistant:", error);
-      // Here you could show a toast notification
+      // Generic error for unexpected issues
+      setServerError({
+        message: error instanceof Error ? error.message : "Failed to create assistant",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -99,8 +125,19 @@ export function CreateAssistantModal({
   const shouldShowSuggestion = formData.docsUrl && isSpecificPage(formData.docsUrl);
   const suggestedUrl = shouldShowSuggestion ? getRootDomain(formData.docsUrl) : '';
 
+  // Check if user can create assistants (not over question limit)
+  const canCreateAssistant = userPlan === "pro" || (questionsThisMonth < 20 && !serverError);
+
+  const handleClose = (open: boolean) => {
+    if (!open) {
+      setServerError(null);
+      setFormData({ name: "", docsUrl: "", description: "" });
+    }
+    onOpenChange(open);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create New Assistant</DialogTitle>
@@ -110,7 +147,55 @@ export function CreateAssistantModal({
           </DialogDescription>
         </DialogHeader>
 
-        {userPlan === "free" && (
+        {/* Server error from API (takes priority) */}
+        {serverError && serverError.type === "question_limit" && (
+          <UpgradePrompt
+            title="Monthly question limit reached!"
+            description={serverError.message}
+            feature="questions"
+            currentUsage={{
+              used: serverError.questionsUsed || questionsThisMonth,
+              limit: serverError.limit || 20,
+            }}
+            className="mb-4"
+          />
+        )}
+
+        {/* Assistant limit error */}
+        {serverError && serverError.type === "assistant_limit" && (
+          <UpgradePrompt
+            title="Assistant limit reached!"
+            description={serverError.message}
+            feature="assistants"
+            className="mb-4"
+          />
+        )}
+
+        {/* Generic server error */}
+        {serverError && !serverError.type && (
+          <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950 mb-4">
+            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+            <AlertDescription className="text-red-800 dark:text-red-200">
+              {serverError.message}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Frontend preventive check (when no server error) */}
+        {!serverError && userPlan === "free" && questionsThisMonth >= 20 && (
+          <UpgradePrompt
+            title="Monthly question limit reached!"
+            description="You need to upgrade to Pro to create new assistants."
+            feature="questions"
+            currentUsage={{
+              used: questionsThisMonth,
+              limit: 20,
+            }}
+            className="mb-4"
+          />
+        )}
+
+        {userPlan === "free" && questionsThisMonth < 20 && (
           <Alert className="mb-4">
             <Lightbulb className="h-4 w-4" />
             <AlertDescription>
@@ -135,7 +220,7 @@ export function CreateAssistantModal({
                 placeholder="e.g., React Docs Assistant"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                disabled={isLoading}
+                disabled={isLoading || !canCreateAssistant}
                 required
               />
             </div>
@@ -148,7 +233,7 @@ export function CreateAssistantModal({
                 placeholder="https://docs.example.com"
                 value={formData.docsUrl}
                 onChange={(e) => handleInputChange("docsUrl", e.target.value)}
-                disabled={isLoading}
+                disabled={isLoading || !canCreateAssistant}
                 required
               />
               <p className="text-xs text-muted-foreground">
@@ -187,7 +272,7 @@ export function CreateAssistantModal({
                 placeholder="Describe what this assistant helps with..."
                 value={formData.description}
                 onChange={(e) => handleInputChange("description", e.target.value)}
-                disabled={isLoading}
+                disabled={isLoading || !canCreateAssistant}
                 rows={3}
               />
             </div>
@@ -205,7 +290,7 @@ export function CreateAssistantModal({
             <Button
               type="submit"
               disabled={
-                isLoading || !formData.name.trim() || !formData.docsUrl.trim()
+                isLoading || !formData.name.trim() || !formData.docsUrl.trim() || !canCreateAssistant
               }
             >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

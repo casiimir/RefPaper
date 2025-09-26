@@ -114,15 +114,13 @@ export function AssistantSettingsModal({
     onOpenChange(false);
   };
 
-  if (!assistant) return null;
-
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={open && !!assistant} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Assistant Settings</DialogTitle>
           <DialogDescription>
-            Manage settings for "{assistant.name}"
+            Manage settings for "{assistant?.name || ''}"
           </DialogDescription>
         </DialogHeader>
 
@@ -143,7 +141,7 @@ export function AssistantSettingsModal({
                     <li>• All processed documents and embeddings</li>
                   </ul>
                   <div className="text-sm font-medium mt-3">
-                    Assistant: <span className="font-normal">"{assistant.name}"</span>
+                    Assistant: <span className="font-normal">"{assistant?.name || ''}"</span>
                   </div>
                 </div>
               </AlertDescription>
@@ -180,7 +178,7 @@ export function AssistantSettingsModal({
               <div className="grid gap-2">
                 <Label className="text-muted-foreground">Documentation URL</Label>
                 <div className="px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground">
-                  {assistant.docsUrl}
+                  {assistant?.docsUrl || ''}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   URL cannot be changed after creation
