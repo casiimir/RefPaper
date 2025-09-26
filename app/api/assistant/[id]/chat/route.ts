@@ -50,8 +50,25 @@ export async function POST(
     const hasPro = has({ plan: "pro" });
 
     if (!hasPro) {
-      // Free users have 20 questions/month limit enforced by Clerk billing
-      // No manual tracking needed - Clerk handles subscription limits
+      // Check if free user has reached their monthly limit
+      const questionsThisMonth = await convex.query(api.usage.getCurrentMonthUsage, {});
+
+      if (questionsThisMonth >= 20) {
+        return NextResponse.json(
+          {
+            error: "Monthly question limit reached",
+            message: "You've reached your limit of 20 questions per month. Upgrade to Pro for unlimited questions.",
+            questionsUsed: questionsThisMonth,
+            limit: 20
+          },
+          { status: 429 }
+        );
+      }
+    }
+
+    // Increment usage counter (for billing tracking)
+    if (!hasPro) {
+      await convex.mutation(api.usage.incrementUsage, {});
     }
 
     // Add user message

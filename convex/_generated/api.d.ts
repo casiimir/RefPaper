@@ -17,6 +17,7 @@ import type * as assistantActions from "../assistantActions.js";
 import type * as assistants from "../assistants.js";
 import type * as documents from "../documents.js";
 import type * as messages from "../messages.js";
+import type * as usage from "../usage.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   assistants: typeof assistants;
   documents: typeof documents;
   messages: typeof messages;
+  usage: typeof usage;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

@@ -54,4 +54,14 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_assistant", ["assistantId"]),
 
+  usage: defineTable({
+    userId: v.string(),
+    month: v.string(), // "2025-01" format
+    questionsUsed: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user_month", ["userId", "month"])
+    .index("by_user", ["userId"]),
+
 });

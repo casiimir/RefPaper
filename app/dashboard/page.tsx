@@ -37,6 +37,10 @@ export default function Dashboard() {
     api.assistants.getAssistants,
     isLoaded && isSignedIn ? {} : "skip"
   );
+  const questionsThisMonth = useQuery(
+    api.usage.getCurrentMonthUsage,
+    isLoaded && isSignedIn ? {} : "skip"
+  );
   const isPro = has ? has({ plan: "pro" }) : false;
 
   const getStatusIcon = (status: string) => {
@@ -87,9 +91,14 @@ export default function Dashboard() {
   };
 
   const canCreateAssistant = () => {
+    if (!isLoaded || !isSignedIn) return false;
+
     // Pro users can create unlimited assistants
-    // Free users will get limited by the API route
-    return isLoaded && isSignedIn;
+    if (isPro) return true;
+
+    // Free users: check if under limit (3 assistants max)
+    const currentCount = assistants?.length || 0;
+    return currentCount < 3;
   };
 
   // Show loading while auth is loading or while data is loading
@@ -120,6 +129,11 @@ export default function Dashboard() {
             onClick={() => setShowCreateModal(true)}
             disabled={!canCreateAssistant()}
             className="font-semibold"
+            title={
+              !canCreateAssistant() && !isPro && (assistants?.length || 0) >= 3
+                ? "Free plan limited to 3 assistants. Upgrade to Pro for 20 assistants."
+                : ""
+            }
           >
             <Plus className="w-4 h-4 mr-2" />
             Create Assistant
@@ -171,14 +185,14 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                0
+                {questionsThisMonth || 0}
                 <span className="text-sm font-normal text-muted-foreground ml-1">
                   / {isPro ? "∞" : "20"}
                 </span>
               </div>
               {!isPro && (
                 <Progress
-                  value={0}
+                  value={((questionsThisMonth || 0) / 20) * 100}
                   className="mt-2 h-1"
                 />
               )}
