@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useQuery } from "convex/react";
 import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 import {
   Plus,
   Settings,
@@ -275,15 +276,28 @@ export default function Dashboard() {
                 </CardContent>
 
                 <CardFooter className="gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={assistant.status !== "ready"}
-                    className="flex-1"
-                  >
-                    <MessageSquare className="w-3 h-3 mr-1" />
-                    Chat
-                  </Button>
+                  {assistant.status === "ready" ? (
+                    <Link href={`/assistant/${assistant._id}`} className="flex-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                      >
+                        <MessageSquare className="w-3 h-3 mr-1" />
+                        Chat
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={true}
+                      className="flex-1"
+                    >
+                      <MessageSquare className="w-3 h-3 mr-1" />
+                      Chat
+                    </Button>
+                  )}
                   <Button variant="outline" size="sm">
                     <Settings className="w-3 h-3" />
                   </Button>

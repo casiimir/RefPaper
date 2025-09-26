@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import { LayoutWrapper } from "@/components/layout-wrapper";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,11 +22,7 @@ export default function RootLayout({
         <ClerkProvider>
           <ConvexClientProvider>
             <ThemeProvider defaultTheme="system" storageKey="refpaper-theme">
-              <div className="min-h-screen flex flex-col">
-                <Navbar />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </div>
+              <LayoutWrapper>{children}</LayoutWrapper>
             </ThemeProvider>
           </ConvexClientProvider>
         </ClerkProvider>
