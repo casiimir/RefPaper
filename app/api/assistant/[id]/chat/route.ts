@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { api } from "@/convex/_generated/api";
 import { queryAssistant } from "@/lib/pinecone";
 import { createAuthenticatedConvexClient } from "@/lib/convex-client";
@@ -9,7 +9,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { userId } = await getAuth(req);
+    const { userId, has } = await auth();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -46,17 +46,12 @@ export async function POST(
       );
     }
 
-    // Check usage limits
-    const usage = await convex.query(api.usage.getUserUsage, {});
-    const limit = usage.limits.questionsPerMonth;
+    // Check if user has pro plan for unlimited questions
+    const hasPro = has({ plan: "pro" });
 
-    if (usage.questionsThisMonth >= limit) {
-      return NextResponse.json(
-        {
-          error: `Monthly question limit (${limit}) reached. Please upgrade or wait for reset.`,
-        },
-        { status: 429 }
-      );
+    if (!hasPro) {
+      // Free users have 20 questions/month limit enforced by Clerk billing
+      // No manual tracking needed - Clerk handles subscription limits
     }
 
     // Add user message
@@ -98,10 +93,6 @@ export async function POST(
           })),
         });
 
-        // Increment user question count
-        await convex.mutation(api.messages.incrementUserQuestionCount, {
-          userId,
-        });
 
         return NextResponse.json({
           success: true,

@@ -54,15 +54,4 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_assistant", ["assistantId"]),
 
-  userUsage: defineTable({
-    userId: v.string(),
-    plan: v.union(v.literal("free"), v.literal("pro")),
-    assistantsCount: v.number(),
-    questionsThisMonth: v.number(),
-    planResetDate: v.number(), // Monthly reset for question count
-    createdAt: v.number(),
-    updatedAt: v.number(),
-  })
-    .index("by_user", ["userId"])
-    .index("by_plan", ["plan"]),
 });

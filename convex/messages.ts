@@ -52,22 +52,6 @@ export const addMessage = mutation({
   },
 });
 
-export const incrementUserQuestionCount = mutation({
-  args: { userId: v.string() },
-  handler: async (ctx, { userId }) => {
-    const usage = await ctx.db
-      .query("userUsage")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
-      .first();
-
-    if (usage) {
-      await ctx.db.patch(usage._id, {
-        questionsThisMonth: usage.questionsThisMonth + 1,
-        updatedAt: Date.now(),
-      });
-    }
-  },
-});
 
 export const clearMessages = mutation({
   args: { assistantId: v.id("assistants") },

@@ -12,8 +12,9 @@ export const processAssistantCreation = internalAction({
     assistantId: v.id("assistants"),
     docsUrl: v.string(),
     name: v.string(),
+    userPlan: v.union(v.literal("free"), v.literal("pro")),
   },
-  handler: async (ctx, { assistantId, docsUrl, name }) => {
+  handler: async (ctx, { assistantId, docsUrl, name, userPlan }) => {
     try {
       // Update status to crawling
       await ctx.runMutation(internal.assistants.updateAssistantStatus, {
@@ -21,12 +22,8 @@ export const processAssistantCreation = internalAction({
         status: "crawling",
       });
 
-      // Step 1: Get user plan and crawl documentation with plan-based limits
-      const identity = await ctx.auth.getUserIdentity();
-      const usage = await ctx.runQuery(internal.usage.getUserUsageInternal, {
-        userId: identity?.subject
-      });
-      const userPlan = usage?.plan || 'free';
+      // Step 1: Crawl documentation
+      // Use the userPlan passed from API route (where Clerk plan is checked)
 
       const documents: Document[] = await crawlDocumentation(docsUrl, {}, userPlan);
 

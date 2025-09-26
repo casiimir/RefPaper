@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { api } from "@/convex/_generated/api";
 import { createAuthenticatedConvexClient } from "@/lib/convex-client";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await getAuth(req);
+    const { userId, has } = await auth();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -20,6 +20,34 @@ export async function POST(req: NextRequest) {
         { error: "Name and docsUrl are required" },
         { status: 400 }
       );
+    }
+
+    // Check plan limits
+    const hasPro = has({ plan: "pro" });
+    const assistants = await convex.query(api.assistants.getAssistants, {});
+
+    if (!hasPro) {
+      // Free plan: 3 assistants max
+      if (assistants.length >= 3) {
+        return NextResponse.json(
+          {
+            error: "Free plan limited to 3 assistants. Upgrade to Pro for 20 assistants.",
+            upgradeRequired: true,
+          },
+          { status: 403 }
+        );
+      }
+    } else {
+      // Pro plan: 20 assistants max
+      if (assistants.length >= 20) {
+        return NextResponse.json(
+          {
+            error: "Pro plan limited to 20 assistants total.",
+            upgradeRequired: false,
+          },
+          { status: 403 }
+        );
+      }
     }
 
     // Create assistant record first
@@ -37,6 +65,7 @@ export async function POST(req: NextRequest) {
       assistantId,
       docsUrl,
       name,
+      userPlan: hasPro ? "pro" : "free",
     });
 
     return NextResponse.json({

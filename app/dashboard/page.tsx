@@ -28,7 +28,7 @@ import { api } from "@/convex/_generated/api";
 import { CreateAssistantModal } from "@/components/create-assistant-modal";
 
 export default function Dashboard() {
-  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoaded, isSignedIn, has } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   // Only fetch data when auth is loaded and user is signed in
@@ -36,10 +36,7 @@ export default function Dashboard() {
     api.assistants.getAssistants,
     isLoaded && isSignedIn ? {} : "skip"
   );
-  const usage = useQuery(
-    api.usage.getUserUsage,
-    isLoaded && isSignedIn ? {} : "skip"
-  );
+  const isPro = has ? has({ plan: "pro" }) : false;
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -89,12 +86,13 @@ export default function Dashboard() {
   };
 
   const canCreateAssistant = () => {
-    if (!usage) return false;
-    return usage.assistantsCount < usage.limits.assistants;
+    // Pro users can create unlimited assistants
+    // Free users will get limited by the API route
+    return isLoaded && isSignedIn;
   };
 
   // Show loading while auth is loading or while data is loading
-  if (!isLoaded || !isSignedIn || assistants === undefined || usage === undefined) {
+  if (!isLoaded || !isSignedIn || assistants === undefined) {
     return (
       <div className="bg-background min-h-screen">
         <div className="container mx-auto px-4 py-8">
@@ -135,8 +133,8 @@ export default function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold capitalize">{usage.plan}</div>
-              {usage.plan === "free" && (
+              <div className="text-2xl font-bold capitalize">{isPro ? "pro" : "free"}</div>
+              {!isPro && (
                 <p className="text-xs text-muted-foreground mt-1">
                   Limited features
                 </p>
@@ -152,17 +150,15 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {usage.assistantsCount}
+                {assistants?.length || 0}
                 <span className="text-sm font-normal text-muted-foreground ml-1">
-                  / {usage.limits.assistants === Infinity ? "∞" : usage.limits.assistants}
+                  / {isPro ? "20" : "3"}
                 </span>
               </div>
-              {usage.limits.assistants !== Infinity && (
-                <Progress
-                  value={(usage.assistantsCount / usage.limits.assistants) * 100}
-                  className="mt-2 h-1"
-                />
-              )}
+              <Progress
+                value={((assistants?.length || 0) / (isPro ? 20 : 3)) * 100}
+                className="mt-2 h-1"
+              />
             </CardContent>
           </Card>
 
@@ -174,16 +170,14 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {usage.questionsThisMonth}
+                0
                 <span className="text-sm font-normal text-muted-foreground ml-1">
-                  / {usage.limits.questionsPerMonth === Infinity ? "∞" : usage.limits.questionsPerMonth}
+                  / {isPro ? "∞" : "20"}
                 </span>
               </div>
-              {usage.limits.questionsPerMonth !== Infinity && (
+              {!isPro && (
                 <Progress
-                  value={
-                    (usage.questionsThisMonth / usage.limits.questionsPerMonth) * 100
-                  }
+                  value={0}
                   className="mt-2 h-1"
                 />
               )}
@@ -208,11 +202,6 @@ export default function Dashboard() {
                 Transform any docs into an intelligent knowledge base.
               </p>
 
-              {!canCreateAssistant() && (
-                <p className="text-sm text-muted-foreground mt-2">
-                  Free plan limit reached. Upgrade to create more assistants.
-                </p>
-              )}
             </div>
           </div>
         ) : (
@@ -308,7 +297,7 @@ export default function Dashboard() {
       <CreateAssistantModal
         open={showCreateModal}
         onOpenChange={setShowCreateModal}
-        userPlan={usage.plan}
+        userPlan={isPro ? "pro" : "free"}
       />
     </div>
   );

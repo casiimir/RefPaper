@@ -59,7 +59,7 @@ export function CreateAssistantModal({
         throw new Error(error.error || "Failed to create assistant");
       }
 
-      const result = await response.json();
+      await response.json();
 
       // Close modal and reset form
       onOpenChange(false);

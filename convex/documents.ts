@@ -46,41 +46,6 @@ export const createDocuments = internalMutation({
   },
 });
 
-export const createDocumentsPublic = mutation({
-  args: {
-    assistantId: v.id("assistants"),
-    documents: v.array(
-      v.object({
-        sourceUrl: v.string(),
-        title: v.string(),
-        fullContent: v.string(),
-      })
-    ),
-  },
-  handler: async (ctx, { assistantId, documents }) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
-
-    // Verify assistant ownership
-    const assistant = await ctx.db.get(assistantId);
-    if (!assistant || assistant.userId !== identity.subject) {
-      throw new Error("Assistant not found or unauthorized");
-    }
-
-    const now = Date.now();
-    const documentIds = await Promise.all(
-      documents.map(async (doc) => {
-        return await ctx.db.insert("documents", {
-          assistantId,
-          sourceUrl: doc.sourceUrl,
-          title: doc.title,
-          createdAt: now,
-        });
-      })
-    );
-    return documentIds;
-  },
-});
 
 export const deleteDocumentsByAssistant = internalMutation({
   args: { assistantId: v.id("assistants") },

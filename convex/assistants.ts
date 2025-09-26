@@ -2,19 +2,7 @@ import { v } from "convex/values";
 import { mutation, query, internalMutation } from "./_generated/server";
 import { internal } from "./_generated/api";
 
-// Constants for usage limits
-const USAGE_LIMITS = {
-  free: {
-    assistants: 2,
-    questionsPerMonth: 20,
-    crawlDepth: 3,
-  },
-  pro: {
-    assistants: 30,
-    questionsPerMonth: Infinity,
-    crawlDepth: 15,
-  },
-} as const;
+// Plan limits are now handled by Clerk billing system in API routes
 
 // Helper to generate share ID
 const generateShareId = (): string => {
@@ -81,15 +69,8 @@ export const createAssistantRecord = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
 
-    // Check usage limits
-    const usage = await ctx.db
-      .query("userUsage")
-      .withIndex("by_user", (q) => q.eq("userId", identity.subject))
-      .first();
-
-    if (usage && usage.plan === "free" && usage.assistantsCount >= USAGE_LIMITS.free.assistants) {
-      throw new Error("Free plan limit reached. Please upgrade to Pro.");
-    }
+    // Check if user has pro plan (we'll let the API route handle the plan check)
+    // The API route already validates plan limits using Clerk's has() method
 
     const now = Date.now();
 
@@ -104,24 +85,6 @@ export const createAssistantRecord = mutation({
       updatedAt: now,
     });
 
-    // Update user usage
-    if (usage) {
-      await ctx.db.patch(usage._id, {
-        assistantsCount: usage.assistantsCount + 1,
-        updatedAt: now,
-      });
-    } else {
-      // Create initial usage record for new user
-      await ctx.db.insert("userUsage", {
-        userId: identity.subject,
-        plan: "free", // Default to free plan
-        assistantsCount: 1,
-        questionsThisMonth: 0,
-        planResetDate: now + 30 * 24 * 60 * 60 * 1000, // 30 days from now
-        createdAt: now,
-        updatedAt: now,
-      });
-    }
 
     return assistantId;
   },
@@ -132,13 +95,15 @@ export const triggerAssistantCreation = mutation({
     assistantId: v.id("assistants"),
     docsUrl: v.string(),
     name: v.string(),
+    userPlan: v.union(v.literal("free"), v.literal("pro")),
   },
-  handler: async (ctx, { assistantId, docsUrl, name }) => {
+  handler: async (ctx, { assistantId, docsUrl, name, userPlan }) => {
     // Schedule the background processing action
     await ctx.scheduler.runAfter(0, internal.assistantActions.processAssistantCreation, {
       assistantId,
       docsUrl,
       name,
+      userPlan,
     });
   },
 });
@@ -217,18 +182,6 @@ export const deleteAssistantRecord = mutation({
       await ctx.db.delete(message._id);
     }
 
-    // Update usage count
-    const usage = await ctx.db
-      .query("userUsage")
-      .withIndex("by_user", (q) => q.eq("userId", identity.subject))
-      .first();
-
-    if (usage && usage.assistantsCount > 0) {
-      await ctx.db.patch(usage._id, {
-        assistantsCount: usage.assistantsCount - 1,
-        updatedAt: Date.now(),
-      });
-    }
 
     // Delete associated documents
     await ctx.runMutation(internal.documents.deleteDocumentsByAssistant, {
