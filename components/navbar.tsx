@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useUser, SignOutButton, SignInButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { User } from "lucide-react";
 
 export function Navbar() {
   const { isSignedIn, user } = useUser();
@@ -25,9 +26,11 @@ export function Navbar() {
                   Dashboard
                 </Button>
               </Link>
-              <span className="text-sm text-muted-foreground">
-                {user?.firstName}
-              </span>
+              <Link href="/settings">
+                <Button variant="ghost" size="sm" className="p-2">
+                  <User className="h-5 w-5" />
+                </Button>
+              </Link>
               <SignOutButton>
                 <Button variant="outline" size="sm">
                   Sign Out
