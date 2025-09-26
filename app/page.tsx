@@ -3,7 +3,6 @@
 import { Unauthenticated } from "convex/react";
 import { SignInButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
 export default function Home() {
   return (
