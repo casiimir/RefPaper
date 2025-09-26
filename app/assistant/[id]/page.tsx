@@ -6,6 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { ChatInterface } from "@/components/chat/ChatInterface";
 import { AssistantSidebar } from "@/components/chat/AssistantSidebar";
+import { Navbar } from "@/components/navbar";
 import { redirect } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -73,28 +74,34 @@ export default function AssistantPage() {
   }
 
   return (
-    <div className="flex h-full w-full bg-background overflow-hidden">
-      {/* Sidebar */}
-      <AssistantSidebar
-        assistants={assistants}
-        currentAssistantId={assistantId}
-        isOpen={sidebarOpen}
-        isMobile={isMobile}
-        onClose={() => setSidebarOpen(false)}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
-      />
+    <div className="flex flex-col h-screen w-full bg-background">
+      {/* Navbar */}
+      <Navbar />
 
-      {/* Mobile Backdrop */}
-      {isMobile && sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 z-30"
-          onClick={() => setSidebarOpen(false)}
+      {/* Main Content Area */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <AssistantSidebar
+          assistants={assistants}
+          currentAssistantId={assistantId}
+          isOpen={sidebarOpen}
+          isMobile={isMobile}
+          onClose={() => setSidebarOpen(false)}
+          onToggle={() => setSidebarOpen(!sidebarOpen)}
         />
-      )}
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 h-full">
-        <ChatInterface assistant={assistant} />
+        {/* Mobile Backdrop */}
+        {isMobile && sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/30 z-30"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        {/* Chat Content */}
+        <div className="flex-1 flex flex-col min-w-0 h-full">
+          <ChatInterface assistant={assistant} />
+        </div>
       </div>
     </div>
   );
