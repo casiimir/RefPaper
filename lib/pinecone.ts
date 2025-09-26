@@ -160,7 +160,10 @@ const smartChunk = (
   return chunks;
 };
 
-const processDocumentsWithIds = (documents: Document[], documentIds: string[]): DocumentChunk[] => {
+const processDocumentsWithIds = (
+  documents: Document[],
+  documentIds: string[]
+): DocumentChunk[] => {
   const allChunks: DocumentChunk[] = [];
 
   documents.forEach((doc, docIndex) => {
@@ -296,7 +299,6 @@ export const createAssistantWithConvexDocs = async (
     duration,
   };
 };
-
 
 export const searchDocuments = async (
   query: string,
@@ -435,7 +437,9 @@ export const queryAssistant = async (
 
         // Enhance results with full content
         enhancedResults = searchResults.map((result) => {
-          const doc = documents.find((d: any) => d && d._id === result.metadata.documentId);
+          const doc = documents.find(
+            (d: any) => d && d._id === result.metadata.documentId
+          );
           if (doc) {
             return {
               ...result,
@@ -446,7 +450,10 @@ export const queryAssistant = async (
         });
       }
     } catch (error) {
-      console.warn("Failed to fetch full content from Convex, using previews:", error);
+      console.warn(
+        "Failed to fetch full content from Convex, using previews:",
+        error
+      );
     }
   }
 
@@ -486,5 +493,3 @@ export const queryAssistant = async (
     tokensUsed: response.usage?.total_tokens,
   };
 };
-
-

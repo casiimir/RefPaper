@@ -17,11 +17,15 @@ export default function AssistantPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  const assistant = useQuery(api.assistants.getAssistant, {
-    id: assistantId as Id<"assistants">,
-  });
+  const assistant = useQuery(
+    api.assistants.getAssistant,
+    isLoaded && isSignedIn ? { id: assistantId as Id<"assistants"> } : "skip"
+  );
 
-  const assistants = useQuery(api.assistants.getAssistants);
+  const assistants = useQuery(
+    api.assistants.getAssistants,
+    isLoaded && isSignedIn ? {} : "skip"
+  );
 
   // Handle mobile detection and sidebar state
   useEffect(() => {

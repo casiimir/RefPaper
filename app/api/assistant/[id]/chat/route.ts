@@ -71,17 +71,20 @@ export async function POST(
     }));
 
     try {
-      // Query assistant with Convex client for full content retrieval
+      // Query assistant with RAG pipeline
       const response = await queryAssistant(
         assistant.pineconeNamespace,
         message,
         conversationHistory,
-        {},
+        {
+          maxTokens: 1500,
+          stream: false,
+        },
         convex
       );
 
       if ("answer" in response && response.answer) {
-        // Add assistant response
+        // Add assistant response with sources
         await convex.mutation(api.messages.addMessage, {
           assistantId: assistantId as any,
           role: "assistant",
@@ -89,20 +92,26 @@ export async function POST(
           sources: response.sources.map((source: any) => ({
             url: source.sourceUrl,
             title: source.title,
-            preview: source.preview,
+            preview: source.preview || source.title || "Documentation snippet",
           })),
         });
-
 
         return NextResponse.json({
           success: true,
           answer: response.answer,
-          sources: response.sources,
+          sources: response.sources.map((source: any) => ({
+            url: source.sourceUrl,
+            title: source.title,
+            preview: source.preview || source.title || "Documentation snippet",
+          })),
+          tokensUsed: response.tokensUsed,
         });
       } else {
         throw new Error("No answer received from assistant");
       }
     } catch (error) {
+      console.error("RAG pipeline error:", error);
+
       // Add error message
       await convex.mutation(api.messages.addMessage, {
         assistantId: assistantId as any,
@@ -110,6 +119,7 @@ export async function POST(
         content:
           "I'm sorry, I encountered an error while processing your request. Please try again.",
       });
+
       throw error;
     }
   } catch (error) {
