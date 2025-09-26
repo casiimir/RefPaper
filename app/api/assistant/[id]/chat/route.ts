@@ -1,40 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { api } from "@/convex/_generated/api";
 import { queryAssistant } from "@/lib/pinecone";
-import { createAuthenticatedConvexClient } from "@/lib/convex-client";
+import { withAuth } from "@/lib/api-middleware";
+import { checkChatMessageLimits } from "@/lib/plan-utils";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { userId, has } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // Authenticate user and create Convex client
+    const authResult = await withAuth(req);
+    if (!authResult.success) {
+      return authResult.response;
     }
 
-    // Create authenticated Convex client
-    const convex = await createAuthenticatedConvexClient(req);
-
+    const { context } = authResult;
     const { id: assistantId } = await params;
     const { message } = await req.json();
 
     if (!message) {
       return NextResponse.json(
-        { error: "Message is required" },
+        { error: ERROR_MESSAGES.MESSAGE_REQUIRED },
         { status: 400 }
       );
     }
 
     // Get assistant and verify ownership
-    const assistant = await convex.query(api.assistants.getAssistant, {
+    const assistant = await context.convex.query(api.assistants.getAssistant, {
       id: assistantId as any,
     });
 
     if (assistant.status !== "ready") {
       return NextResponse.json(
-        { error: "Assistant is not ready yet" },
+        { error: ERROR_MESSAGES.ASSISTANT_NOT_READY },
         { status: 400 }
       );
     }
@@ -46,33 +46,27 @@ export async function POST(
       );
     }
 
-    // Check if user has pro plan for unlimited questions
-    const hasPro = has({ plan: "pro" });
-
-    if (!hasPro) {
-      // Check if free user has reached their monthly limit
-      const questionsThisMonth = await convex.query(api.usage.getCurrentMonthUsage, {});
-
-      if (questionsThisMonth >= 20) {
-        return NextResponse.json(
-          {
-            error: "Monthly question limit reached",
-            message: "You've reached your limit of 20 questions per month. Upgrade to Pro for unlimited questions.",
-            questionsUsed: questionsThisMonth,
-            limit: 20
-          },
-          { status: 429 }
-        );
-      }
+    // Check chat message limits
+    const limitCheck = await checkChatMessageLimits(context);
+    if (!limitCheck.canProceed) {
+      return NextResponse.json(
+        {
+          error: limitCheck.error?.type === "question_limit" ? "Monthly question limit reached" : limitCheck.error?.message,
+          message: "You've reached your limit of 20 questions per month. Upgrade to Pro for unlimited questions.",
+          questionsUsed: limitCheck.error?.questionsUsed,
+          limit: limitCheck.error?.limit
+        },
+        { status: 429 }
+      );
     }
 
     // Increment usage counter (for billing tracking)
-    if (!hasPro) {
-      await convex.mutation(api.usage.incrementUsage, {});
+    if (!context.isPro) {
+      await context.convex.mutation(api.usage.incrementUsage, {});
     }
 
     // Add user message
-    await convex.mutation(api.messages.addMessage, {
+    await context.convex.mutation(api.messages.addMessage, {
       assistantId: assistantId as any,
       role: "user",
       content: message,
@@ -88,13 +82,13 @@ export async function POST(
           maxTokens: 1500,
           stream: false,
         },
-        convex
+        context.convex
       );
 
 
       if ("answer" in response && response.answer) {
         // Add assistant response with sources
-        await convex.mutation(api.messages.addMessage, {
+        await context.convex.mutation(api.messages.addMessage, {
           assistantId: assistantId as any,
           role: "assistant",
           content: response.answer,
@@ -122,7 +116,7 @@ export async function POST(
       console.error("RAG pipeline error:", error);
 
       // Add error message
-      await convex.mutation(api.messages.addMessage, {
+      await context.convex.mutation(api.messages.addMessage, {
         assistantId: assistantId as any,
         role: "assistant",
         content:
@@ -134,7 +128,7 @@ export async function POST(
   } catch (error) {
     console.error("Failed to send message:", error);
     return NextResponse.json(
-      { error: "Failed to send message" },
+      { error: ERROR_MESSAGES.FAILED_TO_SEND },
       { status: 500 }
     );
   }

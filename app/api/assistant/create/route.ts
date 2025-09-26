@@ -1,74 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { api } from "@/convex/_generated/api";
-import { createAuthenticatedConvexClient } from "@/lib/convex-client";
+import { withAuth } from "@/lib/api-middleware";
+import { checkAssistantCreationLimits } from "@/lib/plan-utils";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId, has } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // Authenticate user and create Convex client
+    const authResult = await withAuth(req);
+    if (!authResult.success) {
+      return authResult.response;
     }
 
-    // Create authenticated Convex client
-    const convex = await createAuthenticatedConvexClient(req);
-
+    const { context } = authResult;
     const { name, docsUrl, description } = await req.json();
 
+    // Validate required fields
     if (!name || !docsUrl) {
       return NextResponse.json(
-        { error: "Name and docsUrl are required" },
+        { error: ERROR_MESSAGES.NAME_DOCSURL_REQUIRED },
         { status: 400 }
       );
     }
 
     // Check plan limits
-    const hasPro = has({ plan: "pro" });
-    const assistants = await convex.query(api.assistants.getAssistants, {});
-
-    if (!hasPro) {
-      // Free plan: Check monthly question limit first
-      const questionsThisMonth = await convex.query(api.usage.getCurrentMonthUsage, {});
-      if (questionsThisMonth >= 20) {
-        return NextResponse.json(
-          {
-            error: "Monthly question limit reached. Upgrade to Pro for unlimited questions.",
-            upgradeRequired: true,
-            type: "question_limit",
-            questionsUsed: questionsThisMonth,
-            limit: 20
-          },
-          { status: 403 }
-        );
-      }
-
-      // Free plan: 3 assistants max
-      if (assistants.length >= 3) {
-        return NextResponse.json(
-          {
-            error: "Free plan limited to 3 assistants. Upgrade to Pro for 20 assistants.",
-            upgradeRequired: true,
-            type: "assistant_limit",
-          },
-          { status: 403 }
-        );
-      }
-    } else {
-      // Pro plan: 20 assistants max
-      if (assistants.length >= 20) {
-        return NextResponse.json(
-          {
-            error: "Pro plan limited to 20 assistants total.",
-            upgradeRequired: false,
-            type: "assistant_limit",
-          },
-          { status: 403 }
-        );
-      }
+    const limitCheck = await checkAssistantCreationLimits(context);
+    if (!limitCheck.canProceed) {
+      return NextResponse.json(limitCheck.error, { status: 403 });
     }
 
     // Create assistant record first
-    const assistantId = await convex.mutation(
+    const assistantId = await context.convex.mutation(
       api.assistants.createAssistantRecord,
       {
         name,
@@ -78,11 +40,11 @@ export async function POST(req: NextRequest) {
     );
 
     // Trigger Convex Action for background processing (20+ minute timeout)
-    await convex.mutation(api.assistants.triggerAssistantCreation, {
+    await context.convex.mutation(api.assistants.triggerAssistantCreation, {
       assistantId,
       docsUrl,
       name,
-      userPlan: hasPro ? "pro" : "free",
+      userPlan: context.isPro ? "pro" : "free",
     });
 
     return NextResponse.json({
@@ -93,7 +55,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Failed to create assistant:", error);
     return NextResponse.json(
-      { error: "Failed to create assistant" },
+      { error: ERROR_MESSAGES.FAILED_TO_CREATE },
       { status: 500 }
     );
   }

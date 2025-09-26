@@ -29,6 +29,7 @@ import { api } from "@/convex/_generated/api";
 import { CreateAssistantModal } from "@/components/create-assistant-modal";
 import { AssistantSettingsModal } from "@/components/assistant-settings-modal";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
+import { PLAN_LIMITS, UI_MESSAGES } from "@/lib/constants";
 
 type Assistant = {
   _id: string;
@@ -109,13 +110,13 @@ export default function Dashboard() {
     // Pro users can create unlimited assistants
     if (isPro) return true;
 
-    // Free users: check if under assistant limit (3 assistants max)
+    // Free users: check if under assistant limit
     const currentCount = assistants?.length || 0;
-    if (currentCount >= 3) return false;
+    if (currentCount >= PLAN_LIMITS.FREE.ASSISTANTS) return false;
 
-    // Free users: check if under monthly question limit (20 questions max)
+    // Free users: check if under monthly question limit
     const questionsUsed = questionsThisMonth || 0;
-    if (questionsUsed >= 20) return false;
+    if (questionsUsed >= PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH) return false;
 
     return true;
   };
@@ -127,11 +128,11 @@ export default function Dashboard() {
     const currentCount = assistants?.length || 0;
     const questionsUsed = questionsThisMonth || 0;
 
-    if (currentCount >= 3) {
-      return "Free plan limited to 3 assistants. Upgrade to Pro for 20 assistants.";
+    if (currentCount >= PLAN_LIMITS.FREE.ASSISTANTS) {
+      return `Free plan limited to ${PLAN_LIMITS.FREE.ASSISTANTS} assistants. Upgrade to Pro for ${PLAN_LIMITS.PRO.ASSISTANTS} assistants.`;
     }
 
-    if (questionsUsed >= 20) {
+    if (questionsUsed >= PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH) {
       return "Monthly question limit reached. Upgrade to Pro for unlimited questions.";
     }
 
@@ -174,14 +175,14 @@ export default function Dashboard() {
         </div>
 
         {/* Show upgrade prompt when free user reaches question limit */}
-        {!isPro && (questionsThisMonth || 0) >= 20 && (
+        {!isPro && (questionsThisMonth || 0) >= PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
           <UpgradePrompt
-            title="Monthly question limit reached!"
-            description="You've used all 20 free questions this month. You can no longer create new assistants or ask questions until you upgrade."
+            title={UI_MESSAGES.MONTHLY_LIMIT_TITLE}
+            description={UI_MESSAGES.UPGRADE_QUESTIONS_DESCRIPTION}
             feature="questions"
             currentUsage={{
               used: questionsThisMonth || 0,
-              limit: 20,
+              limit: PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH,
             }}
             className="mb-8"
           />
@@ -214,11 +215,11 @@ export default function Dashboard() {
               <div className="text-2xl font-bold">
                 {assistants?.length || 0}
                 <span className="text-sm font-normal text-muted-foreground ml-1">
-                  / {isPro ? "20" : "3"}
+                  / {isPro ? PLAN_LIMITS.PRO.ASSISTANTS : PLAN_LIMITS.FREE.ASSISTANTS}
                 </span>
               </div>
               <Progress
-                value={((assistants?.length || 0) / (isPro ? 20 : 3)) * 100}
+                value={((assistants?.length || 0) / (isPro ? PLAN_LIMITS.PRO.ASSISTANTS : PLAN_LIMITS.FREE.ASSISTANTS)) * 100}
                 className="mt-2 h-1"
               />
             </CardContent>
@@ -234,12 +235,12 @@ export default function Dashboard() {
               <div className="text-2xl font-bold">
                 {questionsThisMonth || 0}
                 <span className="text-sm font-normal text-muted-foreground ml-1">
-                  / {isPro ? "∞" : "20"}
+                  / {isPro ? "∞" : PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}
                 </span>
               </div>
               {!isPro && (
                 <Progress
-                  value={((questionsThisMonth || 0) / 20) * 100}
+                  value={((questionsThisMonth || 0) / PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH) * 100}
                   className="mt-2 h-1"
                 />
               )}
