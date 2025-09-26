@@ -35,7 +35,9 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       </div>
 
       {/* Message Content */}
-      <div className={cn("flex-1 space-y-2", isUser && "flex items-end flex-col")}>
+      <div
+        className={cn("flex-1 space-y-2", isUser && "flex items-end flex-col")}
+      >
         <div
           className={cn(
             "rounded-lg px-4 py-3 max-w-[80%]",
@@ -44,13 +46,17 @@ export function MessageBubble({ message }: MessageBubbleProps) {
               : "bg-muted text-foreground"
           )}
         >
-          <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+          <p className="whitespace-pre-wrap leading-relaxed">
+            {message.content}
+          </p>
         </div>
 
         {/* Sources */}
         {!isUser && message.sources && message.sources.length > 0 && (
           <div className="space-y-2 max-w-[80%]">
-            <p className="text-xs text-muted-foreground font-medium">Sources:</p>
+            <p className="text-xs text-muted-foreground font-medium">
+              Suggestions:
+            </p>
             <div className="grid gap-2">
               {message.sources.map((source, index) => (
                 <a

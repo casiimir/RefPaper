@@ -50,7 +50,7 @@ export default defineSchema({
     assistantId: v.id("assistants"),
     sourceUrl: v.string(),
     title: v.string(),
-    fileStorageId: v.optional(v.id("_storage")),
+    fullContent: v.string(),
     createdAt: v.number(),
   }).index("by_assistant", ["assistantId"]),
 

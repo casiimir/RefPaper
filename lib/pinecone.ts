@@ -370,11 +370,10 @@ const buildMessages = (
 
 Rules:
 1. Only answer based on the provided context
-2. If the context doesn't contain the answer, say so clearly
-3. Always cite your sources using [Source N] format
-4. Be concise but thorough
-5. Include code examples when relevant
-6. If code is provided format it as code`;
+2. If the context doesn't contain the answer, say so clearly and stop there
+3. Be concise but thorough
+4. Include code examples when relevant
+5. Do not offer to explain things beyond the provided context`;
 
   const messages: ChatMessage[] = [
     {
@@ -443,7 +442,7 @@ export const queryAssistant = async (
           if (doc) {
             return {
               ...result,
-              content: doc.fullContent,
+              content: doc.fullContent || "",
             };
           }
           return result;
@@ -467,12 +466,14 @@ export const queryAssistant = async (
   );
 
   // Get completion from OpenAI
+
   const openai = initOpenAI();
   const completion = await openai.chat.completions.create({
     model: CONFIG.CHAT_MODEL!,
     messages,
     max_completion_tokens: maxTokens,
     stream,
+    reasoning_effort: "low",
   });
 
   const sources = searchResults.map((r) => r.metadata);

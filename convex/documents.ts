@@ -11,7 +11,7 @@ export const getDocumentsByIds = query({
 
         return {
           ...doc,
-          fullContent: "",
+          fullContent: doc.fullContent || "",
         };
       })
     );
@@ -38,6 +38,7 @@ export const createDocuments = internalMutation({
           assistantId,
           sourceUrl: doc.sourceUrl,
           title: doc.title,
+          fullContent: doc.fullContent,
           createdAt: now,
         });
       })

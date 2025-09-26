@@ -65,10 +65,17 @@ export async function POST(
     const messages = await convex.query(api.messages.getMessages, {
       assistantId: assistantId as any,
     });
-    const conversationHistory = messages.slice(-10).map((msg: any) => ({
-      role: msg.role,
-      content: msg.content,
-    }));
+    // Get conversation history, excluding error messages
+    const conversationHistory = messages
+      .slice(-10)
+      .filter((msg: any) =>
+        !msg.content.includes("I'm sorry, I encountered an error") &&
+        !msg.content.includes("Please try again")
+      )
+      .map((msg: any) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
 
     try {
       // Query assistant with RAG pipeline
@@ -82,6 +89,7 @@ export async function POST(
         },
         convex
       );
+
 
       if ("answer" in response && response.answer) {
         // Add assistant response with sources
