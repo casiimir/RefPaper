@@ -482,12 +482,17 @@ export const queryAssistant = async (
     reasoning_effort: "low",
   });
 
-  const sources = searchResults.map((r) => r.metadata);
+  // Deduplicate sources by sourceUrl to avoid showing the same link multiple times
+  const uniqueSources = searchResults
+    .map((r) => r.metadata)
+    .filter((source, index, array) =>
+      array.findIndex(s => s.sourceUrl === source.sourceUrl) === index
+    );
 
   if (stream) {
     return {
       stream: completion,
-      sources,
+      sources: uniqueSources,
     };
   }
 
@@ -495,7 +500,7 @@ export const queryAssistant = async (
 
   return {
     answer: response.choices[0].message.content || "",
-    sources,
+    sources: uniqueSources,
     query,
     tokensUsed: response.usage?.total_tokens,
   };

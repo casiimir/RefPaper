@@ -7,7 +7,8 @@ import { Id } from "@/convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageBubble } from "./MessageBubble";
-import { Send, Loader2, Crown, AlertCircle } from "lucide-react";
+import { TypingIndicator } from "./TypingIndicator";
+import { Send, Loader2, Crown, AlertCircle, User } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type Assistant = {
@@ -29,6 +30,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
     questionsUsed: number;
     limit: number;
   } | null>(null);
+  const [pendingMessage, setPendingMessage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const messages = useQuery(api.messages.getMessages, {
@@ -47,6 +49,12 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (pendingMessage || isLoading) {
+      scrollToBottom();
+    }
+  }, [pendingMessage, isLoading]);
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -55,6 +63,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
     setInput("");
     setIsLoading(true);
     setRateLimitError(null); // Clear any previous error
+    setPendingMessage(message); // Show message immediately
 
     try {
       const response = await fetch(`/api/assistant/${assistant._id}/chat`, {
@@ -84,6 +93,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
       console.error("Failed to send message:", error);
     } finally {
       setIsLoading(false);
+      setPendingMessage(null); // Clear pending message
     }
   };
 
@@ -152,6 +162,33 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
             {messages.map((message) => (
               <MessageBubble key={message._id} message={message} />
             ))}
+
+            {/* Show pending user message only if it's not already in the messages */}
+            {pendingMessage &&
+              !messages.some(
+                (msg) => msg.content === pendingMessage && msg.role === "user"
+              ) && (
+                <div className="flex gap-3 flex-row-reverse">
+                  <div className="h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 bg-primary text-primary-foreground">
+                    <User className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 flex items-end flex-col">
+                    <div className="rounded-lg px-4 py-3 max-w-[80%] bg-primary text-primary-foreground ml-auto">
+                      <p className="whitespace-pre-wrap leading-relaxed">
+                        {pendingMessage}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            {/* Show typing indicator only if user message is already in the database */}
+            {isLoading &&
+              pendingMessage &&
+              messages.some(
+                (msg) => msg.content === pendingMessage && msg.role === "user"
+              ) && <TypingIndicator />}
+
             <div ref={messagesEndRef} />
           </>
         )}
