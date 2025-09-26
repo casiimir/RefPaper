@@ -27,10 +27,22 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { api } from "@/convex/_generated/api";
 import { CreateAssistantModal } from "@/components/create-assistant-modal";
+import { AssistantSettingsModal } from "@/components/assistant-settings-modal";
+
+type Assistant = {
+  _id: string;
+  name: string;
+  description?: string;
+  docsUrl: string;
+  status: string;
+  totalPages?: number;
+  processedPages?: number;
+};
 
 export default function Dashboard() {
   const { isLoaded, isSignedIn, has } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(null);
 
   // Only fetch data when auth is loaded and user is signed in
   const assistants = useQuery(
@@ -312,7 +324,11 @@ export default function Dashboard() {
                       Chat
                     </Button>
                   )}
-                  <Button variant="outline" size="sm">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedAssistant(assistant)}
+                  >
                     <Settings className="w-3 h-3" />
                   </Button>
                 </CardFooter>
@@ -326,6 +342,12 @@ export default function Dashboard() {
         open={showCreateModal}
         onOpenChange={setShowCreateModal}
         userPlan={isPro ? "pro" : "free"}
+      />
+
+      <AssistantSettingsModal
+        open={!!selectedAssistant}
+        onOpenChange={(open) => !open && setSelectedAssistant(null)}
+        assistant={selectedAssistant}
       />
     </div>
   );

@@ -104,6 +104,22 @@ const waitForIndexReady = async (
   throw new Error(`Index creation timeout for ${indexName}`);
 };
 
+// Delete namespace from Pinecone index
+export const deleteNamespace = async (namespace: string): Promise<void> => {
+  if (!namespace) {
+    throw new Error("Namespace is required for deletion");
+  }
+
+  try {
+    const index = await getOrCreateIndex();
+    await index.deleteNamespace(namespace);
+  } catch (error) {
+    console.error(`Failed to delete Pinecone namespace ${namespace}:`, error);
+    // Don't throw error to avoid blocking assistant deletion if Pinecone fails
+    // The assistant deletion should succeed even if namespace cleanup fails
+  }
+};
+
 // Document processing
 const smartChunk = (
   text: string,
@@ -485,8 +501,9 @@ export const queryAssistant = async (
   // Deduplicate sources by sourceUrl to avoid showing the same link multiple times
   const uniqueSources = searchResults
     .map((r) => r.metadata)
-    .filter((source, index, array) =>
-      array.findIndex(s => s.sourceUrl === source.sourceUrl) === index
+    .filter(
+      (source, index, array) =>
+        array.findIndex((s) => s.sourceUrl === source.sourceUrl) === index
     );
 
   if (stream) {

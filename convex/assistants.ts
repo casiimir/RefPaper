@@ -133,6 +133,32 @@ export const updateAssistantStatus = internalMutation({
   },
 });
 
+export const updateAssistant = mutation({
+  args: {
+    id: v.id("assistants"),
+    name: v.optional(v.string()),
+    description: v.optional(v.string()),
+  },
+  handler: async (ctx, { id, name, description }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const assistant = await ctx.db.get(id);
+    if (!assistant || assistant.userId !== identity.subject) {
+      throw new Error("Assistant not found or unauthorized");
+    }
+
+    const updates: any = {
+      updatedAt: Date.now(),
+    };
+
+    if (name !== undefined) updates.name = name;
+    if (description !== undefined) updates.description = description;
+
+    await ctx.db.patch(id, updates);
+  },
+});
+
 export const togglePublicSharing = mutation({
   args: {
     id: v.id("assistants"),
@@ -187,6 +213,14 @@ export const deleteAssistantRecord = mutation({
     await ctx.runMutation(internal.documents.deleteDocumentsByAssistant, {
       assistantId: id,
     });
+
+    // Delete Pinecone namespace if it exists
+    if (assistant.pineconeNamespace) {
+      // Schedule async deletion of Pinecone namespace
+      await ctx.scheduler.runAfter(0, internal.assistantActions.deletePineconeNamespace, {
+        namespace: assistant.pineconeNamespace,
+      });
+    }
 
     // Delete the assistant
     await ctx.db.delete(id);

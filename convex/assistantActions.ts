@@ -4,7 +4,10 @@ import { internalAction } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 import { crawlDocumentation } from "../lib/firecrawl";
-import { createAssistantWithConvexDocs } from "../lib/pinecone";
+import {
+  createAssistantWithConvexDocs,
+  deleteNamespace,
+} from "../lib/pinecone";
 import { Document } from "@/types/document";
 
 export const processAssistantCreation = internalAction({
@@ -25,7 +28,11 @@ export const processAssistantCreation = internalAction({
       // Step 1: Crawl documentation
       // Use the userPlan passed from API route (where Clerk plan is checked)
 
-      const documents: Document[] = await crawlDocumentation(docsUrl, {}, userPlan);
+      const documents: Document[] = await crawlDocumentation(
+        docsUrl,
+        {},
+        userPlan
+      );
 
       if (documents.length === 0) {
         throw new Error("No documents found during crawling");
@@ -41,14 +48,17 @@ export const processAssistantCreation = internalAction({
 
       // Step 2: Create assistant with progress callbacks
       // Step 2.1: Save documents to Convex and update to processing
-      const documentIds: string[] = await ctx.runMutation(internal.documents.createDocuments, {
-        assistantId,
-        documents: documents.map((doc) => ({
-          sourceUrl: doc.sourceUrl,
-          title: doc.title || "Untitled",
-          fullContent: doc.content,
-        })),
-      });
+      const documentIds: string[] = await ctx.runMutation(
+        internal.documents.createDocuments,
+        {
+          assistantId,
+          documents: documents.map((doc) => ({
+            sourceUrl: doc.sourceUrl,
+            title: doc.title || "Untitled",
+            fullContent: doc.content,
+          })),
+        }
+      );
 
       await ctx.runMutation(internal.assistants.updateAssistantStatus, {
         id: assistantId,
@@ -90,6 +100,20 @@ export const processAssistantCreation = internalAction({
       });
 
       throw error;
+    }
+  },
+});
+
+export const deletePineconeNamespace = internalAction({
+  args: {
+    namespace: v.string(),
+  },
+  handler: async (ctx, { namespace }) => {
+    try {
+      await deleteNamespace(namespace);
+    } catch (error) {
+      console.error(`Failed to delete Pinecone namespace ${namespace}:`, error);
+      // Don't throw error to avoid blocking assistant deletion if Pinecone fails
     }
   },
 });
