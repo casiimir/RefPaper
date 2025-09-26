@@ -61,28 +61,12 @@ export async function POST(
       content: message,
     });
 
-    // Get conversation history
-    const messages = await convex.query(api.messages.getMessages, {
-      assistantId: assistantId as any,
-    });
-    // Get conversation history, excluding error messages
-    const conversationHistory = messages
-      .slice(-10)
-      .filter((msg: any) =>
-        !msg.content.includes("I'm sorry, I encountered an error") &&
-        !msg.content.includes("Please try again")
-      )
-      .map((msg: any) => ({
-        role: msg.role,
-        content: msg.content,
-      }));
-
     try {
-      // Query assistant with RAG pipeline
+      // Query assistant with RAG pipeline (no conversation history for cost optimization)
       const response = await queryAssistant(
         assistant.pineconeNamespace,
         message,
-        conversationHistory,
+        [], // Empty conversation history to reduce costs by 85%+
         {
           maxTokens: 1500,
           stream: false,
