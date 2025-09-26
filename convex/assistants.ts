@@ -1,15 +1,18 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalMutation } from "./_generated/server";
+import { internal } from "./_generated/api";
 
 // Constants for usage limits
 const USAGE_LIMITS = {
   free: {
     assistants: 2,
-    questionsPerMonth: 10,
+    questionsPerMonth: 20,
+    crawlDepth: 3,
   },
   pro: {
-    assistants: Infinity,
-    questionsPerMonth: 500,
+    assistants: 30,
+    questionsPerMonth: Infinity,
+    crawlDepth: 15,
   },
 } as const;
 
@@ -124,7 +127,23 @@ export const createAssistantRecord = mutation({
   },
 });
 
-export const updateAssistantStatus = mutation({
+export const triggerAssistantCreation = mutation({
+  args: {
+    assistantId: v.id("assistants"),
+    docsUrl: v.string(),
+    name: v.string(),
+  },
+  handler: async (ctx, { assistantId, docsUrl, name }) => {
+    // Schedule the background processing action
+    await ctx.scheduler.runAfter(0, internal.assistantActions.processAssistantCreation, {
+      assistantId,
+      docsUrl,
+      name,
+    });
+  },
+});
+
+export const updateAssistantStatus = internalMutation({
   args: {
     id: v.id("assistants"),
     status: v.union(
@@ -210,6 +229,11 @@ export const deleteAssistantRecord = mutation({
         updatedAt: Date.now(),
       });
     }
+
+    // Delete associated documents
+    await ctx.runMutation(internal.documents.deleteDocumentsByAssistant, {
+      assistantId: id,
+    });
 
     // Delete the assistant
     await ctx.db.delete(id);

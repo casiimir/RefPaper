@@ -1,4 +1,4 @@
-// Unified document types for firecrawl and pinecone integration
+// Document types for content processing and storage
 
 // Base document structure after crawling and processing
 export interface Document {
@@ -9,15 +9,12 @@ export interface Document {
   metadata: DocumentMetadata;
 }
 
-// Document metadata
+// Document metadata from crawling process
 export interface DocumentMetadata {
   hasCode: boolean;
   hasImages: boolean;
   contentLength: number;
   crawledAt: string;
-  // Additional fields from original types
-  url?: string;
-  docIndex?: number;
 }
 
 // Document chunk for vector storage
@@ -34,8 +31,8 @@ export interface ChunkMetadata {
   docIndex: number;
   chunkIndex: number;
   totalChunks: number;
-  fullContent: string;
-  contentPreview: string;
+  documentId: string;
+  contentPreview?: string; // Optional for backward compatibility
 }
 
 // Vector representation for Pinecone
@@ -54,6 +51,7 @@ export interface SearchResult {
     title: string;
     sourceUrl: string;
     preview: string;
+    documentId?: string;
   };
 }
 
@@ -65,52 +63,6 @@ export interface AssistantCreationResult {
   duration: string;
 }
 
-// Chat message
-export interface ChatMessage {
-  role: "system" | "user" | "assistant";
-  content: string;
-}
-
-// Chat response
-export interface ChatResponse {
-  answer: string;
-  sources: Array<{
-    title: string;
-    sourceUrl: string;
-    preview: string;
-  }>;
-  query: string;
-  tokensUsed?: number;
-}
-
-// Stream chat response
-export interface StreamChatResponse {
-  stream: any;
-  sources: Array<{
-    title: string;
-    sourceUrl: string;
-    preview: string;
-  }>;
-}
-
-// Search options
-export interface SearchOptions {
-  topK?: number;
-  minScore?: number;
-  filter?: Record<string, any> | null;
-}
-
-// Chat options
-export interface ChatOptions {
-  systemPrompt?: string | null;
-  maxTokens?: number;
-  stream?: boolean;
-}
-
-// Progress callback for long operations
-export interface ProgressCallback {
-  onProgress?: (stage: string, completed: number, total: number) => void;
-}
 
 // Configuration
 export interface DocumentProcessingConfig {
@@ -118,3 +70,4 @@ export interface DocumentProcessingConfig {
   chunkOverlap?: number;
   minChunkSize?: number;
 }
+

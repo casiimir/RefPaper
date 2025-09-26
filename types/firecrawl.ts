@@ -8,18 +8,6 @@ export interface CrawlConfig {
   onlyMainContent: boolean;
 }
 
-export interface ProcessedPage {
-  content: string;
-  sourceUrl: string;
-  title: string;
-  description?: string;
-  metadata: {
-    hasCode: boolean;
-    hasImages: boolean;
-    contentLength: number;
-    crawledAt: string;
-  };
-}
 
 export interface RawPage {
   markdown?: string;

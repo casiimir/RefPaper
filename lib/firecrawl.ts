@@ -34,17 +34,32 @@ const DEFAULT_CONFIG: CrawlConfig = {
  */
 export async function crawlDocumentation(
   docUrl: string,
-  options: Partial<CrawlConfig> = {}
+  options: Partial<CrawlConfig> = {},
+  userPlan: 'free' | 'pro' = 'free'
 ): Promise<Document[]> {
+  if (!process.env.FIRECRAWL_API_KEY) {
+    throw new Error("FIRECRAWL_API_KEY is required");
+  }
+
   // Initialize Firecrawl client
   const firecrawl = new FirecrawlApp({
     apiKey: process.env.FIRECRAWL_API_KEY,
   });
 
+  // Set depth limits based on user plan
+  const planLimits = {
+    free: { maxDepth: 3, limit: 30 }, // Limited to 30 pages for free users
+    pro: { maxDepth: 15, limit: 1000 },
+  };
+
+  const limits = planLimits[userPlan];
+
   // Merge configurations
   const crawlConfig = {
     ...DEFAULT_CONFIG,
     ...options,
+    maxDepth: limits.maxDepth,
+    limit: limits.limit,
     excludePaths: [
       ...DEFAULT_CONFIG.excludePaths,
       ...(options.excludePaths || []),
@@ -94,7 +109,7 @@ async function pollForResults(
   let attempts = 0;
 
   while (attempts < maxAttempts) {
-    await new Promise((r) => setTimeout(r, 1000)); // Typic waiting window
+    await new Promise((r) => setTimeout(r, 1000));
 
     const status: CrawlStatus = await firecrawl.getCrawlStatus(jobId);
 
@@ -107,7 +122,7 @@ async function pollForResults(
     attempts++;
   }
 
-  throw new Error("Crawl timeout after 10 minutes");
+  throw new Error("Crawl timeout after 5 minutes");
 }
 
 /**

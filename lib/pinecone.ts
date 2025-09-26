@@ -5,15 +5,19 @@ import {
   DocumentChunk,
   DocumentVector,
   SearchResult,
+  AssistantCreationResult,
+} from "@/types/document";
+import {
   SearchOptions,
   ChatMessage,
   ChatOptions,
   ChatResponse,
   StreamChatResponse,
-  AssistantCreationResult,
   ProgressCallback,
-} from "@/types/document";
-import { PineconeConfig, IndexStats } from "@/types/pinecone";
+  PineconeConfig,
+} from "@/types/pinecone";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "@/convex/_generated/api";
 
 // Configuration
 const CONFIG: PineconeConfig = {
@@ -29,7 +33,7 @@ const CONFIG: PineconeConfig = {
   TOP_K_SEARCH: 10,
   MIN_SCORE_THRESHOLD: 0.5,
   MAX_CONCURRENT_EMBEDDINGS: 20,
-  MAX_CONCURRENT_UPSERTS: 100,
+  MAX_CONCURRENT_UPSERTS: 5,
 };
 
 // Initialize clients
@@ -156,11 +160,12 @@ const smartChunk = (
   return chunks;
 };
 
-const processDocuments = (documents: Document[]): DocumentChunk[] => {
+const processDocumentsWithIds = (documents: Document[], documentIds: string[]): DocumentChunk[] => {
   const allChunks: DocumentChunk[] = [];
 
   documents.forEach((doc, docIndex) => {
     const chunks = smartChunk(doc.content);
+    const documentId = documentIds[docIndex];
 
     chunks.forEach((chunk, chunkIndex) => {
       allChunks.push({
@@ -172,8 +177,8 @@ const processDocuments = (documents: Document[]): DocumentChunk[] => {
           docIndex,
           chunkIndex,
           totalChunks: chunks.length,
-          fullContent: doc.content.length < 40000 ? doc.content : chunk,
-          contentPreview: chunk.substring(0, 500),
+          documentId: documentId,
+          contentPreview: chunk.substring(0, 200),
         },
       });
     });
@@ -195,7 +200,7 @@ const createEmbeddings = async (
     const batch = texts.slice(i, i + batchSize);
 
     const response = await openai.embeddings.create({
-      model: CONFIG.EMBEDDING_MODEL!,
+      model: CONFIG.EMBEDDING_MODEL,
       input: batch,
     });
 
@@ -211,7 +216,7 @@ const createEmbeddings = async (
 const createQueryEmbedding = async (query: string): Promise<number[]> => {
   const openai = initOpenAI();
   const response = await openai.embeddings.create({
-    model: CONFIG.EMBEDDING_MODEL!,
+    model: CONFIG.EMBEDDING_MODEL,
     input: query,
   });
 
@@ -243,8 +248,9 @@ const upsertVectors = async (
 };
 
 // High-level API functions
-export const createAssistant = async (
+export const createAssistantWithConvexDocs = async (
   documents: Document[],
+  documentIds: string[],
   assistantName: string = "assistant",
   callbacks?: ProgressCallback
 ): Promise<AssistantCreationResult> => {
@@ -254,23 +260,30 @@ export const createAssistant = async (
 
   callbacks?.onProgress?.("processing", 0, 4);
 
-  // Process documents into chunks
-  const chunks = processDocuments(documents);
+  // Step 1: Process documents into chunks with document references
+  const chunks = processDocumentsWithIds(documents, documentIds);
   callbacks?.onProgress?.("processing", 1, 4);
 
-  // Create embeddings
+  // Step 2: Create embeddings
   const texts = chunks.map((chunk) => chunk.text);
   const embeddings = await createEmbeddings(texts, callbacks);
   callbacks?.onProgress?.("processing", 2, 4);
 
-  // Prepare vectors
+  // Step 3: Prepare vectors with minimal metadata (exclude content preview to reduce size)
   const vectors: DocumentVector[] = chunks.map((chunk, idx) => ({
     id: chunk.id,
     values: embeddings[idx],
-    metadata: chunk.metadata,
+    metadata: {
+      sourceUrl: chunk.metadata.sourceUrl,
+      title: chunk.metadata.title,
+      docIndex: chunk.metadata.docIndex,
+      chunkIndex: chunk.metadata.chunkIndex,
+      totalChunks: chunk.metadata.totalChunks,
+      documentId: chunk.metadata.documentId,
+    },
   }));
 
-  // Upsert to Pinecone
+  // Step 4: Upsert to Pinecone
   await upsertVectors(index, namespace, vectors, callbacks);
   callbacks?.onProgress?.("processing", 4, 4);
 
@@ -283,6 +296,7 @@ export const createAssistant = async (
     duration,
   };
 };
+
 
 export const searchDocuments = async (
   query: string,
@@ -325,11 +339,12 @@ export const searchDocuments = async (
 const formatMatch = (match: any): SearchResult => ({
   id: match.id,
   score: match.score,
-  content: match.metadata.fullContent || match.metadata.contentPreview,
+  content: "", // Will be filled from file storage via documentId
   metadata: {
     title: match.metadata.title,
     sourceUrl: match.metadata.sourceUrl,
-    preview: match.metadata.contentPreview,
+    preview: match.metadata.title, // Use title as preview for now
+    documentId: match.metadata.documentId, // Reference to full content
   },
 });
 
@@ -387,7 +402,8 @@ export const queryAssistant = async (
   namespace: string,
   query: string,
   conversationHistory: ChatMessage[] = [],
-  options: ChatOptions = {}
+  options: ChatOptions = {},
+  convexClient?: ConvexHttpClient
 ): Promise<ChatResponse | StreamChatResponse> => {
   const { systemPrompt = null, maxTokens = 1000, stream = false } = options;
 
@@ -403,8 +419,39 @@ export const queryAssistant = async (
     };
   }
 
+  // Get full content from Convex if client provided
+  let enhancedResults = searchResults;
+  if (convexClient) {
+    try {
+      const documentIds = searchResults
+        .map((r) => r.metadata.documentId)
+        .filter(Boolean) as string[];
+
+      if (documentIds.length > 0) {
+        const documents = await convexClient.query(
+          api.documents.getDocumentsByIds,
+          { documentIds: documentIds as any }
+        );
+
+        // Enhance results with full content
+        enhancedResults = searchResults.map((result) => {
+          const doc = documents.find((d: any) => d && d._id === result.metadata.documentId);
+          if (doc) {
+            return {
+              ...result,
+              content: doc.fullContent,
+            };
+          }
+          return result;
+        });
+      }
+    } catch (error) {
+      console.warn("Failed to fetch full content from Convex, using previews:", error);
+    }
+  }
+
   // Build context and messages
-  const context = buildContext(searchResults);
+  const context = buildContext(enhancedResults);
   const messages = buildMessages(
     query,
     context,
@@ -430,35 +477,14 @@ export const queryAssistant = async (
     };
   }
 
+  const response = completion as OpenAI.Chat.Completions.ChatCompletion;
+
   return {
-    answer: (completion as any).choices[0].message.content,
+    answer: response.choices[0].message.content || "",
     sources,
     query,
-    tokensUsed: (completion as any).usage?.total_tokens,
+    tokensUsed: response.usage?.total_tokens,
   };
 };
 
-// Utility functions
-export const deleteAssistant = async (namespace: string): Promise<void> => {
-  const index = await getOrCreateIndex();
-  await index.namespace(namespace).deleteAll();
-};
 
-export const getIndexStats = async (): Promise<IndexStats> => {
-  const index = await getOrCreateIndex();
-  const stats = await index.describeIndexStats();
-  return {
-    totalRecordCount: stats.totalRecordCount,
-    dimension: stats.dimension || CONFIG.EMBEDDING_DIMENSION,
-  };
-};
-
-// Export default object with all functions
-export default {
-  createAssistant,
-  queryAssistant,
-  deleteAssistant,
-  searchDocuments,
-  generateNamespace,
-  getIndexStats,
-};

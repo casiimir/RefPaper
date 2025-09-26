@@ -46,6 +46,14 @@ export default defineSchema({
     .index("by_assistant", ["assistantId"])
     .index("by_assistant_date", ["assistantId", "createdAt"]),
 
+  documents: defineTable({
+    assistantId: v.id("assistants"),
+    sourceUrl: v.string(),
+    title: v.string(),
+    fileStorageId: v.optional(v.id("_storage")),
+    createdAt: v.number(),
+  }).index("by_assistant", ["assistantId"]),
+
   userUsage: defineTable({
     userId: v.string(),
     plan: v.union(v.literal("free"), v.literal("pro")),

@@ -1,4 +1,5 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalQuery } from "./_generated/server";
+import { v } from "convex/values";
 
 // Queries
 export const getUserUsage = query({
@@ -21,7 +22,7 @@ export const getUserUsage = query({
         planResetDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
         limits: {
           assistants: 2,
-          questionsPerMonth: 10,
+          questionsPerMonth: 20,
         },
       };
     }
@@ -35,10 +36,38 @@ export const getUserUsage = query({
       questionsThisMonth: shouldReset ? 0 : usage.questionsThisMonth,
       planResetDate: shouldReset ? now + 30 * 24 * 60 * 60 * 1000 : usage.planResetDate,
       limits: {
-        assistants: usage.plan === "free" ? 2 : Infinity,
-        questionsPerMonth: usage.plan === "free" ? 10 : 500,
+        assistants: usage.plan === "free" ? 2 : 30,
+        questionsPerMonth: usage.plan === "free" ? 20 : Infinity,
       },
     };
+  },
+});
+
+export const getUserUsageInternal = internalQuery({
+  args: { userId: v.optional(v.string()) },
+  handler: async (ctx, { userId }) => {
+    if (!userId) {
+      return {
+        plan: "free" as const,
+        assistantsCount: 0,
+        questionsThisMonth: 0,
+      };
+    }
+
+    const usage = await ctx.db
+      .query("userUsage")
+      .withIndex("by_user", (q: any) => q.eq("userId", userId))
+      .first();
+
+    if (!usage) {
+      return {
+        plan: "free" as const,
+        assistantsCount: 0,
+        questionsThisMonth: 0,
+      };
+    }
+
+    return usage;
   },
 });
 
@@ -122,26 +151,3 @@ export const resetMonthlyUsage = mutation({
   },
 });
 
-// Admin queries (for future use)
-export const getAllUsageStats = query({
-  args: {},
-  handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
-
-    // TODO: Add admin role check when implementing admin features
-    // For now, anyone can see basic stats
-
-    const allUsage = await ctx.db.query("userUsage").collect();
-
-    const stats = {
-      totalUsers: allUsage.length,
-      freeUsers: allUsage.filter(u => u.plan === "free").length,
-      proUsers: allUsage.filter(u => u.plan === "pro").length,
-      totalAssistants: allUsage.reduce((sum, u) => sum + u.assistantsCount, 0),
-      totalQuestionsThisMonth: allUsage.reduce((sum, u) => sum + u.questionsThisMonth, 0),
-    };
-
-    return stats;
-  },
-});

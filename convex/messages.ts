@@ -20,24 +20,7 @@ export const getMessages = query({
 
     return await ctx.db
       .query("messages")
-      .withIndex("by_assistant_date", (q: any) => q.eq("assistantId", assistantId))
-      .order("asc")
-      .collect();
-  },
-});
-
-export const getPublicMessages = query({
-  args: { assistantId: v.id("assistants") },
-  handler: async (ctx, { assistantId }) => {
-    // Get public assistant (no auth required)
-    const assistant = await ctx.db.get(assistantId);
-    if (!assistant || !assistant.isPublic) {
-      throw new Error("Assistant not found or not public");
-    }
-
-    return await ctx.db
-      .query("messages")
-      .withIndex("by_assistant_date", (q: any) => q.eq("assistantId", assistantId))
+      .withIndex("by_assistant_date", (q) => q.eq("assistantId", assistantId))
       .order("asc")
       .collect();
   },
@@ -74,7 +57,7 @@ export const incrementUserQuestionCount = mutation({
   handler: async (ctx, { userId }) => {
     const usage = await ctx.db
       .query("userUsage")
-      .withIndex("by_user", (q: any) => q.eq("userId", userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .first();
 
     if (usage) {
@@ -101,7 +84,7 @@ export const clearMessages = mutation({
     // Delete all messages
     const messages = await ctx.db
       .query("messages")
-      .withIndex("by_assistant", (q: any) => q.eq("assistantId", assistantId))
+      .withIndex("by_assistant", (q) => q.eq("assistantId", assistantId))
       .collect();
 
     for (const message of messages) {
