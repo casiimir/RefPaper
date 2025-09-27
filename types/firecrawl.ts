@@ -1,11 +1,20 @@
 export interface CrawlConfig {
-  formats: string[];
   limit: number;
-  maxDepth: number;
-  waitFor: number;
+  maxDiscoveryDepth: number;
   excludePaths: string[];
-  removeTags: string[];
-  onlyMainContent: boolean;
+  includePaths?: string[];
+  allowSubdomains?: boolean;
+  crawlEntireDomain?: boolean;
+  scrapeOptions: {
+    formats: ("markdown" | "html" | "rawHtml" | "links" | "images" | "screenshot" | "summary" | "changeTracking" | "json" | "attributes")[];
+    includeTags?: string[];
+    excludeTags?: string[];
+    onlyMainContent: boolean;
+    waitFor?: number;
+    blockAds?: boolean;
+    removeBase64Images?: boolean;
+    fastMode?: boolean;
+  };
 }
 
 
