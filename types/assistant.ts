@@ -7,5 +7,6 @@ export interface Assistant {
   totalPages?: number;
   processedPages?: number;
   pineconeNamespace?: string;
+  errorMessage?: string;
   createdAt?: number;
 }

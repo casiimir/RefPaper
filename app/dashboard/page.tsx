@@ -260,7 +260,7 @@ export default function Dashboard() {
 
                     {assistant.status === "error" && (
                       <div className="text-xs text-red-600">
-                        Failed to create assistant. Please try again.
+                        Failed to create assistant. Check settings for details.
                       </div>
                     )}
                   </div>

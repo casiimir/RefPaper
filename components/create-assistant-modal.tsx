@@ -96,10 +96,21 @@ export function CreateAssistantModal({
       router.refresh();
     } catch (error) {
       console.error("Error creating assistant:", error);
-      // Generic error for unexpected issues
-      setServerError({
-        message: error instanceof Error ? error.message : "Failed to create assistant",
-      });
+
+      // Check for specific error types
+      const errorMessage = error instanceof Error ? error.message : "Failed to create assistant";
+
+      if (errorMessage.includes("DOCUMENTATION_TOO_LARGE")) {
+        setServerError({
+          message: errorMessage.replace("DOCUMENTATION_TOO_LARGE: ", ""),
+          type: "documentation_size",
+        });
+      } else {
+        // Generic error for unexpected issues
+        setServerError({
+          message: errorMessage,
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -124,22 +135,6 @@ export function CreateAssistantModal({
     }
   };
 
-  // Helper functions for URL suggestions
-  const isSpecificPage = (url: string): boolean => {
-    return /\/(home|getting-started|intro|guide|learn|start|welcome)$/i.test(url);
-  };
-
-  const getRootDomain = (url: string): string => {
-    try {
-      const urlObj = new URL(url);
-      return `${urlObj.protocol}//${urlObj.host}`;
-    } catch {
-      return url.replace(/\/[^/]+$/, '');
-    }
-  };
-
-  const shouldShowSuggestion = formData.docsUrl && isSpecificPage(formData.docsUrl);
-  const suggestedUrl = shouldShowSuggestion ? getRootDomain(formData.docsUrl) : '';
 
   // Check if user can create assistants (not over question limit)
   const canCreateAssistant = userPlan === "pro" || (questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && !serverError);
@@ -186,6 +181,29 @@ export function CreateAssistantModal({
             feature="assistants"
             className="mb-4"
           />
+        )}
+
+        {/* Documentation too large error */}
+        {serverError && serverError.type === "documentation_size" && (
+          <Alert className="border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950 mb-4">
+            <AlertCircle className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+            <AlertDescription className="text-orange-800 dark:text-orange-200">
+              <div className="space-y-2">
+                <div className="font-medium">📚 Documentation too extensive</div>
+                <div className="text-sm">
+                  {serverError.message}
+                </div>
+                <div className="text-xs space-y-1">
+                  <div className="font-medium">💡 Try these approaches:</div>
+                  <ul className="ml-4 space-y-1">
+                    <li>• Use specific sections like <code>/getting-started</code> or <code>/tutorials</code></li>
+                    <li>• Target API documentation like <code>/api/reference</code></li>
+                    <li>• Focus on individual guides instead of the entire site</li>
+                  </ul>
+                </div>
+              </div>
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Generic server error */}
@@ -277,29 +295,6 @@ export function CreateAssistantModal({
                 </Alert>
               )}
 
-              {shouldShowSuggestion && (
-                <Alert className="mt-2">
-                  <Lightbulb className="h-4 w-4" />
-                  <AlertDescription className="flex items-center justify-between">
-                    <span className="text-xs">
-                      {userPlan === "free"
-                        ? "💡 Free User: This specific URL is perfect! It will help you make the best use of your 30 pages."
-                        : "💡 For better crawling, try the root domain instead"
-                      }
-                    </span>
-                    {userPlan !== "free" && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="ml-2 h-6 text-xs"
-                        onClick={() => handleInputChange("docsUrl", suggestedUrl)}
-                      >
-                        Use {new URL(suggestedUrl).host}
-                      </Button>
-                    )}
-                  </AlertDescription>
-                </Alert>
-              )}
             </div>
 
             <div className="grid gap-2">

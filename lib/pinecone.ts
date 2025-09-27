@@ -51,6 +51,12 @@ const initOpenAI = (): OpenAI => {
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 };
 
+// Utility function to estimate token count (rough approximation)
+const estimateTokenCount = (text: string): number => {
+  // Rough approximation: 1 token ≈ 4 characters for English text
+  return Math.ceil(text.length / 4);
+};
+
 // Index management
 const getOrCreateIndex = async (indexName?: string) => {
   const pinecone = initPinecone();
@@ -282,6 +288,30 @@ export const createAssistantWithConvexDocs = async (
   // Step 1: Process documents into chunks with document references
   const chunks = processDocumentsWithIds(documents, documentIds);
   callbacks?.onProgress?.("processing", 1, 4);
+
+  // Step 1.5: Validate per-document token count before proceeding
+  const MAX_TOKENS_PER_PAGE = 50000; // 50k token limit per single page
+
+  // Group chunks by document and calculate tokens per document
+  const documentTokens = new Map<number, number>();
+  chunks.forEach((chunk) => {
+    const docIndex = chunk.metadata.docIndex;
+    const currentTokens = documentTokens.get(docIndex) || 0;
+    documentTokens.set(
+      docIndex,
+      currentTokens + estimateTokenCount(chunk.text)
+    );
+  });
+
+  // Check if any single document exceeds the limit
+  for (const [docIndex, tokens] of documentTokens.entries()) {
+    if (tokens > MAX_TOKENS_PER_PAGE) {
+      const documentUrl = documents[docIndex]?.sourceUrl || "Unknown URL";
+      throw new Error(
+        `DOCUMENTATION_TOO_LARGE: The page "${documentUrl}" structure exceeds. Please try using more specific subpages like /getting-started, /api/reference, or /tutorials instead of this large page.`
+      );
+    }
+  }
 
   // Step 2: Create embeddings
   const texts = chunks.map((chunk) => chunk.text);

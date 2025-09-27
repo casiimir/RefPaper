@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Trash2, AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ErrorAlert } from "@/components/ui/error-alert";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Assistant } from "@/types/assistant";
@@ -96,11 +97,8 @@ export function AssistantSettingsModal({
     }
   };
 
-  const handleInputChange = (
-    field: keyof typeof formData,
-    value: string
-  ) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleClose = () => {
@@ -114,7 +112,7 @@ export function AssistantSettingsModal({
         <DialogHeader>
           <DialogTitle>Assistant Settings</DialogTitle>
           <DialogDescription>
-            Manage settings for "{assistant?.name || ''}"
+            Manage settings for "{assistant?.name || ""}"
           </DialogDescription>
         </DialogHeader>
 
@@ -125,7 +123,9 @@ export function AssistantSettingsModal({
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
                 <div className="space-y-2">
-                  <div className="font-medium">Are you sure you want to delete this assistant?</div>
+                  <div className="font-medium">
+                    Are you sure you want to delete this assistant?
+                  </div>
                   <div className="text-sm">
                     This action cannot be undone. This will permanently delete:
                   </div>
@@ -135,7 +135,10 @@ export function AssistantSettingsModal({
                     <li>• All processed documents and embeddings</li>
                   </ul>
                   <div className="text-sm font-medium mt-3">
-                    Assistant: <span className="font-normal">"{assistant?.name || ''}"</span>
+                    Assistant:{" "}
+                    <span className="font-normal">
+                      "{assistant?.name || ""}"
+                    </span>
                   </div>
                 </div>
               </AlertDescription>
@@ -163,21 +166,33 @@ export function AssistantSettingsModal({
                   id="description"
                   placeholder="Describe what this assistant helps with..."
                   value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
                   disabled={isLoading}
                   rows={3}
                 />
               </div>
 
               <div className="grid gap-2">
-                <Label className="text-muted-foreground">Documentation URL</Label>
+                <Label className="text-muted-foreground">
+                  Documentation URL
+                </Label>
                 <div className="px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground">
-                  {assistant?.docsUrl || ''}
+                  {assistant?.docsUrl || ""}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   URL cannot be changed after creation
                 </p>
               </div>
+
+              {/* Error Message Section */}
+              {assistant?.status === "error" && assistant?.errorMessage && (
+                <div className="grid gap-2">
+                  <Label className="text-red-600">Error Details</Label>
+                  <ErrorAlert errorMessage={assistant.errorMessage} />
+                </div>
+              )}
             </div>
           </form>
         )}
