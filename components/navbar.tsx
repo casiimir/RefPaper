@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useUser, SignOutButton, SignInButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { User } from "lucide-react";
+import { User, LayoutDashboard } from "lucide-react";
 
 export function Navbar() {
   const { isSignedIn, user } = useUser();
@@ -22,8 +22,8 @@ export function Navbar() {
           {isSignedIn ? (
             <div className="flex items-center space-x-3">
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm">
-                  Dashboard
+                <Button variant="ghost" size="sm" className="p-2">
+                  <LayoutDashboard className="h-5 w-5" />
                 </Button>
               </Link>
               <Link href="/settings">

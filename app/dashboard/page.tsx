@@ -9,6 +9,7 @@ import {
   Settings,
   MessageSquare,
   ExternalLink,
+  Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,13 +28,19 @@ import { AssistantSettingsModal } from "@/components/assistant-settings-modal";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { PLAN_LIMITS, UI_MESSAGES } from "@/lib/constants";
 import { Assistant } from "@/types/assistant";
-import { getStatusIcon, getStatusLabel, getStatusColor } from "@/lib/status-utils";
+import {
+  getStatusIcon,
+  getStatusLabel,
+  getStatusColor,
+} from "@/lib/status-utils";
 import { CenteredLoading } from "@/components/ui/loading";
 
 export default function Dashboard() {
   const { isLoaded, isSignedIn, has } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(null);
+  const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(
+    null
+  );
 
   // Only fetch data when auth is loaded and user is signed in
   const assistants = useQuery(
@@ -45,7 +52,6 @@ export default function Dashboard() {
     isLoaded && isSignedIn ? {} : "skip"
   );
   const isPro = has ? has({ plan: "pro" }) : false;
-
 
   const canCreateAssistant = () => {
     if (!isLoaded || !isSignedIn) return false;
@@ -93,99 +99,72 @@ export default function Dashboard() {
 
   return (
     <div className="bg-background min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
-            <p className="text-muted-foreground">
-              Manage your AI assistants and documentation
-            </p>
+      {/* Stats Bar with Create Button */}
+      <div className="border-b bg-muted/20">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Stats Left Side */}
+            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Crown className="h-4 w-4" />
+                <span className="capitalize font-medium">
+                  {isPro ? "Pro" : "Free"} Plan
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-medium">
+                  {questionsThisMonth || 0}/
+                  {isPro ? "∞" : PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}
+                </span>
+                <span>questions this month</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-medium">
+                  {assistants?.length || 0}/
+                  {isPro
+                    ? PLAN_LIMITS.PRO.ASSISTANTS
+                    : PLAN_LIMITS.FREE.ASSISTANTS}
+                </span>
+                <span>assistants</span>
+              </div>
+              {!isPro && (
+                <Button variant="outline" size="sm" className="text-xs h-7">
+                  <Crown className="h-3 w-3 mr-1" />
+                  Upgrade
+                </Button>
+              )}
+            </div>
+
+            {/* Create Button Right Side */}
+            <Button
+              size="sm"
+              onClick={() => setShowCreateModal(true)}
+              disabled={!canCreateAssistant()}
+              className="font-medium"
+              title={getCreateAssistantBlockReason()}
+            >
+              <Plus className="w-3 h-3 mr-1" />
+              Create
+            </Button>
           </div>
-          <Button
-            size="lg"
-            onClick={() => setShowCreateModal(true)}
-            disabled={!canCreateAssistant()}
-            className="font-semibold"
-            title={getCreateAssistantBlockReason()}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Create Assistant
-          </Button>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 py-8">
         {/* Show upgrade prompt when free user reaches question limit */}
-        {!isPro && (questionsThisMonth || 0) >= PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
-          <UpgradePrompt
-            title={UI_MESSAGES.MONTHLY_LIMIT_TITLE}
-            description={UI_MESSAGES.UPGRADE_QUESTIONS_DESCRIPTION}
-            feature="questions"
-            currentUsage={{
-              used: questionsThisMonth || 0,
-              limit: PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH,
-            }}
-            className="mb-8"
-          />
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Plan
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold capitalize">{isPro ? "pro" : "free"}</div>
-              {!isPro && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  Limited features
-                </p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Assistants
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {assistants?.length || 0}
-                <span className="text-sm font-normal text-muted-foreground ml-1">
-                  / {isPro ? PLAN_LIMITS.PRO.ASSISTANTS : PLAN_LIMITS.FREE.ASSISTANTS}
-                </span>
-              </div>
-              <Progress
-                value={((assistants?.length || 0) / (isPro ? PLAN_LIMITS.PRO.ASSISTANTS : PLAN_LIMITS.FREE.ASSISTANTS)) * 100}
-                className="mt-2 h-1"
-              />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Questions This Month
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {questionsThisMonth || 0}
-                <span className="text-sm font-normal text-muted-foreground ml-1">
-                  / {isPro ? "∞" : PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}
-                </span>
-              </div>
-              {!isPro && (
-                <Progress
-                  value={((questionsThisMonth || 0) / PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH) * 100}
-                  className="mt-2 h-1"
-                />
-              )}
-            </CardContent>
-          </Card>
-        </div>
+        {!isPro &&
+          (questionsThisMonth || 0) >= PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
+            <UpgradePrompt
+              title={UI_MESSAGES.MONTHLY_LIMIT_TITLE}
+              description={UI_MESSAGES.UPGRADE_QUESTIONS_DESCRIPTION}
+              feature="questions"
+              currentUsage={{
+                used: questionsThisMonth || 0,
+                limit: PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH,
+              }}
+              className="mb-8"
+            />
+          )}
 
         {assistants.length === 0 ? (
           <div className="text-center py-20">
@@ -203,11 +182,10 @@ export default function Dashboard() {
                 Create your first AI assistant by providing documentation URLs.
                 Transform any docs into an intelligent knowledge base.
               </p>
-
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {assistants.map((assistant) => (
               <Card
                 key={assistant._id}
@@ -278,12 +256,11 @@ export default function Dashboard() {
 
                 <CardFooter className="gap-2">
                   {assistant.status === "ready" ? (
-                    <Link href={`/assistant/${assistant._id}`} className="flex-1">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                      >
+                    <Link
+                      href={`/assistant/${assistant._id}`}
+                      className="flex-1"
+                    >
+                      <Button variant="outline" size="sm" className="w-full">
                         <MessageSquare className="w-3 h-3 mr-1" />
                         Chat
                       </Button>
