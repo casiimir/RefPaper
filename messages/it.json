@@ -25,25 +25,25 @@
     "pricing": "Prezzi"
   },
   "dashboard": {
-    "loadingDashboard": "Loading dashboard...",
-    "questionsThisMonth": "questions this month",
-    "assistants": "assistants",
+    "loadingDashboard": "Caricamento dashboard...",
+    "questionsThisMonth": "domande questo mese",
+    "assistants": "assistenti",
     "chat": "Chat",
-    "clearChat": "Clear Chat",
-    "noAssistants": "No assistants yet",
-    "noAssistantsDescription": "Create your first AI assistant by providing documentation URLs. Transform any docs into an intelligent knowledge base.",
-    "documentsProcessed": "documents processed",
-    "processingDocuments": "Processing documents",
-    "failedToCreate": "Failed to create assistant. Check settings for details.",
-    "backToDashboard": "← Back to Dashboard"
+    "clearChat": "Cancella Chat",
+    "noAssistants": "Nessun assistente ancora",
+    "noAssistantsDescription": "Crea il tuo primo assistente AI fornendo URL di documentazione. Trasforma qualsiasi documentazione in una base di conoscenza intelligente.",
+    "documentsProcessed": "documenti elaborati",
+    "processingDocuments": "Elaborazione documenti",
+    "failedToCreate": "Impossibile creare l'assistente. Controlla le impostazioni per i dettagli.",
+    "backToDashboard": "← Torna alla Dashboard"
   },
   "plans": {
-    "freePlan": "Free Plan",
-    "proPlan": "Pro Plan",
-    "of": "of",
-    "remaining": "remaining",
-    "unlimited": "unlimited",
-    "unlimitedQuestions": "∞ Unlimited questions with Pro plan"
+    "freePlan": "Piano Gratuito",
+    "proPlan": "Piano Pro",
+    "of": "di",
+    "remaining": "rimanenti",
+    "unlimited": "illimitato",
+    "unlimitedQuestions": "∞ Domande illimitate con il piano Pro"
   },
   "settings": {
     "title": "Settings",

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useQuery } from "convex/react";
 import { useAuth } from "@clerk/nextjs";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 import Link from "next/link";
 import {
   Plus,
@@ -39,6 +40,7 @@ import { DebugDialog } from "@/components/dev/debug-dialog";
 
 export default function Dashboard() {
   const { isLoaded, isSignedIn, has } = useAuth();
+  const { t } = useTranslation();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(
     null
@@ -94,7 +96,7 @@ export default function Dashboard() {
   if (!isLoaded || !isSignedIn || assistants === undefined) {
     return (
       <div className="bg-background min-h-screen">
-        <CenteredLoading message="Loading dashboard..." />
+        <CenteredLoading message={t("dashboard.loadingDashboard")} />
       </div>
     );
   }
@@ -110,15 +112,15 @@ export default function Dashboard() {
               <div className="flex items-center gap-2">
                 <Crown className="h-4 w-4" />
                 <span className="capitalize font-medium">
-                  {isPro ? "Pro" : "Free"} Plan
+                  {isPro ? t("plans.proPlan") : t("plans.freePlan")}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">
-                  {questionsThisMonth === undefined ? "Loading..." : questionsThisMonth}/
+                  {questionsThisMonth === undefined ? t("common.loading") : questionsThisMonth}/
                   {isPro ? "∞" : PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}
                 </span>
-                <span>questions this month</span>
+                <span>{t("dashboard.questionsThisMonth")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">
@@ -127,12 +129,12 @@ export default function Dashboard() {
                     ? PLAN_LIMITS.PRO.ASSISTANTS
                     : PLAN_LIMITS.FREE.ASSISTANTS}
                 </span>
-                <span>assistants</span>
+                <span>{t("dashboard.assistants")}</span>
               </div>
               {!isPro && (
                 <Button variant="outline" size="sm" className="text-xs h-7">
                   <Crown className="h-3 w-3 mr-1" />
-                  Upgrade
+                  {t("common.upgrade")}
                 </Button>
               )}
             </div>
@@ -146,7 +148,7 @@ export default function Dashboard() {
               title={getCreateAssistantBlockReason()}
             >
               <Plus className="w-3 h-3 mr-1" />
-              Create
+              {t("common.create")}
             </Button>
           </div>
         </div>
@@ -179,10 +181,9 @@ export default function Dashboard() {
                   <Plus className="w-12 h-12 text-muted-foreground" />
                 </div>
               )}
-              <h2 className="text-2xl font-semibold mb-4">No assistants yet</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t("dashboard.noAssistants")}</h2>
               <p className="text-muted-foreground mb-6">
-                Create your first AI assistant by providing documentation URLs.
-                Transform any docs into an intelligent knowledge base.
+                {t("dashboard.noAssistantsDescription")}
               </p>
             </div>
           </div>
@@ -216,7 +217,7 @@ export default function Dashboard() {
 
                   {assistant.status === "ready" && assistant.totalPages && (
                     <div className="text-xs text-ring">
-                      {assistant.totalPages} documents processed
+                      {assistant.totalPages} {t("dashboard.documentsProcessed")}
                     </div>
                   )}
                 </CardHeader>
@@ -242,7 +243,7 @@ export default function Dashboard() {
                       assistant.totalPages && (
                         <div className="space-y-1">
                           <div className="flex justify-between text-xs text-muted-foreground">
-                            <span>Processing documents</span>
+                            <span>{t("dashboard.processingDocuments")}</span>
                             <span>
                               {assistant.processedPages || 0}/
                               {assistant.totalPages}
@@ -261,7 +262,7 @@ export default function Dashboard() {
 
                     {assistant.status === "error" && (
                       <div className="text-xs text-red-600">
-                        Failed to create assistant. Check settings for details.
+                        {t("dashboard.failedToCreate")}
                       </div>
                     )}
                   </div>
@@ -275,7 +276,7 @@ export default function Dashboard() {
                     >
                       <Button variant="outline" size="sm" className="w-full">
                         <MessageSquare className="w-3 h-3 mr-1" />
-                        Chat
+                        {t("dashboard.chat")}
                       </Button>
                     </Link>
                   ) : (
@@ -286,7 +287,7 @@ export default function Dashboard() {
                       className="flex-1"
                     >
                       <MessageSquare className="w-3 h-3 mr-1" />
-                      Chat
+                      {t("dashboard.chat")}
                     </Button>
                   )}
                   <Button
