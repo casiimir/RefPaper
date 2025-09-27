@@ -115,7 +115,7 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">
-                  {questionsThisMonth || 0}/
+                  {questionsThisMonth === undefined ? "Loading..." : questionsThisMonth}/
                   {isPro ? "∞" : PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}
                 </span>
                 <span>questions this month</span>
@@ -292,6 +292,7 @@ export default function Dashboard() {
                   <Button
                     variant="outline"
                     size="sm"
+                    disabled={assistant.status !== "ready"}
                     onClick={() => setSelectedAssistant(assistant)}
                   >
                     <Settings className="w-3 h-3" />

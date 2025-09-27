@@ -57,21 +57,6 @@ export default function AssistantPage() {
     redirect("/dashboard");
   }
 
-  if (assistant.status !== "ready") {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold mb-2">Assistant is not ready yet</h2>
-          <p className="text-muted-foreground">
-            Status: {assistant.status}
-            {assistant.status === "processing" && assistant.processedPages && assistant.totalPages &&
-              ` (${assistant.processedPages}/${assistant.totalPages} pages)`
-            }
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col h-screen w-full bg-background">

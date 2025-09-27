@@ -61,8 +61,10 @@ export async function POST(
     }
 
     // Increment usage counter (for billing tracking)
+    console.log(`👤 User plan: ${context.isPro ? 'PRO' : 'FREE'} - Will ${context.isPro ? 'NOT' : ''} track usage`);
     if (!context.isPro) {
       await context.convex.mutation(api.usage.incrementUsage, {});
+      console.log('✅ Usage incremented for FREE user');
     }
 
     // Add user message

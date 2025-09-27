@@ -6,7 +6,7 @@ import {
   oneLight,
   oneDark,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/components/providers/theme-provider";
 
 // Pre-compiled regex patterns for performance
 const REGEX_PATTERNS = {

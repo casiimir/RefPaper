@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
-import ConvexClientProvider from "@/components/ConvexClientProvider";
-import { ThemeProvider } from "@/components/theme-provider";
+import ConvexClientProvider from "@/components/providers/ConvexClientProvider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { LayoutWrapper } from "@/components/layout-wrapper";
 import "./globals.css";
 

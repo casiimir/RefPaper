@@ -2,25 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { useMutation } from "convex/react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { BaseModal } from "@/components/modals/BaseModal";
+import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Trash2, AlertTriangle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { ButtonLoading } from "@/components/ui/loading";
+import { Trash2 } from "lucide-react";
 import { ErrorAlert } from "@/components/ui/error-alert";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Assistant } from "@/types/assistant";
-import { ButtonLoading } from "@/components/ui/loading";
 
 interface AssistantSettingsModalProps {
   open: boolean;
@@ -36,6 +29,7 @@ export function AssistantSettingsModal({
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: assistant?.name || "",
     description: assistant?.description || "",
@@ -54,14 +48,12 @@ export function AssistantSettingsModal({
     }
   }, [assistant]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!assistant || !formData.name.trim()) {
-      return;
-    }
+    if (!assistant || !formData.name.trim()) return;
 
     setIsLoading(true);
+    setError(null);
 
     try {
       await updateAssistant({
@@ -69,10 +61,10 @@ export function AssistantSettingsModal({
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
       });
-
       onOpenChange(false);
-    } catch (error) {
-      console.error("Error updating assistant:", error);
+    } catch (err) {
+      console.error("Failed to update assistant:", err);
+      setError("Failed to update assistant. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -82,187 +74,128 @@ export function AssistantSettingsModal({
     if (!assistant) return;
 
     setIsDeleting(true);
+    setError(null);
 
     try {
       await deleteAssistant({
         id: assistant._id as Id<"assistants">,
       });
-
-      onOpenChange(false);
       setShowDeleteConfirm(false);
-    } catch (error) {
-      console.error("Error deleting assistant:", error);
+      onOpenChange(false);
+    } catch (err) {
+      console.error("Failed to delete assistant:", err);
+      setError("Failed to delete assistant. Please try again.");
     } finally {
       setIsDeleting(false);
     }
   };
 
-  const handleInputChange = (field: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleClose = () => {
+    if (!isLoading && !isDeleting) {
+      setShowDeleteConfirm(false);
+      setError(null);
+      onOpenChange(false);
+    }
   };
 
-  const handleClose = () => {
-    setShowDeleteConfirm(false);
-    onOpenChange(false);
-  };
+  const settingsFooter = (
+    <>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => setShowDeleteConfirm(true)}
+        disabled={isLoading}
+        className="mr-auto"
+      >
+        <Trash2 className="h-4 w-4 mr-2" />
+        Delete
+      </Button>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={handleClose}
+        disabled={isLoading}
+      >
+        Cancel
+      </Button>
+      <Button
+        type="submit"
+        disabled={!formData.name.trim() || isLoading}
+        form="settings-form"
+      >
+        <ButtonLoading isLoading={isLoading}>
+          Save Changes
+        </ButtonLoading>
+      </Button>
+    </>
+  );
 
   return (
-    <Dialog open={open && !!assistant} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Assistant Settings</DialogTitle>
-          <DialogDescription>
-            Manage settings for "{assistant?.name || ""}"
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <BaseModal
+        open={open && !showDeleteConfirm}
+        onOpenChange={handleClose}
+        title="Assistant Settings"
+        description={`Manage settings for "${assistant?.name || ""}"`}
+        footer={settingsFooter}
+        loading={isLoading}
+      >
+        <form id="settings-form" onSubmit={handleSave} className="space-y-4">
+          {error && <ErrorAlert errorMessage={error} />}
 
-        {showDeleteConfirm ? (
-          // Delete Confirmation View
-          <div className="py-4">
-            <Alert className="border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="space-y-2">
-                  <div className="font-medium">
-                    Are you sure you want to delete this assistant?
-                  </div>
-                  <div className="text-sm">
-                    This action cannot be undone. This will permanently delete:
-                  </div>
-                  <ul className="text-xs space-y-1 ml-4">
-                    <li>• The assistant and all its settings</li>
-                    <li>• All chat messages and conversation history</li>
-                    <li>• All processed documents and embeddings</li>
-                  </ul>
-                  <div className="text-sm font-medium mt-3">
-                    Assistant:{" "}
-                    <span className="font-normal">
-                      "{assistant?.name || ""}"
-                    </span>
-                  </div>
-                </div>
-              </AlertDescription>
-            </Alert>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-right">
+              Name
+            </Label>
+            <div className="col-span-3">
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                disabled={isLoading}
+                required
+              />
+            </div>
           </div>
-        ) : (
-          // Settings Form View
-          <form onSubmit={handleSubmit}>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Assistant Name *</Label>
-                <Input
-                  id="name"
-                  placeholder="e.g., React Docs Assistant"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  disabled={isLoading}
-                  required
-                />
-              </div>
 
-              <div className="grid gap-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  placeholder="Describe what this assistant helps with..."
-                  value={formData.description}
-                  onChange={(e) =>
-                    handleInputChange("description", e.target.value)
-                  }
-                  disabled={isLoading}
-                  rows={3}
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label className="text-muted-foreground">
-                  Documentation URL
-                </Label>
-                <div className="px-3 py-2 bg-muted rounded-md text-sm text-muted-foreground">
-                  {assistant?.docsUrl || ""}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  URL cannot be changed after creation
-                </p>
-              </div>
-
-              {/* Error Message Section */}
-              {assistant?.status === "error" && assistant?.errorMessage && (
-                <div className="grid gap-2">
-                  <Label className="text-red-600">Error Details</Label>
-                  <ErrorAlert errorMessage={assistant.errorMessage} />
-                </div>
-              )}
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="description" className="text-right">
+              Description
+            </Label>
+            <div className="col-span-3">
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                disabled={isLoading}
+                rows={3}
+              />
             </div>
-          </form>
-        )}
+          </div>
+        </form>
+      </BaseModal>
 
-        <DialogFooter className="flex-col gap-4">
-          {showDeleteConfirm ? (
-            // Delete Confirmation Buttons
-            <div className="flex gap-2 w-full">
-              <Button
-                variant="outline"
-                onClick={() => setShowDeleteConfirm(false)}
-                disabled={isDeleting}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={handleDelete}
-                disabled={isDeleting}
-                className="flex-1"
-              >
-                <ButtonLoading isLoading={isDeleting} loadingText="Deleting...">
-                  Delete Forever
-                </ButtonLoading>
-              </Button>
-            </div>
-          ) : (
-            // Settings Form Buttons
-            <>
-              <div className="flex gap-2 w-full">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleClose}
-                  disabled={isLoading}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isLoading || !formData.name.trim()}
-                  className="flex-1"
-                >
-                  <ButtonLoading isLoading={isLoading} loadingText="Saving...">
-                    Save Changes
-                  </ButtonLoading>
-                </Button>
-              </div>
-
-              <div className="w-full border-t border-border my-2"></div>
-
-              <div className="w-full">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => setShowDeleteConfirm(true)}
-                  disabled={isLoading}
-                  className="w-full"
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete Assistant
-                </Button>
-              </div>
-            </>
-          )}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <ConfirmationModal
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        title="Delete Assistant"
+        confirmText="Delete Assistant"
+        onConfirm={handleDelete}
+        loading={isDeleting}
+        variant="destructive"
+      >
+        <div className="text-sm space-y-2">
+          <div>This will permanently delete:</div>
+          <ul className="text-xs space-y-1 ml-4">
+            <li>• The assistant and all its settings</li>
+            <li>• All chat messages and conversation history</li>
+            <li>• All processed documents and embeddings</li>
+          </ul>
+          <div className="text-sm font-medium mt-3">
+            Assistant: <span className="font-normal">"{assistant?.name || ""}"</span>
+          </div>
+        </div>
+      </ConfirmationModal>
+    </>
   );
 }

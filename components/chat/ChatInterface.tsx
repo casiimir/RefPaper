@@ -60,6 +60,12 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
+    // Check if assistant is ready
+    if (assistant.status !== "ready") {
+      alert(`Assistant is ${assistant.status}. Please wait for it to be ready before asking questions.`);
+      return;
+    }
+
     const message = input.trim();
     setInput("");
     setIsLoading(true);
@@ -275,14 +281,16 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
             placeholder={
               rateLimitError
                 ? "Monthly limit reached - upgrade to Pro for unlimited questions"
+                : assistant.status !== "ready"
+                ? `Assistant is ${assistant.status}... Please wait`
                 : "Ask a question about the documentation..."
             }
-            disabled={isLoading || !!rateLimitError}
+            disabled={isLoading || !!rateLimitError || assistant.status !== "ready"}
             className="flex-1"
           />
           <Button
             type="submit"
-            disabled={!input.trim() || isLoading || !!rateLimitError}
+            disabled={!input.trim() || isLoading || !!rateLimitError || assistant.status !== "ready"}
             size="sm"
           >
             {isLoading ? (
