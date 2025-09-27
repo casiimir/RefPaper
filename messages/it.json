@@ -1,0 +1,160 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "create": "Create",
+    "confirm": "Confirm",
+    "tryAgain": "Try again",
+    "upgrade": "Upgrade",
+    "actionCannotBeUndone": "This action cannot be undone."
+  },
+  "app": {
+    "name": "RefPaper",
+    "tagline": "Turn any documentation into an AI knowledge assistant in 30 seconds.",
+    "subtitle": "Boost support, reduce costs, and scale knowledge.",
+    "ctaButton": "Start Free",
+    "description": "Turn documentation into an AI knowledge assistant. RefPaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge."
+  },
+  "navigation": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "dashboard": "Dashboard",
+    "features": "Features",
+    "pricing": "Pricing"
+  },
+  "dashboard": {
+    "loadingDashboard": "Loading dashboard...",
+    "questionsThisMonth": "questions this month",
+    "assistants": "assistants",
+    "chat": "Chat",
+    "clearChat": "Clear Chat",
+    "noAssistants": "No assistants yet",
+    "noAssistantsDescription": "Create your first AI assistant by providing documentation URLs. Transform any docs into an intelligent knowledge base.",
+    "documentsProcessed": "documents processed",
+    "processingDocuments": "Processing documents",
+    "failedToCreate": "Failed to create assistant. Check settings for details.",
+    "backToDashboard": "← Back to Dashboard"
+  },
+  "plans": {
+    "freePlan": "Free Plan",
+    "proPlan": "Pro Plan",
+    "of": "of",
+    "remaining": "remaining",
+    "unlimited": "unlimited",
+    "unlimitedQuestions": "∞ Unlimited questions with Pro plan"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and usage",
+    "accountBilling": "Account & Billing",
+    "usage": "Usage",
+    "aiAssistants": "AI Assistants",
+    "assistantsUsage": "Your current assistants usage",
+    "assistantsRemaining": "{count} assistants remaining",
+    "monthlyQuestions": "Monthly Questions",
+    "questionsDescription": "Questions asked this month",
+    "questionsRemaining": "{count} questions remaining",
+    "approachingLimit": "Approaching monthly limit",
+    "approachingLimitDescription": "You're using most of your free questions. Upgrade to Pro for unlimited questions.",
+    "usageCount": "Usage: {used}/{limit} questions this month"
+  },
+  "chat": {
+    "assistantsSidebar": "Assistants",
+    "new": "New",
+    "documentationFrom": "Documentation from {hostname}",
+    "startConversation": "Start a conversation",
+    "askAnything": "Ask me anything about the documentation from {hostname}",
+    "tryAsking": "Try asking:",
+    "howToGetStarted": "How do I get started?",
+    "mainFeatures": "What are the main features?",
+    "showExamples": "Show me examples",
+    "askQuestion": "Ask a question about the documentation...",
+    "monthlyLimitReached": "Monthly limit reached - upgrade to Pro for unlimited questions",
+    "assistantNotReady": "Assistant is {status}... Please wait",
+    "assistantNotReadyLong": "Assistant is {status}. Please wait for it to be ready before asking questions.",
+    "monthlyLimitReachedTitle": "Monthly limit reached!",
+    "suggestions": "Suggestions:",
+    "consultingDocs": "I'm consulting the documentation"
+  },
+  "assistant": {
+    "createNew": "Create New Assistant",
+    "createDescription": "Create an AI assistant trained on your documentation",
+    "createAssistant": "Create Assistant",
+    "settings": "Assistant Settings",
+    "settingsDescription": "Manage settings for \"{name}\"",
+    "saveChanges": "Save Changes",
+    "deleteAssistant": "Delete Assistant",
+    "deleteConfirmation": "Delete Assistant",
+    "deleteWarning": "This will permanently delete:",
+    "deleteItems": [
+      "• The assistant and all its settings",
+      "• All chat messages and conversation history",
+      "• All processed documents and embeddings"
+    ],
+    "assistantName": "Assistant: \"{name}\"",
+    "form": {
+      "name": "Name",
+      "docsUrl": "Docs URL",
+      "description": "Description",
+      "namePlaceholder": "My Documentation Assistant",
+      "urlPlaceholder": "https://docs.example.com",
+      "descriptionPlaceholder": "Brief description of what this assistant helps with...",
+      "crawlNote": "The starting URL where we'll crawl your documentation"
+    },
+    "freePlanLimits": {
+      "title": "Free Plan - Limitations:",
+      "specificSubpages": "Specific subpages recommended: e.g. https://docs.convex.dev/functions instead of https://docs.convex.dev/",
+      "pageLimit": "30 pages limit: If you enter complete URLs, we'll only crawl the first 30 pages",
+      "depthLimit": "Limited depth: Only 3 levels of subpages"
+    }
+  },
+  "status": {
+    "creating": "Creating",
+    "crawling": "Crawling",
+    "processing": "Processing",
+    "ready": "Ready",
+    "error": "Error"
+  },
+  "errors": {
+    "unauthorized": "Unauthorized",
+    "assistantNotReady": "Assistant is not ready yet",
+    "assistantNotFound": "Assistant not found or unauthorized",
+    "monthlyLimitReached": "Monthly question limit reached. Upgrade to Pro for unlimited questions.",
+    "assistantLimitFree": "Free plan limited to 3 assistants. Upgrade to Pro for 20 assistants.",
+    "assistantLimitPro": "Pro plan limited to 20 assistants total.",
+    "messageRequired": "Message is required",
+    "nameAndUrlRequired": "Name and docsUrl are required",
+    "failedToSend": "Failed to send message",
+    "failedToCreate": "Failed to create assistant",
+    "assistantLimitReached": "Assistant limit reached!",
+    "upgradeToCreateNew": "You need to upgrade to Pro to create new assistants.",
+    "questionsExhausted": "You've used all 20 free questions this month. You can no longer create new assistants or ask questions until you upgrade.",
+    "fieldRequired": "{fieldName} is required",
+    "invalidUrl": "Please enter a valid URL",
+    "minLength": "{fieldName} must be at least {count} characters",
+    "maxLength": "{fieldName} must be no more than {count} characters",
+    "validationFailed": "Validation failed. Please check the URL format."
+  },
+  "upgrade": {
+    "required": "Upgrade Required",
+    "description": "You've reached your plan limit. Upgrade to Pro for more assistants and unlimited questions.",
+    "toPro": "Upgrade to Pro",
+    "getUnlimited": "Get unlimited {feature}",
+    "suggestions": "💡 Suggestions:"
+  },
+  "footer": {
+    "description": "Transform any documentation into an AI knowledge assistant in seconds. Boost support, reduce costs, and scale knowledge effortlessly.",
+    "product": "Product",
+    "about": "About",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "copyright": "© 2025 RefPaper.",
+    "builtWith": "Built with Next.js, Convex, and Clerk"
+  },
+  "ui": {
+    "toggleTheme": "Toggle theme",
+    "switchToLanguage": "Switch to {language}"
+  }
+}
