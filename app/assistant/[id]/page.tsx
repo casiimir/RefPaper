@@ -10,9 +10,11 @@ import { Navbar } from "@/components/navbar";
 import { redirect } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export default function AssistantPage() {
   const { isLoaded, isSignedIn } = useAuth();
+  const { t } = useTranslation();
   const params = useParams();
   const assistantId = params.id as string;
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -42,7 +44,7 @@ export default function AssistantPage() {
   }, []);
 
   if (!isLoaded) {
-    return <div className="flex h-screen items-center justify-center">Loading...</div>;
+    return <div className="flex h-screen items-center justify-center">{t("common.loading")}</div>;
   }
 
   if (!isSignedIn) {
@@ -50,7 +52,7 @@ export default function AssistantPage() {
   }
 
   if (assistant === undefined || assistants === undefined) {
-    return <div className="flex h-screen items-center justify-center">Loading...</div>;
+    return <div className="flex h-screen items-center justify-center">{t("common.loading")}</div>;
   }
 
   if (assistant === null) {

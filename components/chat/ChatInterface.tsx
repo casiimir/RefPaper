@@ -11,12 +11,14 @@ import { TypingIndicator } from "./TypingIndicator";
 import { Send, Loader2, User } from "lucide-react";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { Assistant } from "@/types/assistant";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 interface ChatInterfaceProps {
   assistant: Assistant;
 }
 
 export function ChatInterface({ assistant }: ChatInterfaceProps) {
+  const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [rateLimitError, setRateLimitError] = useState<{
@@ -62,7 +64,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
 
     // Check if assistant is ready
     if (assistant.status !== "ready") {
-      alert(`Assistant is ${assistant.status}. Please wait for it to be ready before asking questions.`);
+      alert(t("chat.assistantNotReadyLong", { status: assistant.status }));
       return;
     }
 
@@ -185,7 +187,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
           <div>
             <h1 className="text-xl font-semibold">{assistant.name}</h1>
             <p className="text-sm text-muted-foreground">
-              Documentation from {new URL(assistant.docsUrl).hostname}
+              {t("chat.documentationFrom", { hostname: new URL(assistant.docsUrl).hostname })}
             </p>
           </div>
         </div>
@@ -195,7 +197,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
           onClick={handleClearChat}
           disabled={messages.length === 0}
         >
-          Clear Chat
+          {t("dashboard.clearChat")}
         </Button>
       </div>
 
@@ -204,19 +206,16 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         {messages.length === 0 ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center max-w-md">
-              <h3 className="text-lg font-medium mb-2">Start a conversation</h3>
+              <h3 className="text-lg font-medium mb-2">{t("chat.startConversation")}</h3>
               <p className="text-muted-foreground mb-4">
-                Ask me anything about the documentation from{" "}
-                <span className="font-medium">
-                  {new URL(assistant.docsUrl).hostname}
-                </span>
+                {t("chat.askAnything", { hostname: new URL(assistant.docsUrl).hostname })}
               </p>
               <div className="text-sm text-muted-foreground space-y-1">
-                <p>Try asking:</p>
+                <p>{t("chat.tryAsking")}</p>
                 <ul className="list-disc list-inside space-y-1 text-left">
-                  <li>&quot;How do I get started?&quot;</li>
-                  <li>&quot;What are the main features?&quot;</li>
-                  <li>&quot;Show me examples&quot;</li>
+                  <li>&quot;{t("chat.howToGetStarted")}&quot;</li>
+                  <li>&quot;{t("chat.mainFeatures")}&quot;</li>
+                  <li>&quot;{t("chat.showExamples")}&quot;</li>
                 </ul>
               </div>
             </div>
@@ -260,7 +259,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         {/* Rate limit error */}
         {rateLimitError && (
           <UpgradePrompt
-            title="Monthly limit reached!"
+            title={t("chat.monthlyLimitReachedTitle")}
             description={rateLimitError.message}
             feature="questions"
             currentUsage={{
@@ -280,10 +279,10 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
             onChange={(e) => setInput(e.target.value)}
             placeholder={
               rateLimitError
-                ? "Monthly limit reached - upgrade to Pro for unlimited questions"
+                ? t("chat.monthlyLimitReached")
                 : assistant.status !== "ready"
-                ? `Assistant is ${assistant.status}... Please wait`
-                : "Ask a question about the documentation..."
+                ? t("chat.assistantNotReady", { status: assistant.status })
+                : t("chat.askQuestion")
             }
             disabled={isLoading || !!rateLimitError || assistant.status !== "ready"}
             className="flex-1"

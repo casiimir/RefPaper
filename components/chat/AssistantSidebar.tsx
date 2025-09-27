@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Assistant } from "@/types/assistant";
 import { isReadyStatus, isProcessingStatus, isErrorStatus } from "@/lib/status-utils";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 interface AssistantSidebarProps {
   assistants: Assistant[];
@@ -24,6 +25,7 @@ export function AssistantSidebar({
   onClose,
   onToggle,
 }: AssistantSidebarProps) {
+  const { t } = useTranslation();
   return (
     <>
       {/* Side toggle button for opening */}
@@ -65,11 +67,11 @@ export function AssistantSidebar({
         {/* Header */}
         <div className="p-4 border-b">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-lg">Assistants</h2>
+            <h2 className="font-semibold text-lg">{t("chat.assistantsSidebar")}</h2>
             <Link href="/dashboard">
               <Button size="sm" variant="outline">
                 <Plus className="h-4 w-4 mr-1" />
-                {isMobile ? "" : "New"}
+                {isMobile ? "" : t("chat.new")}
               </Button>
             </Link>
           </div>
@@ -115,7 +117,7 @@ export function AssistantSidebar({
         <div className="p-4 border-t">
           <Link href="/dashboard" onClick={() => isMobile && onClose()}>
             <Button variant="ghost" className="w-full justify-start">
-              ← Back to Dashboard
+              {t("dashboard.backToDashboard")}
             </Button>
           </Link>
         </div>
