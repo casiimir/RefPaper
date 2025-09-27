@@ -19,6 +19,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { PLAN_LIMITS } from "@/lib/constants";
 import { ButtonLoading } from "@/components/ui/loading";
+import { validateDomain, ValidationResult } from "@/lib/domain-validator";
 
 interface CreateAssistantModalProps {
   open: boolean;
@@ -45,6 +46,7 @@ export function CreateAssistantModal({
     docsUrl: "",
     description: "",
   });
+  const [urlValidation, setUrlValidation] = useState<ValidationResult | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -110,6 +112,18 @@ export function CreateAssistantModal({
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // Handle URL change with validation
+  const handleUrlChange = (url: string) => {
+    setFormData(prev => ({ ...prev, docsUrl: url }));
+
+    if (url.trim()) {
+      const validation = validateDomain(url);
+      setUrlValidation(validation);
+    } else {
+      setUrlValidation(null);
+    }
+  };
+
   // Helper functions for URL suggestions
   const isSpecificPage = (url: string): boolean => {
     return /\/(home|getting-started|intro|guide|learn|start|welcome)$/i.test(url);
@@ -134,6 +148,7 @@ export function CreateAssistantModal({
     if (!open) {
       setServerError(null);
       setFormData({ name: "", docsUrl: "", description: "" });
+      setUrlValidation(null);
     }
     onOpenChange(open);
   };
@@ -234,13 +249,33 @@ export function CreateAssistantModal({
                 type="url"
                 placeholder="https://docs.example.com"
                 value={formData.docsUrl}
-                onChange={(e) => handleInputChange("docsUrl", e.target.value)}
+                onChange={(e) => handleUrlChange(e.target.value)}
                 disabled={isLoading || !canCreateAssistant}
                 required
               />
               <p className="text-xs text-muted-foreground">
                 The starting URL where we'll crawl your documentation
               </p>
+
+              {/* URL Validation Errors */}
+              {urlValidation?.error && (
+                <Alert variant="destructive" className="mt-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-xs">
+                    {urlValidation.error}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {/* URL Validation Warnings */}
+              {urlValidation?.warning && !urlValidation.error && (
+                <Alert className="mt-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-xs">
+                    ⚠️ {urlValidation.warning}
+                  </AlertDescription>
+                </Alert>
+              )}
 
               {shouldShowSuggestion && (
                 <Alert className="mt-2">
@@ -292,7 +327,11 @@ export function CreateAssistantModal({
             <Button
               type="submit"
               disabled={
-                isLoading || !formData.name.trim() || !formData.docsUrl.trim() || !canCreateAssistant
+                isLoading ||
+                !formData.name.trim() ||
+                !formData.docsUrl.trim() ||
+                !canCreateAssistant ||
+                (urlValidation?.isValid === false)
               }
             >
               <ButtonLoading isLoading={isLoading} loadingText="Creating...">

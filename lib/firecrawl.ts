@@ -10,7 +10,7 @@ import {
 // Generic config
 const DEFAULT_CONFIG: CrawlConfig = {
   formats: ["markdown"],
-  limit: 500,
+  limit: 30,
   maxDepth: 10,
   waitFor: 1000,
   excludePaths: [
@@ -35,7 +35,7 @@ const DEFAULT_CONFIG: CrawlConfig = {
 export async function crawlDocumentation(
   docUrl: string,
   options: Partial<CrawlConfig> = {},
-  userPlan: 'free' | 'pro' = 'free'
+  userPlan: "free" | "pro" = "free"
 ): Promise<Document[]> {
   if (!process.env.FIRECRAWL_API_KEY) {
     throw new Error("FIRECRAWL_API_KEY is required");
@@ -49,7 +49,7 @@ export async function crawlDocumentation(
   // Set depth limits based on user plan
   const planLimits = {
     free: { maxDepth: 3, limit: 30 }, // Limited to 30 pages for free users
-    pro: { maxDepth: 15, limit: 1000 },
+    pro: { maxDepth: 15, limit: 150 }, // Limited to 150 pages for free users
   };
 
   const limits = planLimits[userPlan];
