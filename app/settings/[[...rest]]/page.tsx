@@ -12,9 +12,11 @@ import { User, BarChart3 } from "lucide-react";
 import { PLAN_LIMITS } from "@/lib/constants";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { CenteredLoading } from "@/components/ui/loading";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export default function SettingsPage() {
   const { isLoaded, isSignedIn, has } = useAuth();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("account");
 
   const assistants = useQuery(
@@ -29,13 +31,13 @@ export default function SettingsPage() {
   const isPro = has ? has({ plan: "pro" }) : false;
 
   if (!isLoaded) {
-    return <CenteredLoading message="Loading settings..." />;
+    return <CenteredLoading message={t("common.loading")} />;
   }
 
   if (!isSignedIn) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <CenteredLoading message="Please sign in to access settings." />
+        <CenteredLoading message={t("navigation.signIn")} />
       </div>
     );
   }
@@ -44,9 +46,9 @@ export default function SettingsPage() {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Settings</h1>
+        <h1 className="text-3xl font-bold">{t("settings.title")}</h1>
         <p className="text-muted-foreground">
-          Manage your account and usage
+          {t("settings.subtitle")}
         </p>
       </div>
 
@@ -55,11 +57,11 @@ export default function SettingsPage() {
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="account" className="flex items-center gap-2">
             <User className="h-4 w-4" />
-            Account & Billing
+            {t("settings.accountBilling")}
           </TabsTrigger>
           <TabsTrigger value="usage" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
-            Usage
+            {t("settings.usage")}
           </TabsTrigger>
         </TabsList>
 
@@ -86,9 +88,9 @@ export default function SettingsPage() {
             {/* Assistants Usage */}
             <Card>
               <CardHeader>
-                <CardTitle>AI Assistants</CardTitle>
+                <CardTitle>{t("settings.aiAssistants")}</CardTitle>
                 <CardDescription>
-                  Your current assistants usage
+                  {t("settings.assistantsUsage")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -98,7 +100,7 @@ export default function SettingsPage() {
                       {assistants?.length || 0}
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      of {isPro ? PLAN_LIMITS.PRO.ASSISTANTS : PLAN_LIMITS.FREE.ASSISTANTS}
+                      {t("plans.of")} {isPro ? PLAN_LIMITS.PRO.ASSISTANTS : PLAN_LIMITS.FREE.ASSISTANTS}
                     </span>
                   </div>
                   <Progress
@@ -106,10 +108,11 @@ export default function SettingsPage() {
                     className="h-2"
                   />
                   <div className="text-xs text-muted-foreground">
-                    {isPro ?
-                      `${PLAN_LIMITS.PRO.ASSISTANTS - (assistants?.length || 0)} assistants remaining` :
-                      `${PLAN_LIMITS.FREE.ASSISTANTS - (assistants?.length || 0)} assistants remaining`
-                    }
+                    {t("settings.assistantsRemaining", {
+                      count: isPro ?
+                        PLAN_LIMITS.PRO.ASSISTANTS - (assistants?.length || 0) :
+                        PLAN_LIMITS.FREE.ASSISTANTS - (assistants?.length || 0)
+                    })}
                   </div>
                 </div>
               </CardContent>
@@ -118,9 +121,9 @@ export default function SettingsPage() {
             {/* Questions Usage */}
             <Card>
               <CardHeader>
-                <CardTitle>Monthly Questions</CardTitle>
+                <CardTitle>{t("settings.monthlyQuestions")}</CardTitle>
                 <CardDescription>
-                  Questions asked this month
+                  {t("settings.questionsDescription")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -130,7 +133,7 @@ export default function SettingsPage() {
                       {questionsThisMonth || 0}
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      {isPro ? "unlimited" : `of ${PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}`}
+                      {isPro ? t("plans.unlimited") : `${t("plans.of")} ${PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}`}
                     </span>
                   </div>
                   {!isPro && (
@@ -140,13 +143,15 @@ export default function SettingsPage() {
                         className="h-2"
                       />
                       <div className="text-xs text-muted-foreground">
-                        {PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH - (questionsThisMonth || 0)} questions remaining
+                        {t("settings.questionsRemaining", {
+                          count: PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH - (questionsThisMonth || 0)
+                        })}
                       </div>
                     </>
                   )}
                   {isPro && (
                     <div className="text-xs text-muted-foreground">
-                      ∞ Unlimited questions with Pro plan
+                      {t("plans.unlimitedQuestions")}
                     </div>
                   )}
                 </div>
@@ -157,8 +162,8 @@ export default function SettingsPage() {
           {/* Upgrade Prompt for Free Users Near Limit */}
           {!isPro && (questionsThisMonth || 0) >= PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH * 0.8 && (
             <UpgradePrompt
-              title="Approaching monthly limit"
-              description="You're using most of your free questions. Upgrade to Pro for unlimited questions."
+              title={t("settings.approachingLimit")}
+              description={t("settings.approachingLimitDescription")}
               feature="questions"
               currentUsage={{
                 used: questionsThisMonth || 0,

@@ -46,19 +46,19 @@
     "unlimitedQuestions": "∞ Domande illimitate con il piano Pro"
   },
   "settings": {
-    "title": "Settings",
-    "subtitle": "Manage your account and usage",
-    "accountBilling": "Account & Billing",
-    "usage": "Usage",
-    "aiAssistants": "AI Assistants",
-    "assistantsUsage": "Your current assistants usage",
-    "assistantsRemaining": "{count} assistants remaining",
-    "monthlyQuestions": "Monthly Questions",
-    "questionsDescription": "Questions asked this month",
-    "questionsRemaining": "{count} questions remaining",
-    "approachingLimit": "Approaching monthly limit",
-    "approachingLimitDescription": "You're using most of your free questions. Upgrade to Pro for unlimited questions.",
-    "usageCount": "Usage: {used}/{limit} questions this month"
+    "title": "Impostazioni",
+    "subtitle": "Gestisci il tuo account e utilizzo",
+    "accountBilling": "Account e Fatturazione",
+    "usage": "Utilizzo",
+    "aiAssistants": "Assistenti AI",
+    "assistantsUsage": "Il tuo utilizzo attuale degli assistenti",
+    "assistantsRemaining": "{count} assistenti rimanenti",
+    "monthlyQuestions": "Domande Mensili",
+    "questionsDescription": "Domande fatte questo mese",
+    "questionsRemaining": "{count} domande rimanenti",
+    "approachingLimit": "Limite mensile in avvicinamento",
+    "approachingLimitDescription": "Stai usando la maggior parte delle tue domande gratuite. Aggiorna a Pro per domande illimitate.",
+    "usageCount": "Utilizzo: {used}/{limit} domande questo mese"
   },
   "chat": {
     "assistantsSidebar": "Assistenti",
