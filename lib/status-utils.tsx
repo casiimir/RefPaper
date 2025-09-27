@@ -37,13 +37,13 @@ export function getStatusColor(status: string) {
     case "creating":
     case "crawling":
     case "processing":
-      return "bg-blue-500/10 text-blue-700 border-blue-200";
+      return "bg-blue-500/10 text-blue-500 border-blue-200";
     case "ready":
-      return "bg-green-500/10 text-green-700 border-green-200";
+      return "bg-green-500/10 text-green-500 border-green-200";
     case "error":
-      return "bg-red-500/10 text-red-700 border-red-200";
+      return "bg-red-500/10 text-red-500 border-red-200";
     default:
-      return "bg-gray-500/10 text-gray-700 border-gray-200";
+      return "bg-gray-500/10 text-gray-500 border-gray-200";
   }
 }
 
