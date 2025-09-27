@@ -8,9 +8,10 @@ import { api } from "@/convex/_generated/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { Loader2, User, BarChart3 } from "lucide-react";
+import { User, BarChart3 } from "lucide-react";
 import { PLAN_LIMITS } from "@/lib/constants";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
+import { CenteredLoading } from "@/components/ui/loading";
 
 export default function SettingsPage() {
   const { isLoaded, isSignedIn, has } = useAuth();
@@ -28,22 +29,13 @@ export default function SettingsPage() {
   const isPro = has ? has({ plan: "pro" }) : false;
 
   if (!isLoaded) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin" />
-        </div>
-      </div>
-    );
+    return <CenteredLoading message="Loading settings..." />;
   }
 
   if (!isSignedIn) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-20">
-          <h1 className="text-2xl font-bold">Access Denied</h1>
-          <p className="text-muted-foreground">Please sign in to access settings.</p>
-        </div>
+        <CenteredLoading message="Please sign in to access settings." />
       </div>
     );
   }

@@ -9,10 +9,6 @@ import {
   Settings,
   MessageSquare,
   ExternalLink,
-  Loader2,
-  AlertCircle,
-  CheckCircle,
-  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,16 +26,9 @@ import { CreateAssistantModal } from "@/components/create-assistant-modal";
 import { AssistantSettingsModal } from "@/components/assistant-settings-modal";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { PLAN_LIMITS, UI_MESSAGES } from "@/lib/constants";
-
-type Assistant = {
-  _id: string;
-  name: string;
-  description?: string;
-  docsUrl: string;
-  status: string;
-  totalPages?: number;
-  processedPages?: number;
-};
+import { Assistant } from "@/types/assistant";
+import { getStatusIcon, getStatusLabel, getStatusColor } from "@/lib/status-utils";
+import { CenteredLoading } from "@/components/ui/loading";
 
 export default function Dashboard() {
   const { isLoaded, isSignedIn, has } = useAuth();
@@ -57,52 +46,6 @@ export default function Dashboard() {
   );
   const isPro = has ? has({ plan: "pro" }) : false;
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "creating":
-      case "crawling":
-      case "processing":
-        return <Loader2 className="w-4 h-4 animate-spin" />;
-      case "ready":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "error":
-        return <AlertCircle className="w-4 h-4 text-red-500" />;
-      default:
-        return <Clock className="w-4 h-4" />;
-    }
-  };
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case "creating":
-        return "Creating";
-      case "crawling":
-        return "Crawling";
-      case "processing":
-        return "Processing";
-      case "ready":
-        return "Ready";
-      case "error":
-        return "Error";
-      default:
-        return status;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "creating":
-      case "crawling":
-      case "processing":
-        return "bg-blue-500/10 text-blue-700 border-blue-200";
-      case "ready":
-        return "bg-green-500/10 text-green-700 border-green-200";
-      case "error":
-        return "bg-red-500/10 text-red-700 border-red-200";
-      default:
-        return "bg-gray-500/10 text-gray-700 border-gray-200";
-    }
-  };
 
   const canCreateAssistant = () => {
     if (!isLoaded || !isSignedIn) return false;
@@ -143,11 +86,7 @@ export default function Dashboard() {
   if (!isLoaded || !isSignedIn || assistants === undefined) {
     return (
       <div className="bg-background min-h-screen">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin" />
-          </div>
-        </div>
+        <CenteredLoading message="Loading dashboard..." />
       </div>
     );
   }

@@ -14,18 +14,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Trash2, AlertTriangle } from "lucide-react";
+import { Trash2, AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-
-type Assistant = {
-  _id: string;
-  name: string;
-  description?: string;
-  docsUrl: string;
-  status: string;
-};
+import { Assistant } from "@/types/assistant";
+import { ButtonLoading } from "@/components/ui/loading";
 
 interface AssistantSettingsModalProps {
   open: boolean;
@@ -206,8 +200,9 @@ export function AssistantSettingsModal({
                 disabled={isDeleting}
                 className="flex-1"
               >
-                {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Delete Forever
+                <ButtonLoading isLoading={isDeleting} loadingText="Deleting...">
+                  Delete Forever
+                </ButtonLoading>
               </Button>
             </div>
           ) : (
@@ -228,8 +223,9 @@ export function AssistantSettingsModal({
                   disabled={isLoading || !formData.name.trim()}
                   className="flex-1"
                 >
-                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Save Changes
+                  <ButtonLoading isLoading={isLoading} loadingText="Saving...">
+                    Save Changes
+                  </ButtonLoading>
                 </Button>
               </div>
 

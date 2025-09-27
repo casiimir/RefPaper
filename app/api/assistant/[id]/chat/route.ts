@@ -3,7 +3,7 @@ import { api } from "@/convex/_generated/api";
 import { queryAssistant } from "@/lib/pinecone";
 import { withAuth } from "@/lib/api-middleware";
 import { checkChatMessageLimits } from "@/lib/plan-utils";
-import { ERROR_MESSAGES } from "@/lib/constants";
+import { ERROR_MESSAGES, PLAN_LIMITS } from "@/lib/constants";
 
 export async function POST(
   req: NextRequest,
@@ -52,7 +52,7 @@ export async function POST(
       return NextResponse.json(
         {
           error: limitCheck.error?.type === "question_limit" ? "Monthly question limit reached" : limitCheck.error?.message,
-          message: "You've reached your limit of 20 questions per month. Upgrade to Pro for unlimited questions.",
+          message: `You've reached your limit of ${PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH} questions per month. Upgrade to Pro for unlimited questions.`,
           questionsUsed: limitCheck.error?.questionsUsed,
           limit: limitCheck.error?.limit
         },

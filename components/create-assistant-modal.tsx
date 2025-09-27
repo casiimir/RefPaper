@@ -14,9 +14,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Lightbulb, AlertCircle } from "lucide-react";
+import { Lightbulb, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
+import { PLAN_LIMITS } from "@/lib/constants";
+import { ButtonLoading } from "@/components/ui/loading";
 
 interface CreateAssistantModalProps {
   open: boolean;
@@ -126,7 +128,7 @@ export function CreateAssistantModal({
   const suggestedUrl = shouldShowSuggestion ? getRootDomain(formData.docsUrl) : '';
 
   // Check if user can create assistants (not over question limit)
-  const canCreateAssistant = userPlan === "pro" || (questionsThisMonth < 20 && !serverError);
+  const canCreateAssistant = userPlan === "pro" || (questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && !serverError);
 
   const handleClose = (open: boolean) => {
     if (!open) {
@@ -155,7 +157,7 @@ export function CreateAssistantModal({
             feature="questions"
             currentUsage={{
               used: serverError.questionsUsed || questionsThisMonth,
-              limit: serverError.limit || 20,
+              limit: serverError.limit || PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH,
             }}
             className="mb-4"
           />
@@ -182,20 +184,20 @@ export function CreateAssistantModal({
         )}
 
         {/* Frontend preventive check (when no server error) */}
-        {!serverError && userPlan === "free" && questionsThisMonth >= 20 && (
+        {!serverError && userPlan === "free" && questionsThisMonth >= PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
           <UpgradePrompt
             title="Monthly question limit reached!"
             description="You need to upgrade to Pro to create new assistants."
             feature="questions"
             currentUsage={{
               used: questionsThisMonth,
-              limit: 20,
+              limit: PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH,
             }}
             className="mb-4"
           />
         )}
 
-        {userPlan === "free" && questionsThisMonth < 20 && (
+        {userPlan === "free" && questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
           <Alert className="mb-4">
             <Lightbulb className="h-4 w-4" />
             <AlertDescription>
@@ -293,8 +295,9 @@ export function CreateAssistantModal({
                 isLoading || !formData.name.trim() || !formData.docsUrl.trim() || !canCreateAssistant
               }
             >
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Assistant
+              <ButtonLoading isLoading={isLoading} loadingText="Creating...">
+                Create Assistant
+              </ButtonLoading>
             </Button>
           </DialogFooter>
         </form>

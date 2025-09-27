@@ -4,14 +4,8 @@ import Link from "next/link";
 import { Bot, Plus, ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-type Assistant = {
-  _id: string;
-  name: string;
-  status: string;
-  docsUrl: string;
-  createdAt: number;
-};
+import { Assistant } from "@/types/assistant";
+import { isReadyStatus, isProcessingStatus, isErrorStatus } from "@/lib/status-utils";
 
 interface AssistantSidebarProps {
   assistants: Assistant[];
@@ -103,11 +97,9 @@ export function AssistantSidebar({
                   <div
                     className={cn(
                       "h-2 w-2 rounded-full",
-                      assistant.status === "ready" && "bg-green-500",
-                      assistant.status === "creating" && "bg-yellow-500",
-                      assistant.status === "crawling" && "bg-blue-500",
-                      assistant.status === "processing" && "bg-blue-500",
-                      assistant.status === "error" && "bg-red-500"
+                      isReadyStatus(assistant.status) && "bg-green-500",
+                      isProcessingStatus(assistant.status) && "bg-blue-500",
+                      isErrorStatus(assistant.status) && "bg-red-500"
                     )}
                   />
                   <span className="text-xs text-muted-foreground capitalize">

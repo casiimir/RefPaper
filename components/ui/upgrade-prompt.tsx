@@ -28,7 +28,7 @@ export function UpgradePrompt({
     if (onUpgrade) {
       onUpgrade();
     } else {
-      // Default behavior: open pricing page
+      // Default behavior: open billing page
       window.open("/pricing", "_blank");
     }
   };

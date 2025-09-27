@@ -3,18 +3,7 @@
 import { User, Bot, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MarkdownRenderer } from "./MarkdownRenderer";
-
-type Message = {
-  _id: string;
-  role: "user" | "assistant";
-  content: string;
-  sources?: Array<{
-    url: string;
-    title: string;
-    preview: string;
-  }>;
-  createdAt: number;
-};
+import { Message } from "@/types/message";
 
 interface MessageBubbleProps {
   message: Message;

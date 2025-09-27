@@ -10,13 +10,7 @@ import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./TypingIndicator";
 import { Send, Loader2, User } from "lucide-react";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
-
-type Assistant = {
-  _id: string;
-  name: string;
-  docsUrl: string;
-  status: string;
-};
+import { Assistant } from "@/types/assistant";
 
 interface ChatInterfaceProps {
   assistant: Assistant;
@@ -203,7 +197,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
               used: rateLimitError.questionsUsed,
               limit: rateLimitError.limit,
             }}
-            onUpgrade={() => window.open('/pricing', '_blank')}
+            onUpgrade={() => window.open("/pricing", "_blank")}
           />
         )}
       </div>
