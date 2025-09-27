@@ -6,6 +6,7 @@ import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { PLAN_LIMITS } from "@/lib/constants";
 import { AssistantForm, AssistantFormData } from "@/components/forms/AssistantForm";
 import { ServerErrorDisplay, FormError } from "@/components/forms/FormErrorDisplay";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 interface CreateAssistantModalProps {
   open: boolean;
@@ -20,6 +21,7 @@ export function CreateAssistantModal({
   userPlan = "free",
   questionsThisMonth = 0,
 }: CreateAssistantModalProps) {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<FormError | null>(null);
   const [formData, setFormData] = useState<AssistantFormData>({
@@ -52,7 +54,7 @@ export function CreateAssistantModal({
       if (!response.ok) {
         const errorData = await response.json();
         setServerError({
-          message: errorData.error || "Failed to create assistant",
+          message: errorData.error || t("errors.failedToCreate"),
           type: errorData.type || "error",
           questionsUsed: errorData.questionsUsed,
           limit: errorData.limit,
@@ -65,7 +67,7 @@ export function CreateAssistantModal({
     } catch (error) {
       console.error("Failed to create assistant:", error);
       setServerError({
-        message: "Network error. Please check your connection and try again.",
+        message: t("errors.networkError"),
         type: "error",
       });
     } finally {
@@ -85,10 +87,10 @@ export function CreateAssistantModal({
     <FormModal
       open={open}
       onOpenChange={handleClose}
-      title="Create New Assistant"
-      description="Create an AI assistant trained on your documentation"
+      title={t("assistant.createNew")}
+      description={t("assistant.createDescription")}
       onSubmit={handleSubmit}
-      submitText="Create Assistant"
+      submitText={t("assistant.createAssistant")}
       submitDisabled={!canCreateAssistant || !formData.name.trim() || !formData.docsUrl.trim()}
       loading={isLoading}
       maxWidth="lg"
@@ -97,8 +99,8 @@ export function CreateAssistantModal({
         {/* Upgrade prompt for users at limit */}
         {!canCreateAssistant && (
           <UpgradePrompt
-            title="Upgrade Required"
-            description="You've reached your plan limit. Upgrade to Pro for more assistants and unlimited questions."
+            title={t("upgrade.required")}
+            description={t("upgrade.description")}
             feature="creating assistants"
             currentUsage={{
               used: questionsThisMonth || 0,

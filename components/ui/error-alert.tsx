@@ -4,6 +4,7 @@ import { AlertTriangle, AlertCircle, Info } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { processError } from "@/lib/error-classifier";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 interface ErrorAlertProps {
   errorMessage: string;
@@ -16,6 +17,8 @@ export function ErrorAlert({
   className,
   showSuggestions = true
 }: ErrorAlertProps) {
+  const { t } = useTranslation();
+
   if (!errorMessage) {
     return null;
   }
@@ -48,7 +51,7 @@ export function ErrorAlert({
 
   return (
     <Alert
-      variant={details.variant}
+      variant={details.variant === 'secondary' ? 'default' : details.variant}
       className={cn(
         details.variant === 'secondary' && getVariantClasses(),
         className
@@ -66,7 +69,7 @@ export function ErrorAlert({
 
           {showSuggestions && details.suggestions && details.suggestions.length > 0 && (
             <div className="text-xs space-y-1 mt-3">
-              <div className="font-medium">💡 Suggestions:</div>
+              <div className="font-medium">{t("ui.suggestions")}</div>
               <ul className="ml-4 space-y-1">
                 {details.suggestions.map((suggestion, index) => (
                   <li key={index}>

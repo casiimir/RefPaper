@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Crown } from "lucide-react";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 interface UpgradePromptProps {
   title: string;
@@ -24,6 +25,7 @@ export function UpgradePrompt({
   onUpgrade,
   className = "",
 }: UpgradePromptProps) {
+  const { t } = useTranslation();
   const handleUpgrade = () => {
     if (onUpgrade) {
       onUpgrade();
@@ -49,10 +51,10 @@ export function UpgradePrompt({
               onClick={handleUpgrade}
             >
               <Crown className="h-4 w-4 mr-1" />
-              Upgrade to Pro
+              {t("upgrade.toPro")}
             </Button>
             <span className="text-xs text-amber-700 dark:text-amber-300">
-              Get unlimited {feature}
+              {t("upgrade.getUnlimited", { feature })}
             </span>
           </div>
         </div>

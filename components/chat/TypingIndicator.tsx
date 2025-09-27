@@ -2,8 +2,11 @@
 
 import { Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export function TypingIndicator() {
+  const { t } = useTranslation();
+
   return (
     <div className="flex gap-3">
       {/* Avatar */}
@@ -16,7 +19,7 @@ export function TypingIndicator() {
         <div className="rounded-lg px-4 py-3 bg-muted text-foreground max-w-[80%]">
           <div className="flex items-center space-x-1">
             <span className="text-sm text-muted-foreground">
-              I’m consulting the documentation
+              {t("chat.consultingDocs")}
             </span>
             <div className="flex space-x-1">
               <div

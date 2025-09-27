@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export interface ConfirmationModalProps {
   open: boolean;
@@ -25,13 +26,14 @@ export function ConfirmationModal({
   onOpenChange,
   title,
   description,
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  confirmText,
+  cancelText,
   onConfirm,
   loading = false,
   variant = "default",
   children,
 }: ConfirmationModalProps) {
+  const { t } = useTranslation();
   const handleConfirm = async () => {
     await onConfirm();
   };
@@ -44,7 +46,7 @@ export function ConfirmationModal({
         onClick={() => onOpenChange(false)}
         disabled={loading}
       >
-        {cancelText}
+        {cancelText || t("common.cancel")}
       </Button>
       <Button
         type="button"
@@ -53,7 +55,7 @@ export function ConfirmationModal({
         disabled={loading}
       >
         <ButtonLoading isLoading={loading}>
-          {confirmText}
+          {confirmText || t("common.confirm")}
         </ButtonLoading>
       </Button>
     </>
@@ -74,7 +76,7 @@ export function ConfirmationModal({
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
             <div className="space-y-2">
-              <div className="font-medium">This action cannot be undone.</div>
+              <div className="font-medium">{t("common.actionCannotBeUndone")}</div>
               {children}
             </div>
           </AlertDescription>

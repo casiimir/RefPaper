@@ -1,5 +1,6 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, AlertTriangle } from "lucide-react";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export interface FormError {
   message: string;
@@ -17,6 +18,8 @@ interface FormErrorDisplayProps {
  * Standardized error display component for forms
  */
 export function FormErrorDisplay({ error, className }: FormErrorDisplayProps) {
+  const { t } = useTranslation();
+
   if (!error) return null;
 
   const variant = error.type === "warning" ? "default" : "destructive";
@@ -29,7 +32,7 @@ export function FormErrorDisplay({ error, className }: FormErrorDisplayProps) {
         {error.message}
         {error.questionsUsed && error.limit && (
           <div className="mt-1 text-xs text-muted-foreground">
-            Usage: {error.questionsUsed}/{error.limit} questions this month
+            {t("settings.usageCount", { used: error.questionsUsed, limit: error.limit })}
           </div>
         )}
       </AlertDescription>
@@ -69,6 +72,8 @@ export function ServerErrorDisplay({
   onRetry,
   className
 }: ServerErrorDisplayProps) {
+  const { t } = useTranslation();
+
   if (!error) return null;
 
   return (
@@ -82,7 +87,7 @@ export function ServerErrorDisplay({
               onClick={onRetry}
               className="text-xs underline hover:no-underline ml-2"
             >
-              Try again
+              {t("common.tryAgain")}
             </button>
           )}
         </div>

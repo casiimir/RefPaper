@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/loading";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export interface BaseModalProps {
   open: boolean;
@@ -75,14 +76,15 @@ export interface FormModalProps extends Omit<BaseModalProps, 'footer' | 'childre
  */
 export function FormModal({
   onSubmit,
-  submitText = "Save",
-  cancelText = "Cancel",
+  submitText,
+  cancelText,
   submitDisabled = false,
   loading = false,
   onOpenChange,
   children,
   ...baseProps
 }: FormModalProps) {
+  const { t } = useTranslation();
   const footer = (
     <>
       <Button
@@ -91,7 +93,7 @@ export function FormModal({
         onClick={() => onOpenChange(false)}
         disabled={loading}
       >
-        {cancelText}
+        {cancelText || t("common.cancel")}
       </Button>
       <Button
         type="submit"
@@ -99,7 +101,7 @@ export function FormModal({
         form="modal-form"
       >
         <ButtonLoading isLoading={loading}>
-          {submitText}
+          {submitText || t("common.save")}
         </ButtonLoading>
       </Button>
     </>

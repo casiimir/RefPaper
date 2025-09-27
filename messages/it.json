@@ -79,35 +79,33 @@
     "consultingDocs": "Sto consultando la documentazione"
   },
   "assistant": {
-    "createNew": "Create New Assistant",
-    "createDescription": "Create an AI assistant trained on your documentation",
-    "createAssistant": "Create Assistant",
-    "settings": "Assistant Settings",
-    "settingsDescription": "Manage settings for \"{name}\"",
-    "saveChanges": "Save Changes",
-    "deleteAssistant": "Delete Assistant",
-    "deleteConfirmation": "Delete Assistant",
-    "deleteWarning": "This will permanently delete:",
-    "deleteItems": [
-      "• The assistant and all its settings",
-      "• All chat messages and conversation history",
-      "• All processed documents and embeddings"
-    ],
-    "assistantName": "Assistant: \"{name}\"",
+    "createNew": "Crea Nuovo Assistente",
+    "createDescription": "Crea un assistente AI addestrato sulla tua documentazione",
+    "createAssistant": "Crea Assistente",
+    "settings": "Impostazioni Assistente",
+    "settingsDescription": "Gestisci le impostazioni per \"{name}\"",
+    "saveChanges": "Salva Modifiche",
+    "deleteAssistant": "Elimina Assistente",
+    "deleteConfirmation": "Elimina Assistente",
+    "deleteWarning": "Questo eliminerà permanentemente:",
+    "deleteItem1": "• L'assistente e tutte le sue impostazioni",
+    "deleteItem2": "• Tutti i messaggi chat e la cronologia delle conversazioni",
+    "deleteItem3": "• Tutti i documenti elaborati e gli embeddings",
+    "assistantName": "Assistente: \"{name}\"",
     "form": {
-      "name": "Name",
-      "docsUrl": "Docs URL",
-      "description": "Description",
-      "namePlaceholder": "My Documentation Assistant",
+      "name": "Nome",
+      "docsUrl": "URL Documentazione",
+      "description": "Descrizione",
+      "namePlaceholder": "Il Mio Assistente Documentazione",
       "urlPlaceholder": "https://docs.example.com",
-      "descriptionPlaceholder": "Brief description of what this assistant helps with...",
-      "crawlNote": "The starting URL where we'll crawl your documentation"
+      "descriptionPlaceholder": "Breve descrizione di cosa aiuta questo assistente...",
+      "crawlNote": "L'URL di partenza da cui analizzeremo la tua documentazione"
     },
     "freePlanLimits": {
-      "title": "Free Plan - Limitations:",
-      "specificSubpages": "Specific subpages recommended: e.g. https://docs.convex.dev/functions instead of https://docs.convex.dev/",
-      "pageLimit": "30 pages limit: If you enter complete URLs, we'll only crawl the first 30 pages",
-      "depthLimit": "Limited depth: Only 3 levels of subpages"
+      "title": "Piano Gratuito - Limitazioni:",
+      "specificSubpages": "Sottopagine specifiche consigliate: es. https://docs.convex.dev/functions invece di https://docs.convex.dev/",
+      "pageLimit": "Limite 30 pagine: Se inserisci URL completi, analizzeremo solo le prime 30 pagine",
+      "depthLimit": "Profondità limitata: Solo 3 livelli di sottopagine"
     }
   },
   "status": {
@@ -138,11 +136,11 @@
     "validationFailed": "Validation failed. Please check the URL format."
   },
   "upgrade": {
-    "required": "Upgrade Required",
-    "description": "You've reached your plan limit. Upgrade to Pro for more assistants and unlimited questions.",
-    "toPro": "Upgrade to Pro",
-    "getUnlimited": "Get unlimited {feature}",
-    "suggestions": "💡 Suggestions:"
+    "required": "Aggiornamento Richiesto",
+    "description": "Hai raggiunto il limite del tuo piano. Aggiorna a Pro per più assistenti e domande illimitate.",
+    "toPro": "Aggiorna a Pro",
+    "getUnlimited": "Ottieni {feature} illimitati",
+    "suggestions": "💡 Suggerimenti:"
   },
   "footer": {
     "description": "Trasforma qualsiasi documentazione in un assistente AI in pochi secondi. Migliora il supporto, riduci i costi e scala la conoscenza senza sforzo.",
@@ -155,6 +153,7 @@
   },
   "ui": {
     "toggleTheme": "Toggle theme",
-    "switchToLanguage": "Switch to {language}"
+    "switchToLanguage": "Switch to {language}",
+    "suggestions": "💡 Suggerimenti:"
   }
 }

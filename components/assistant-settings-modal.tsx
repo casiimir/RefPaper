@@ -14,6 +14,7 @@ import { ErrorAlert } from "@/components/ui/error-alert";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Assistant } from "@/types/assistant";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 interface AssistantSettingsModalProps {
   open: boolean;
@@ -26,6 +27,7 @@ export function AssistantSettingsModal({
   onOpenChange,
   assistant,
 }: AssistantSettingsModalProps) {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -108,7 +110,7 @@ export function AssistantSettingsModal({
         className="mr-auto"
       >
         <Trash2 className="h-4 w-4 mr-2" />
-        Delete
+        {t("common.delete")}
       </Button>
       <Button
         type="button"
@@ -116,7 +118,7 @@ export function AssistantSettingsModal({
         onClick={handleClose}
         disabled={isLoading}
       >
-        Cancel
+        {t("common.cancel")}
       </Button>
       <Button
         type="submit"
@@ -124,7 +126,7 @@ export function AssistantSettingsModal({
         form="settings-form"
       >
         <ButtonLoading isLoading={isLoading}>
-          Save Changes
+          {t("assistant.saveChanges")}
         </ButtonLoading>
       </Button>
     </>
@@ -135,8 +137,8 @@ export function AssistantSettingsModal({
       <BaseModal
         open={open && !showDeleteConfirm}
         onOpenChange={handleClose}
-        title="Assistant Settings"
-        description={`Manage settings for "${assistant?.name || ""}"`}
+        title={t("assistant.settings")}
+        description={t("assistant.settingsDescription", { name: assistant?.name || "" })}
         footer={settingsFooter}
         loading={isLoading}
       >
@@ -145,7 +147,7 @@ export function AssistantSettingsModal({
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Name
+              {t("assistant.form.name")}
             </Label>
             <div className="col-span-3">
               <Input
@@ -160,7 +162,7 @@ export function AssistantSettingsModal({
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="description" className="text-right">
-              Description
+              {t("assistant.form.description")}
             </Label>
             <div className="col-span-3">
               <Textarea
@@ -178,21 +180,21 @@ export function AssistantSettingsModal({
       <ConfirmationModal
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
-        title="Delete Assistant"
-        confirmText="Delete Assistant"
+        title={t("assistant.deleteAssistant")}
+        confirmText={t("assistant.deleteConfirmation")}
         onConfirm={handleDelete}
         loading={isDeleting}
         variant="destructive"
       >
         <div className="text-sm space-y-2">
-          <div>This will permanently delete:</div>
+          <div>{t("assistant.deleteWarning")}</div>
           <ul className="text-xs space-y-1 ml-4">
-            <li>• The assistant and all its settings</li>
-            <li>• All chat messages and conversation history</li>
-            <li>• All processed documents and embeddings</li>
+            <li>{t("assistant.deleteItem1")}</li>
+            <li>{t("assistant.deleteItem2")}</li>
+            <li>{t("assistant.deleteItem3")}</li>
           </ul>
           <div className="text-sm font-medium mt-3">
-            Assistant: <span className="font-normal">"{assistant?.name || ""}"</span>
+            {t("assistant.assistantName", { name: assistant?.name || "" })}
           </div>
         </div>
       </ConfirmationModal>

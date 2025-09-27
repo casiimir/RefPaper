@@ -7,6 +7,7 @@ import { Lightbulb, AlertCircle } from "lucide-react";
 import { PLAN_LIMITS } from "@/lib/constants";
 import { useFormValidation, FormValidationUtils } from "./FormValidation";
 import { FormErrorDisplay, ValidationErrorDisplay } from "./FormErrorDisplay";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export interface AssistantFormData {
   name: string;
@@ -32,6 +33,7 @@ export function AssistantForm({
   questionsThisMonth,
   disabled = false,
 }: AssistantFormProps) {
+  const { t } = useTranslation();
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { urlValidation, validateUrl, isValidating } = useFormValidation({
     validateOnChange: true,
@@ -97,11 +99,11 @@ export function AssistantForm({
           <Lightbulb className="h-4 w-4" />
           <AlertDescription>
             <div className="space-y-2">
-              <div className="font-medium">Free Plan - Limitations:</div>
+              <div className="font-medium">{t("assistant.freePlanLimits.title")}</div>
               <ul className="text-xs space-y-1 ml-4">
-                <li>• <strong>Specific subpages recommended:</strong> e.g. https://docs.convex.dev/functions instead of https://docs.convex.dev/</li>
-                <li>• <strong>30 pages limit:</strong> If you enter complete URLs, we&apos;ll only crawl the first 30 pages</li>
-                <li>• <strong>Limited depth:</strong> Only 3 levels of subpages</li>
+                <li>• <strong>Specific subpages recommended:</strong> {t("assistant.freePlanLimits.specificSubpages")}</li>
+                <li>• <strong>30 pages limit:</strong> {t("assistant.freePlanLimits.pageLimit")}</li>
+                <li>• <strong>Limited depth:</strong> {t("assistant.freePlanLimits.depthLimit")}</li>
               </ul>
             </div>
           </AlertDescription>
@@ -111,12 +113,12 @@ export function AssistantForm({
       {/* Assistant Name */}
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="name" className="text-right">
-          Name
+          {t("assistant.form.name")}
         </Label>
         <div className="col-span-3">
           <Input
             id="name"
-            placeholder="My Documentation Assistant"
+            placeholder={t("assistant.form.namePlaceholder")}
             value={formData.name}
             onChange={(e) => handleFieldChange("name", e.target.value)}
             disabled={disabled || !canCreateAssistant}
@@ -129,20 +131,20 @@ export function AssistantForm({
       {/* Documentation URL */}
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="docsUrl" className="text-right">
-          Docs URL
+          {t("assistant.form.docsUrl")}
         </Label>
         <div className="col-span-3">
           <Input
             id="docsUrl"
             type="url"
-            placeholder="https://docs.example.com"
+            placeholder={t("assistant.form.urlPlaceholder")}
             value={formData.docsUrl}
             onChange={(e) => handleFieldChange("docsUrl", e.target.value)}
             disabled={disabled || !canCreateAssistant}
             required
           />
           <p className="text-xs text-muted-foreground mt-1">
-            The starting URL where we&apos;ll crawl your documentation
+            {t("assistant.form.crawlNote")}
           </p>
           <ValidationErrorDisplay error={fieldErrors.docsUrl} />
 
@@ -159,12 +161,12 @@ export function AssistantForm({
       {/* Description */}
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="description" className="text-right">
-          Description
+          {t("assistant.form.description")}
         </Label>
         <div className="col-span-3">
           <Textarea
             id="description"
-            placeholder="Brief description of what this assistant helps with..."
+            placeholder={t("assistant.form.descriptionPlaceholder")}
             value={formData.description}
             onChange={(e) => handleFieldChange("description", e.target.value)}
             disabled={disabled || !canCreateAssistant}

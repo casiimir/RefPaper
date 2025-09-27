@@ -88,11 +88,9 @@
     "deleteAssistant": "Delete Assistant",
     "deleteConfirmation": "Delete Assistant",
     "deleteWarning": "This will permanently delete:",
-    "deleteItems": [
-      "• The assistant and all its settings",
-      "• All chat messages and conversation history",
-      "• All processed documents and embeddings"
-    ],
+    "deleteItem1": "• The assistant and all its settings",
+    "deleteItem2": "• All chat messages and conversation history",
+    "deleteItem3": "• All processed documents and embeddings",
     "assistantName": "Assistant: \"{name}\"",
     "form": {
       "name": "Name",
@@ -155,6 +153,7 @@
   },
   "ui": {
     "toggleTheme": "Toggle theme",
-    "switchToLanguage": "Switch to {language}"
+    "switchToLanguage": "Switch to {language}",
+    "suggestions": "💡 Suggestions:"
   }
 }
