@@ -32,6 +32,13 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
   });
 
   const clearMessages = useMutation(api.messages.clearMessages);
+  // DEBUG: TODO: remove in production!
+  const [debugMetrics, setDebugMetrics] = useState({
+    totalQueries: 0,
+    totalInputTokens: 0,
+    totalOutputTokens: 0,
+    estimatedCost: 0,
+  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -80,8 +87,65 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
       if (!response.ok) {
         throw new Error("Failed to send message");
       }
+      // DEBUG: TODO: remove in production!
+      const responseData = await response.json();
 
-      await response.json();
+      // Use real token data from API if available
+      if (responseData.tokensUsed) {
+        const realTotalTokens = responseData.tokensUsed;
+        const estimatedInputTokens = Math.ceil(message.length / 4) + 2000; // Still estimate for breakdown
+        const realOutputTokens = realTotalTokens - estimatedInputTokens;
+
+        const inputCost = (estimatedInputTokens / 1000000) * 0.05;
+        const outputCost = (Math.max(0, realOutputTokens) / 1000000) * 0.4;
+
+        // Debug logging for token analysis
+        console.log("🔍 Chat Debug Metrics:", {
+          userQuery: message,
+          queryLength: message.length,
+          estimatedQueryTokens: Math.ceil(message.length / 4),
+          estimatedContextTokens: 2000,
+          totalEstimatedInput: estimatedInputTokens,
+          realTotalTokens: realTotalTokens,
+          calculatedOutputTokens: realOutputTokens,
+          inputCost: inputCost,
+          outputCost: outputCost,
+          totalCost: inputCost + outputCost,
+          sources: responseData.sources?.length || 0,
+          assistantResponse: responseData.answer,
+          responseLength: responseData.answer?.length || 0,
+          estimatedResponseTokens: responseData.answer
+            ? Math.ceil(responseData.answer.length / 4)
+            : 0,
+        });
+
+        setDebugMetrics((prev) => ({
+          totalQueries: prev.totalQueries + 1,
+          totalInputTokens: prev.totalInputTokens + estimatedInputTokens,
+          totalOutputTokens:
+            prev.totalOutputTokens + Math.max(0, realOutputTokens),
+          estimatedCost: prev.estimatedCost + inputCost + outputCost,
+        }));
+      } else {
+        // Fallback to old estimation method
+        const inputTokens = Math.ceil(message.length / 4) + 2000;
+        const inputCost = (inputTokens / 1000000) * 0.05;
+
+        console.log("⚠️ Chat Debug (No API tokens):", {
+          userQuery: message,
+          queryLength: message.length,
+          estimatedInputTokens: inputTokens,
+          fallbackMode: true,
+        });
+
+        setDebugMetrics((prev) => ({
+          totalQueries: prev.totalQueries + 1,
+          totalInputTokens: prev.totalInputTokens + inputTokens,
+          totalOutputTokens: prev.totalOutputTokens, // Will be updated by useEffect
+          estimatedCost: prev.estimatedCost + inputCost,
+        }));
+      }
+
       // Messages are automatically updated via Convex real-time subscription
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -228,6 +292,29 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
             )}
           </Button>
         </form>
+
+        {/* Simple Debug Metrics - Only in development TODO: remove in prod */}
+        {process.env.NODE_ENV === "development" && (
+          <div className="text-xs text-muted-foreground mt-2 px-2 py-1 bg-muted/50 rounded text-center">
+            <span className="font-mono">
+              Queries: {debugMetrics.totalQueries} | Input:{" "}
+              {debugMetrics.totalInputTokens.toLocaleString()} | Output:{" "}
+              {debugMetrics.totalOutputTokens.toLocaleString()} | Total:{" "}
+              {(
+                debugMetrics.totalInputTokens + debugMetrics.totalOutputTokens
+              ).toLocaleString()}{" "}
+              | Cost: ${debugMetrics.estimatedCost.toFixed(6)} | Avg:{" "}
+              {debugMetrics.totalQueries > 0
+                ? Math.round(
+                    (debugMetrics.totalInputTokens +
+                      debugMetrics.totalOutputTokens) /
+                      debugMetrics.totalQueries
+                  ).toLocaleString()
+                : 0}{" "}
+              tokens/query
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

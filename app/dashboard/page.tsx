@@ -35,6 +35,7 @@ import {
 } from "@/lib/status-utils";
 import { CenteredLoading } from "@/components/ui/loading";
 import { AssistantIcon } from "@/components/ui/assistant-icon";
+import { DebugDialog } from "@/components/dev/debug-dialog";
 
 export default function Dashboard() {
   const { isLoaded, isSignedIn, has } = useAuth();
@@ -314,6 +315,9 @@ export default function Dashboard() {
         onOpenChange={(open) => !open && setSelectedAssistant(null)}
         assistant={selectedAssistant}
       />
+
+      {/* Debug Dialog - Only in development TODO: remove in prod */}
+      <DebugDialog />
     </div>
   );
 }
