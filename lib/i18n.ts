@@ -1,11 +1,11 @@
-import { notFound } from 'next/navigation';
+import { notFound } from "next/navigation";
 
 // Define supported locales
-export const locales = ['en', 'it'] as const;
-export type Locale = typeof locales[number];
+export const locales = ["en", "it"] as const;
+export type Locale = (typeof locales)[number];
 
 // Default locale
-export const defaultLocale: Locale = 'en';
+export const defaultLocale: Locale = "en";
 
 // Locale validation
 export function isValidLocale(locale: string): locale is Locale {
@@ -14,7 +14,7 @@ export function isValidLocale(locale: string): locale is Locale {
 
 // Get locale from pathname or default
 export function getLocale(pathname: string): Locale {
-  const segments = pathname.split('/').filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
   const potentialLocale = segments[0];
 
   if (potentialLocale && isValidLocale(potentialLocale)) {
@@ -26,8 +26,8 @@ export function getLocale(pathname: string): Locale {
 
 // Dictionary loader - dynamic imports for better performance
 const dictionaries = {
-  en: () => import('@/messages/en.json').then((module) => module.default),
-  it: () => import('@/messages/it.json').then((module) => module.default),
+  en: () => import("@/messages/en.json").then((module) => module.default),
+  it: () => import("@/messages/it.json").then((module) => module.default),
 } as const;
 
 export async function getDictionary(locale: Locale) {
@@ -56,14 +56,14 @@ export function getTranslation(
   key: string,
   params: Record<string, string | number> = {}
 ): string {
-  const keys = key.split('.');
+  const keys = key.split(".");
   let value: any = dict;
 
   for (const k of keys) {
     value = value?.[k];
   }
 
-  if (typeof value !== 'string') {
+  if (typeof value !== "string") {
     console.warn(`Translation key not found: ${key}`);
     return key; // Return the key itself as fallback
   }
@@ -78,13 +78,43 @@ export function getTranslation(
 // Language configuration
 export const languages = {
   en: {
-    name: 'English',
-    flag: '🇺🇸',
-    dir: 'ltr' as const,
+    name: "English",
+    flag: "🇺🇸",
+    dir: "ltr" as const,
   },
   it: {
-    name: 'Italiano',
-    flag: '🇮🇹',
-    dir: 'ltr' as const,
+    name: "Italiano",
+    flag: "🇮🇹",
+    dir: "ltr" as const,
   },
 } as const;
+
+// Storage key for persisting locale preference
+export const LOCALE_STORAGE_KEY = "refpaper-locale";
+
+// Get locale from storage (client-side only)
+export function getStoredLocale(): Locale {
+  if (typeof window === "undefined") return defaultLocale;
+
+  try {
+    const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (stored && isValidLocale(stored)) {
+      return stored;
+    }
+  } catch (error) {
+    console.warn("Failed to get stored locale:", error);
+  }
+
+  return defaultLocale;
+}
+
+// Set locale in storage (client-side only)
+export function setStoredLocale(locale: Locale): void {
+  if (typeof window === "undefined") return;
+
+  try {
+    localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  } catch (error) {
+    console.warn("Failed to store locale:", error);
+  }
+}

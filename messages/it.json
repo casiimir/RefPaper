@@ -1,28 +1,28 @@
 {
   "common": {
-    "loading": "Loading...",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "create": "Create",
-    "confirm": "Confirm",
-    "tryAgain": "Try again",
-    "upgrade": "Upgrade",
-    "actionCannotBeUndone": "This action cannot be undone."
+    "loading": "Caricamento...",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "create": "Crea",
+    "confirm": "Conferma",
+    "tryAgain": "Riprova",
+    "upgrade": "Aggiorna",
+    "actionCannotBeUndone": "Questa azione non può essere annullata."
   },
   "app": {
     "name": "RefPaper",
-    "tagline": "Turn any documentation into an AI knowledge assistant in 30 seconds.",
-    "subtitle": "Boost support, reduce costs, and scale knowledge.",
-    "ctaButton": "Start Free",
-    "description": "Turn documentation into an AI knowledge assistant. RefPaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge."
+    "tagline": "Trasforma qualsiasi documentazione in un assistente AI in 30 secondi.",
+    "subtitle": "Migliora il supporto, riduci i costi e scala la conoscenza.",
+    "ctaButton": "Inizia Gratis",
+    "description": "Trasforma la documentazione in un assistente AI. RefPaper aiuta team, startup e aziende a migliorare il supporto, ridurre i costi e scalare la conoscenza."
   },
   "navigation": {
-    "signIn": "Sign In",
-    "signOut": "Sign Out",
+    "signIn": "Accedi",
+    "signOut": "Esci",
     "dashboard": "Dashboard",
-    "features": "Features",
-    "pricing": "Pricing"
+    "features": "Funzionalità",
+    "pricing": "Prezzi"
   },
   "dashboard": {
     "loadingDashboard": "Loading dashboard...",
@@ -145,13 +145,13 @@
     "suggestions": "💡 Suggestions:"
   },
   "footer": {
-    "description": "Transform any documentation into an AI knowledge assistant in seconds. Boost support, reduce costs, and scale knowledge effortlessly.",
-    "product": "Product",
-    "about": "About",
+    "description": "Trasforma qualsiasi documentazione in un assistente AI in pochi secondi. Migliora il supporto, riduci i costi e scala la conoscenza senza sforzo.",
+    "product": "Prodotto",
+    "about": "Chi siamo",
     "privacy": "Privacy",
-    "terms": "Terms",
+    "terms": "Termini",
     "copyright": "© 2025 RefPaper.",
-    "builtWith": "Built with Next.js, Convex, and Clerk"
+    "builtWith": "Realizzato con Next.js, Convex e Clerk"
   },
   "ui": {
     "toggleTheme": "Toggle theme",

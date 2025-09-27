@@ -1,41 +1,73 @@
 "use client";
 
-import { Button } from '@/components/ui/button';
-import { Globe } from 'lucide-react';
-import { languages, type Locale } from '@/lib/i18n';
-import { useRouter, usePathname } from 'next/navigation';
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Globe, ChevronDown } from "lucide-react";
+import { languages, type Locale } from "@/lib/i18n";
+import { useTranslation } from "@/components/providers/TranslationProvider";
+import { cn } from "@/lib/utils";
 
 interface LanguageSwitcherProps {
-  currentLocale: Locale;
   className?: string;
 }
 
-export function LanguageSwitcher({ currentLocale, className }: LanguageSwitcherProps) {
-  const router = useRouter();
-  const pathname = usePathname();
+export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { locale: currentLocale, changeLocale } = useTranslation();
 
-  const handleLocaleChange = () => {
-    // Simple toggle between en and it for now
-    const newLocale = currentLocale === 'en' ? 'it' : 'en';
-
-    // For now, just reload with the new locale
-    // In production, you'd implement proper URL structure
-    window.location.reload();
+  const handleLocaleChange = async (newLocale: Locale) => {
+    if (newLocale !== currentLocale) {
+      await changeLocale(newLocale);
+    }
+    setIsOpen(false);
   };
 
-  const currentLanguage = languages[currentLocale];
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className={className}
-      onClick={handleLocaleChange}
-      title={`Switch to ${currentLocale === 'en' ? 'Italiano' : 'English'}`}
-    >
-      <Globe className="h-4 w-4 mr-2" />
-      <span className="text-sm">{currentLanguage.flag}</span>
-      <span className="ml-1 text-xs">{currentLanguage.name}</span>
-    </Button>
+    <div className={cn("relative", className)} ref={dropdownRef}>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-1"
+      >
+        <Globe className="h-4 w-4" />
+      </Button>
+
+      {isOpen && (
+        <div className="absolute left-0 mt-3 w-40 bg-background border-b border-x rounded-b-md shadow-lg z-50">
+          <div className="py-0">
+            {Object.entries(languages).map(([locale, language]) => (
+              <button
+                key={locale}
+                onClick={() => handleLocaleChange(locale as Locale)}
+                className={cn(
+                  "w-full px-3 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground flex items-center gap-2",
+                  currentLocale === locale && "bg-accent text-accent-foreground"
+                )}
+              >
+                <span>{language.flag}</span>
+                <span>{language.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
