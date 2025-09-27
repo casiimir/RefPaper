@@ -31,9 +31,11 @@ const CONFIG: PineconeConfig = {
   CHUNK_OVERLAP: 200,
   MIN_CHUNK_SIZE: 100,
   TOP_K_SEARCH: 3,
+  TOP_K_BEFORE_RERANK: 8, // Retrieve more, then rerank to top 3
   MIN_SCORE_THRESHOLD: 0.5,
-  MAX_CONCURRENT_EMBEDDINGS: 20,
-  MAX_CONCURRENT_UPSERTS: 5,
+  RERANK_MODEL: "bge-reranker-v2-m3",
+  MAX_CONCURRENT_EMBEDDINGS: 10, // Reduced from 20 to avoid rate limits
+  MAX_CONCURRENT_UPSERTS: 10, // Increased from 5 for better throughput
 };
 
 // Initialize clients
@@ -249,10 +251,9 @@ const createQueryEmbedding = async (query: string): Promise<number[]> => {
 };
 
 // Pinecone operations
-export const generateNamespace = (prefix: string = "assistant"): string => {
-  const timestamp = Date.now();
-  const randomId = Math.random().toString(36).substring(2, 8);
-  return `${prefix}_${timestamp}_${randomId}`;
+export const generateNamespace = (assistantId: string): string => {
+  // Use assistant ID directly as namespace for better organization and performance
+  return `assistant_${assistantId}`;
 };
 
 const upsertVectors = async (
@@ -276,12 +277,13 @@ const upsertVectors = async (
 export const createAssistantWithConvexDocs = async (
   documents: Document[],
   documentIds: string[],
-  assistantName: string = "assistant",
+  assistantId: string,
   callbacks?: ProgressCallback
 ): Promise<AssistantCreationResult> => {
   const startTime = Date.now();
   const index = await getOrCreateIndex();
-  const namespace = generateNamespace(assistantName);
+  const namespace = generateNamespace(assistantId);
+
 
   callbacks?.onProgress?.("processing", 0, 4);
 
@@ -362,26 +364,79 @@ export const searchDocuments = async (
   // Create query embedding
   const queryEmbedding = await createQueryEmbedding(query);
 
-  // Search Pinecone
+  // Search Pinecone with more results for reranking
   const searchResponse = await index.namespace(namespace).query({
     vector: queryEmbedding,
-    topK,
+    topK: CONFIG.TOP_K_BEFORE_RERANK, // Get 8 results
     includeMetadata: true,
     includeValues: false,
     ...(filter && { filter }),
   });
 
-  // Filter by minimum score
+  // Filter by minimum score first
   const relevantMatches = searchResponse.matches.filter(
     (match: any) => match.score >= minScore
   );
 
-  // If no high-score matches, return top results anyway
-  if (relevantMatches.length === 0 && searchResponse.matches.length > 0) {
-    return searchResponse.matches.slice(0, 3).map(formatMatch);
+  if (relevantMatches.length === 0) {
+    // If no high-score matches, return top 3 without reranking
+    return searchResponse.matches.slice(0, topK).map(formatMatch);
   }
 
-  return relevantMatches.map(formatMatch);
+  // If we have enough results, apply reranking
+  if (relevantMatches.length > topK) {
+    try {
+      const pinecone = initPinecone();
+
+      // For reranking, we need the actual content, not just titles
+      // Since we don't store full content in Pinecone metadata, use titles + preview
+      const documentsForRerank = relevantMatches.map((match: any) => {
+        // Combine title and available metadata for better reranking
+        const title = match.metadata?.title || '';
+        const preview = match.metadata?.preview || '';
+        const text = `${title}\n${preview}`.trim() || match.id;
+
+        return {
+          id: match.id,
+          text: text,
+          score: match.score,
+          metadata: match.metadata
+        };
+      });
+
+      // Apply reranking
+      const rerankResponse = await pinecone.inference.rerank(
+        CONFIG.RERANK_MODEL,
+        query,
+        documentsForRerank.map(doc => ({ text: doc.text })),
+        {
+          topN: topK,
+          returnDocuments: true
+        }
+      );
+
+      // Map reranked results back to our format
+      const rerankedResults = rerankResponse.data.map((item: any) => {
+        const originalMatch = relevantMatches[item.index];
+        return {
+          ...formatMatch(originalMatch),
+          score: item.score, // Use rerank score
+          originalScore: originalMatch.score, // Keep original for debugging
+        };
+      });
+
+
+      return rerankedResults;
+
+    } catch (error) {
+      console.warn('Reranking failed, falling back to original results:', error);
+      // Fallback to original results without reranking
+      return relevantMatches.slice(0, topK).map(formatMatch);
+    }
+  }
+
+  // If we have few results, just return them
+  return relevantMatches.slice(0, topK).map(formatMatch);
 };
 
 const formatMatch = (match: any): SearchResult => ({

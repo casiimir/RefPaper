@@ -71,7 +71,7 @@ export const processAssistantCreation = internalAction({
       const result: any = await createAssistantWithConvexDocs(
         documents,
         documentIds,
-        name
+        assistantId
       );
 
       // Final success status update

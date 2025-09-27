@@ -58,7 +58,9 @@ export interface PineconeConfig {
   CHUNK_OVERLAP: number;
   MIN_CHUNK_SIZE: number;
   TOP_K_SEARCH: number;
+  TOP_K_BEFORE_RERANK: number;
   MIN_SCORE_THRESHOLD: number;
+  RERANK_MODEL: string;
   MAX_CONCURRENT_EMBEDDINGS: number;
   MAX_CONCURRENT_UPSERTS: number;
 }

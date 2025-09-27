@@ -53,6 +53,7 @@ export interface SearchResult {
     preview: string;
     documentId?: string;
   };
+  originalScore?: number; // For reranking debugging
 }
 
 // Assistant creation result
