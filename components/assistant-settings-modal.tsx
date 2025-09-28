@@ -138,7 +138,9 @@ export function AssistantSettingsModal({
         open={open && !showDeleteConfirm}
         onOpenChange={handleClose}
         title={t("assistant.settings")}
-        description={t("assistant.settingsDescription", { name: assistant?.name || "" })}
+        description={t("assistant.settingsDescription", {
+          name: assistant?.name || "",
+        })}
         footer={settingsFooter}
         loading={isLoading}
       >
@@ -153,7 +155,9 @@ export function AssistantSettingsModal({
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 disabled={isLoading}
                 required
               />
@@ -168,7 +172,9 @@ export function AssistantSettingsModal({
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 disabled={isLoading}
                 rows={3}
               />

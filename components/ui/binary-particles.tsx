@@ -41,7 +41,7 @@ export function BinaryParticles({
         return (
           <div
             key={i}
-            className="absolute text-xs text-primary/50 font-mono select-none animate-matrix-fade"
+            className="absolute text-xs text-primary/50 font-mono animate-matrix-fade"
             style={{
               left: `${x}%`,
               top: `${y}%`,

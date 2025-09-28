@@ -43,7 +43,7 @@ export function AssistantForm({
   const handleFieldChange = (field: keyof AssistantFormData, value: string) => {
     // Clear field error when user starts typing
     if (fieldErrors[field]) {
-      setFieldErrors(prev => ({ ...prev, [field]: "" }));
+      setFieldErrors((prev) => ({ ...prev, [field]: "" }));
     }
 
     onFormDataChange({
@@ -61,14 +61,25 @@ export function AssistantForm({
     const errors: Record<string, string> = {};
 
     // Required fields validation
-    const nameError = FormValidationUtils.validateRequired(formData.name, "Assistant name");
+    const nameError = FormValidationUtils.validateRequired(
+      formData.name,
+      "Assistant name"
+    );
     if (nameError) errors.name = nameError;
 
-    const urlError = FormValidationUtils.validateRequired(formData.docsUrl, "Documentation URL");
+    const urlError = FormValidationUtils.validateRequired(
+      formData.docsUrl,
+      "Documentation URL"
+    );
     if (urlError) errors.docsUrl = urlError;
 
     // Length validation
-    const nameLengthError = FormValidationUtils.validateLength(formData.name, 2, 50, "Assistant name");
+    const nameLengthError = FormValidationUtils.validateLength(
+      formData.name,
+      2,
+      50,
+      "Assistant name"
+    );
     if (nameLengthError) errors.name = nameLengthError;
 
     const descLengthError = FormValidationUtils.validateLength(
@@ -81,7 +92,9 @@ export function AssistantForm({
 
     // URL format validation
     if (formData.docsUrl && !urlValidation?.isValid) {
-      const formatError = FormValidationUtils.validateUrlFormat(formData.docsUrl);
+      const formatError = FormValidationUtils.validateUrlFormat(
+        formData.docsUrl
+      );
       if (formatError) errors.docsUrl = formatError;
     }
 
@@ -89,26 +102,40 @@ export function AssistantForm({
     return Object.keys(errors).length === 0;
   };
 
-  const canCreateAssistant = userPlan === "pro" || questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH;
+  const canCreateAssistant =
+    userPlan === "pro" ||
+    questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH;
 
   return (
     <div className="space-y-4">
       {/* Free Plan Limitations */}
-      {userPlan === "free" && questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
-        <Alert>
-          <Lightbulb className="h-4 w-4" />
-          <AlertDescription>
-            <div className="space-y-2">
-              <div className="font-medium">{t("assistant.freePlanLimits.title")}</div>
-              <ul className="text-xs space-y-1 ml-4">
-                <li>• <strong>Specific subpages recommended:</strong> {t("assistant.freePlanLimits.specificSubpages")}</li>
-                <li>• <strong>30 pages limit:</strong> {t("assistant.freePlanLimits.pageLimit")}</li>
-                <li>• <strong>Limited depth:</strong> {t("assistant.freePlanLimits.depthLimit")}</li>
-              </ul>
-            </div>
-          </AlertDescription>
-        </Alert>
-      )}
+      {userPlan === "free" &&
+        questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
+          <Alert>
+            <Lightbulb className="h-4 w-4" />
+            <AlertDescription>
+              <div className="space-y-2">
+                <div className="font-medium">
+                  {t("assistant.freePlanLimits.title")}
+                </div>
+                <ul className="text-xs space-y-1 ml-4">
+                  <li>
+                    • <strong>Specific subpages recommended:</strong>{" "}
+                    {t("assistant.freePlanLimits.specificSubpages")}
+                  </li>
+                  <li>
+                    • <strong>30 pages limit:</strong>{" "}
+                    {t("assistant.freePlanLimits.pageLimit")}
+                  </li>
+                  <li>
+                    • <strong>Limited depth:</strong>{" "}
+                    {t("assistant.freePlanLimits.depthLimit")}
+                  </li>
+                </ul>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
 
       {/* Assistant Name */}
       <div className="grid grid-cols-4 items-center gap-4">

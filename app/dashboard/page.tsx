@@ -251,7 +251,7 @@ export default function Dashboard() {
             <div className="max-w-md mx-auto">
               {canCreateAssistant() && (
                 <div
-                  className="w-24 h-24 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center cursor-pointer hover:bg-primary"
+                  className="w-24 h-24 mx-auto mb-6 rounded-full bg-muted flex items-center justify-center hover:bg-primary"
                   onClick={() => setShowCreateModal(true)}
                 >
                   <Plus className="w-12 h-12 text-muted-foreground" />
