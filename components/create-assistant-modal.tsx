@@ -32,9 +32,7 @@ export function CreateAssistantModal({
 
   const canCreateAssistant = userPlan === "pro" || questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const performSubmit = async () => {
     if (!formData.name.trim() || !formData.docsUrl.trim()) {
       return;
     }
@@ -53,9 +51,34 @@ export function CreateAssistantModal({
 
       if (!response.ok) {
         const errorData = await response.json();
+
+        // Determine the appropriate error message based on the error content
+        let errorMessage = errorData.error || t("errors.failedToCreate");
+        let errorType: "error" | "warning" | "info" | "network" | "timeout" | "server" | "limit" = "error";
+
+        // Check for specific error patterns and provide better messages
+        if (errorData.error) {
+          const errorText = errorData.error.toLowerCase();
+
+          if (errorText.includes("timeout") || errorText.includes("timed out")) {
+            errorMessage = t("errors.crawlTimeout");
+            errorType = "timeout";
+          } else if (errorText.includes("network") || errorText.includes("connection")) {
+            errorMessage = t("errors.networkError");
+            errorType = "network";
+          } else if (errorText.includes("server") || response.status >= 500) {
+            errorMessage = t("errors.serverError");
+            errorType = "server";
+          } else if (errorText.includes("limit")) {
+            // Keep the original limit message as it's already handled well
+            errorMessage = errorData.error;
+            errorType = "limit";
+          }
+        }
+
         setServerError({
-          message: errorData.error || t("errors.failedToCreate"),
-          type: errorData.type || "error",
+          message: errorMessage,
+          type: errorType,
           questionsUsed: errorData.questionsUsed,
           limit: errorData.limit,
         });
@@ -66,13 +89,38 @@ export function CreateAssistantModal({
       onOpenChange(false);
     } catch (error) {
       console.error("Failed to create assistant:", error);
+
+      // Determine the type of error and provide appropriate message
+      let errorMessage = t("errors.networkError");
+      let errorType: "error" | "warning" | "info" | "network" | "timeout" | "server" | "limit" = "error";
+
+      if (error instanceof TypeError && error.message.includes("fetch")) {
+        // Network/fetch error
+        errorMessage = t("errors.networkError");
+        errorType = "network";
+      } else if (error instanceof Error) {
+        // Check if the error message indicates a timeout
+        if (error.message.includes("timeout") || error.message.includes("timed out")) {
+          errorMessage = t("errors.crawlTimeout");
+          errorType = "timeout";
+        } else {
+          errorMessage = t("errors.unknownError");
+          errorType = "error";
+        }
+      }
+
       setServerError({
-        message: t("errors.networkError"),
-        type: "error",
+        message: errorMessage,
+        type: errorType,
       });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await performSubmit();
   };
 
   const handleClose = () => {
@@ -110,7 +158,16 @@ export function CreateAssistantModal({
         )}
 
         {/* Server error display */}
-        <ServerErrorDisplay error={serverError} />
+        <ServerErrorDisplay
+          error={serverError}
+          onRetry={() => {
+            setServerError(null);
+            // Auto retry for certain error types
+            if (serverError?.type === "network" || serverError?.type === "server") {
+              performSubmit();
+            }
+          }}
+        />
 
         {/* Assistant form */}
         <AssistantForm

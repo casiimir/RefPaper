@@ -1,10 +1,10 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, AlertTriangle } from "lucide-react";
+import { AlertCircle, AlertTriangle, Wifi, Clock, Server } from "lucide-react";
 import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export interface FormError {
   message: string;
-  type?: "error" | "warning" | "info";
+  type?: "error" | "warning" | "info" | "network" | "timeout" | "server" | "limit";
   questionsUsed?: number;
   limit?: number;
 }
@@ -76,13 +76,57 @@ export function ServerErrorDisplay({
 
   if (!error) return null;
 
+  // Choose appropriate icon and variant based on error type
+  const getErrorDisplay = () => {
+    switch (error.type) {
+      case "network":
+        return {
+          icon: <Wifi className="h-4 w-4" />,
+          variant: "destructive" as const,
+          showRetry: true
+        };
+      case "timeout":
+        return {
+          icon: <Clock className="h-4 w-4" />,
+          variant: "default" as const,
+          showRetry: false
+        };
+      case "server":
+        return {
+          icon: <Server className="h-4 w-4" />,
+          variant: "destructive" as const,
+          showRetry: true
+        };
+      case "limit":
+        return {
+          icon: <AlertTriangle className="h-4 w-4" />,
+          variant: "destructive" as const,
+          showRetry: false
+        };
+      case "warning":
+        return {
+          icon: <AlertTriangle className="h-4 w-4" />,
+          variant: "default" as const,
+          showRetry: false
+        };
+      default:
+        return {
+          icon: <AlertCircle className="h-4 w-4" />,
+          variant: "destructive" as const,
+          showRetry: true
+        };
+    }
+  };
+
+  const { icon, variant, showRetry } = getErrorDisplay();
+
   return (
-    <Alert variant="destructive" className={className}>
-      <AlertCircle className="h-4 w-4" />
+    <Alert variant={variant} className={className}>
+      {icon}
       <AlertDescription>
         <div className="flex items-center justify-between">
           <span className="text-xs">{error.message}</span>
-          {onRetry && (
+          {onRetry && showRetry && (
             <button
               onClick={onRetry}
               className="text-xs underline hover:no-underline ml-2"
@@ -91,6 +135,11 @@ export function ServerErrorDisplay({
             </button>
           )}
         </div>
+        {error.questionsUsed && error.limit && (
+          <div className="mt-1 text-xs text-muted-foreground">
+            {t("settings.usageCount", { used: error.questionsUsed, limit: error.limit })}
+          </div>
+        )}
       </AlertDescription>
     </Alert>
   );

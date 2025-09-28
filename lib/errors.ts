@@ -2,6 +2,7 @@
 
 export const ERROR_TYPES = {
   DOCUMENTATION_TOO_LARGE: "documentation_too_large",
+  CRAWL_TIMEOUT: "crawl_timeout",
   ASSISTANT_LIMIT: "assistant_limit",
   QUESTION_LIMIT: "question_limit",
   INVALID_URL: "invalid_url",
@@ -26,6 +27,11 @@ export const ERROR_PATTERNS: Record<ErrorType, string[]> = {
     "token limit",
     "too large",
     "too complex",
+  ],
+  [ERROR_TYPES.CRAWL_TIMEOUT]: [
+    "crawling timed out",
+    "timeout",
+    "too slow or unresponsive",
   ],
   [ERROR_TYPES.ASSISTANT_LIMIT]: ["assistant limit", "assistant_limit"],
   [ERROR_TYPES.QUESTION_LIMIT]: [
@@ -53,6 +59,19 @@ export const ERROR_CONFIGS: Record<ErrorType, ErrorDetails> = {
       "Focus on individual guides instead of the entire site",
     ],
     variant: "destructive",
+    icon: "alert-triangle",
+  },
+  [ERROR_TYPES.CRAWL_TIMEOUT]: {
+    title: "Documentation crawling timeout",
+    description:
+      "The website took too long to respond or has too many pages to crawl within the time limit.",
+    suggestions: [
+      "Try a more specific URL (e.g., /docs/getting-started instead of /docs)",
+      "Use smaller documentation sections",
+      "Check if the website is responsive and accessible",
+      "Contact support if the issue persists",
+    ],
+    variant: "secondary",
     icon: "alert-triangle",
   },
   [ERROR_TYPES.ASSISTANT_LIMIT]: {

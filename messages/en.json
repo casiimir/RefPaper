@@ -279,6 +279,10 @@
     "questionsExhausted": "You've used all 20 free questions this month. You can no longer create new assistants or ask questions until you upgrade.",
     "fieldRequired": "{fieldName} is required",
     "invalidUrl": "Please enter a valid URL",
+    "networkError": "Connection failed. Please check your internet connection and try again.",
+    "crawlTimeout": "Documentation crawling took too long. The website might be slow or have too many pages. Try using a more specific URL like /docs/getting-started instead of /docs.",
+    "serverError": "Server error occurred. Please try again in a few moments.",
+    "unknownError": "An unexpected error occurred. Please try again or contact support if the problem persists.",
     "minLength": "{fieldName} must be at least {count} characters",
     "maxLength": "{fieldName} must be no more than {count} characters",
     "validationFailed": "Validation failed. Please check the URL format."

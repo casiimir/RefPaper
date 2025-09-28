@@ -9,6 +9,7 @@ import {
   deleteNamespace,
 } from "../lib/pinecone";
 import { Document } from "@/types/document";
+import { ERROR_MESSAGES } from "@/lib/constants";
 
 export const processAssistantCreation = internalAction({
   args: {
@@ -18,6 +19,8 @@ export const processAssistantCreation = internalAction({
     userPlan: v.union(v.literal("free"), v.literal("pro")),
   },
   handler: async (ctx, { assistantId, docsUrl, name, userPlan }) => {
+    const startTime = Date.now();
+
     try {
       // Update status to crawling
       await ctx.runMutation(internal.assistants.updateAssistantStatus, {
@@ -25,9 +28,8 @@ export const processAssistantCreation = internalAction({
         status: "crawling",
       });
 
-      // Step 1: Crawl documentation
+      // Step 1: Crawl documentation with timeout protection
       // Use the userPlan passed from API route (where Clerk plan is checked)
-
       const documents: Document[] = await crawlDocumentation(
         docsUrl,
         {},
@@ -83,6 +85,8 @@ export const processAssistantCreation = internalAction({
         processedPages: result.documentsCount,
       });
 
+      const duration = (Date.now() - startTime) / 1000;
+
       return {
         success: true,
         namespace: result.namespace,
@@ -90,13 +94,28 @@ export const processAssistantCreation = internalAction({
         chunksCount: result.chunksCount,
       };
     } catch (error) {
-      console.error("Assistant creation failed:", error);
+      const duration = (Date.now() - startTime) / 1000;
+      console.error(
+        `❌ Assistant creation failed after ${duration} seconds:`,
+        error
+      );
+
+      // Check if it's a timeout error and provide specific messaging
+      let errorMessage = error instanceof Error ? error.message : String(error);
+      const isTimeoutError =
+        errorMessage.includes("timeout") ||
+        errorMessage === ERROR_MESSAGES.CRAWL_TIMEOUT;
+
+      if (isTimeoutError) {
+        console.error(`⏰ Crawling timeout detected for ${docsUrl}`);
+        errorMessage = ERROR_MESSAGES.CRAWL_TIMEOUT;
+      }
 
       // Update status to error with error message
       await ctx.runMutation(internal.assistants.updateAssistantStatus, {
         id: assistantId,
         status: "error",
-        errorMessage: error instanceof Error ? error.message : String(error),
+        errorMessage,
       });
 
       throw error;
