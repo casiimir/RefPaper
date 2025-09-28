@@ -17,6 +17,96 @@
     "ctaButton": "Inizia Gratis",
     "description": "Trasforma la documentazione in un assistente AI. RefPaper aiuta team, startup e aziende a migliorare il supporto, ridurre i costi e scalare la conoscenza."
   },
+  "features": {
+    "title": "Funzionalità Potenti",
+    "subtitle": "Tutto quello che serve per trasformare la documentazione in assistenti intelligenti",
+    "hero": {
+      "title": "Sblocca il Pieno Potenziale",
+      "titleHighlight": "della Tua Documentazione",
+      "subtitle": "Scopri come le funzionalità avanzate di RefPaper possono rivoluzionare il modo in cui il tuo team lavora con la documentazione e la condivisione della conoscenza."
+    },
+    "sections": {
+      "core": {
+        "title": "Funzionalità Principali",
+        "subtitle": "Strumenti essenziali che rendono RefPaper potente"
+      },
+      "advanced": {
+        "title": "Capacità Avanzate",
+        "subtitle": "Funzionalità professionali per team che richiedono di più"
+      },
+      "integration": {
+        "title": "Integrazione e Flusso di Lavoro",
+        "subtitle": "Si integra perfettamente nel tuo flusso di lavoro esistente"
+      }
+    },
+    "core": {
+      "aiPowered": {
+        "title": "Documentazione Potenziata dall'AI",
+        "description": "Trasforma qualsiasi documentazione in un assistente intelligente che comprende il contesto, fornisce risposte accurate e impara dalla struttura dei tuoi contenuti."
+      },
+      "instantSetup": {
+        "title": "Setup da 30 Secondi",
+        "description": "Semplicemente incolla l'URL della tua documentazione. La nostra AI analizza, elabora e crea il tuo assistente istantaneamente senza configurazioni complesse."
+      },
+      "smartCrawling": {
+        "title": "Crawling Web Intelligente",
+        "description": "Scopre ed elabora automaticamente l'intera struttura della tua documentazione, seguendo i link e comprendendo le gerarchie del sito."
+      },
+      "multilingual": {
+        "title": "Supporto Multilingue",
+        "description": "Supporta gli utenti nella loro lingua preferita con capacità di traduzione integrate e comprensione cross-linguistica."
+      }
+    },
+    "advanced": {
+      "contextAware": {
+        "title": "Risposte Consapevoli del Contesto",
+        "description": "Modelli linguistici avanzati comprendono le relazioni tra diverse parti della tua documentazione per risposte più accurate."
+      },
+      "unlimitedConversations": {
+        "title": "Conversazioni Illimitate",
+        "description": "Gli utenti Pro ottengono domande e conversazioni illimitate senza restrizioni mensili o limiti di utilizzo."
+      },
+      "realtime": {
+        "title": "Elaborazione in Tempo Reale",
+        "description": "Risposte istantanee alimentate da elaborazione AI ottimizzata e caching intelligente per prestazioni fulminee."
+      },
+      "customization": {
+        "title": "Assistenti Personalizzati",
+        "description": "Crea più assistenti specializzati per diversi set di documentazione, ognuno adattato a domini o pubblici specifici."
+      }
+    },
+    "integration": {
+      "embeddings": {
+        "title": "Embeddings Avanzati",
+        "description": "Embeddings di testo all'avanguardia assicurano comprensione semantica e recupero accurato di informazioni rilevanti."
+      },
+      "smartParsing": {
+        "title": "Parsing Intelligente dei Documenti",
+        "description": "Estrae e struttura intelligentemente il contenuto da qualsiasi formato di documentazione, comprendendo contesto e relazioni."
+      },
+      "performance": {
+        "title": "Ricerca Ultra-Veloce",
+        "description": "Tecnologia di ricerca vettoriale avanzata fornisce risposte istantanee e rilevanti dalla tua documentazione in secondi."
+      },
+      "reliability": {
+        "title": "99.9% Uptime",
+        "description": "Infrastruttura affidabile assicura che i tuoi assistenti AI siano sempre disponibili quando il tuo team ne ha bisogno."
+      }
+    },
+    "benefits": [
+      "Riduci i ticket di supporto del 70%",
+      "Aiuto documentazione 24/7 istantaneo",
+      "Supporto per più lingue",
+      "Comprensione AI avanzata",
+      "Risposte in tempo reale",
+      "Elaborazione documenti sicura"
+    ],
+    "cta": {
+      "title": "Pronto per Iniziare?",
+      "subtitle": "Unisciti a migliaia di team che già usano RefPaper per trasformare il loro flusso di lavoro di documentazione.",
+      "button": "Inizia Gratis Oggi"
+    }
+  },
   "navigation": {
     "signIn": "Accedi",
     "signOut": "Esci",

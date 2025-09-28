@@ -65,6 +65,96 @@
       "button": "Get Started Free"
     }
   },
+  "features": {
+    "title": "Powerful Features",
+    "subtitle": "Everything you need to transform your documentation into intelligent assistants",
+    "hero": {
+      "title": "Unlock the Full Potential",
+      "titleHighlight": "of Your Documentation",
+      "subtitle": "Discover how RefPaper's advanced features can revolutionize the way your team works with documentation and knowledge sharing."
+    },
+    "sections": {
+      "core": {
+        "title": "Core Features",
+        "subtitle": "Essential tools that make RefPaper powerful"
+      },
+      "advanced": {
+        "title": "Advanced Capabilities",
+        "subtitle": "Professional features for teams that demand more"
+      },
+      "integration": {
+        "title": "Integration & Workflow",
+        "subtitle": "Seamlessly fits into your existing workflow"
+      }
+    },
+    "core": {
+      "aiPowered": {
+        "title": "AI-Powered Documentation",
+        "description": "Transform any documentation into an intelligent assistant that understands context, provides accurate answers, and learns from your content structure."
+      },
+      "instantSetup": {
+        "title": "30-Second Setup",
+        "description": "Simply paste your documentation URL. Our AI crawls, processes, and creates your assistant instantly without any complex configuration."
+      },
+      "smartCrawling": {
+        "title": "Smart Web Crawling",
+        "description": "Automatically discovers and processes your entire documentation structure, following links and understanding site hierarchies."
+      },
+      "multilingual": {
+        "title": "Multilingual Support",
+        "description": "Support users in their preferred language with built-in translation capabilities and cross-language understanding."
+      }
+    },
+    "advanced": {
+      "contextAware": {
+        "title": "Context-Aware Responses",
+        "description": "Advanced language models understand relationships between different parts of your documentation for more accurate answers."
+      },
+      "unlimitedConversations": {
+        "title": "Unlimited Conversations",
+        "description": "Pro users get unlimited questions and conversations with no monthly restrictions or usage limits."
+      },
+      "realtime": {
+        "title": "Real-time Processing",
+        "description": "Instant responses powered by optimized AI processing and intelligent caching for lightning-fast performance."
+      },
+      "customization": {
+        "title": "Custom Assistants",
+        "description": "Create multiple specialized assistants for different documentation sets, each tailored to specific domains or audiences."
+      }
+    },
+    "integration": {
+      "embeddings": {
+        "title": "Advanced Embeddings",
+        "description": "State-of-the-art text embeddings ensure semantic understanding and accurate retrieval of relevant information."
+      },
+      "smartParsing": {
+        "title": "Smart Document Parsing",
+        "description": "Intelligently extracts and structures content from any documentation format, understanding context and relationships."
+      },
+      "performance": {
+        "title": "Lightning Fast Search",
+        "description": "Advanced vector search technology delivers instant, relevant answers from your documentation in seconds."
+      },
+      "reliability": {
+        "title": "99.9% Uptime",
+        "description": "Reliable infrastructure ensures your AI assistants are always available when your team needs them."
+      }
+    },
+    "benefits": [
+      "Reduce support tickets by 70%",
+      "24/7 instant documentation help",
+      "Multiple language support",
+      "Advanced AI understanding",
+      "Real-time responses",
+      "Secure document processing"
+    ],
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Join thousands of teams already using RefPaper to transform their documentation workflow.",
+      "button": "Start Free Today"
+    }
+  },
   "navigation": {
     "signIn": "Sign In",
     "signOut": "Sign Out",
