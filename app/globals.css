@@ -80,6 +80,14 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  button {
+    user-select: none;
+  }
+
+  button:hover {
+    cursor: pointer;
+  }
 }
 
 @keyframes matrix-fall {

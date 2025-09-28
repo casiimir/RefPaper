@@ -72,7 +72,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
         <div className="max-w-4xl mx-auto">
-          <Badge variant="secondary" className="mb-6 px-4 py-2">
+          <Badge className="mb-6 px-4 py-2">
             <Sparkles className="h-4 w-4 mr-2" />
             {t("homepage.hero.badge")}
           </Badge>
@@ -126,7 +126,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="bg-primary/6 py-20" id="features">
+      <section className="bg-primary/3 py-20" id="features">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -163,7 +163,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-20">
         <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto bg-primary/6 rounded-2xl p-12">
+          <div className="max-w-3xl mx-auto bg-primary/3 rounded-2xl p-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               {t("homepage.cta.title")}
             </h2>

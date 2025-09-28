@@ -49,7 +49,9 @@ export function AssistantSidebar({
       <div
         className={cn(
           "border-r bg-background flex flex-col transition-all duration-300 ease-out relative",
-          isMobile ? "w-64 fixed inset-y-0 left-0 z-50 shadow-lg" : "relative z-40",
+          isMobile
+            ? "w-64 fixed inset-y-0 left-0 z-50 shadow-lg"
+            : "relative z-40",
           isMobile && !isOpen && "-translate-x-full",
           !isMobile && isOpen && "w-64",
           !isMobile && !isOpen && "w-0 border-r-0 overflow-hidden"
@@ -97,7 +99,7 @@ export function AssistantSidebar({
                   getAssistantTheme(assistant._id).gradient
                 } hover:shadow-md`,
                 currentAssistantId === assistant._id &&
-                  "ring-2 ring-primary/30 shadow-lg"
+                  "ring-2 ring-primary/20 shadow-md"
               )}
               onClick={() => isMobile && onClose()}
             >
