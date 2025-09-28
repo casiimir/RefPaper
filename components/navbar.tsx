@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useUser, SignOutButton, SignInButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
@@ -11,9 +12,14 @@ import { useTranslation } from "@/components/providers/TranslationProvider";
 export function Navbar() {
   const { isSignedIn, user } = useUser();
   const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 relative z-50">
+    <nav className="fixed top-0 left-0 right-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="container mx-auto px-4 h-14 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <span className="font-bold text-xl">{t("app.name")}</span>
@@ -23,7 +29,10 @@ export function Navbar() {
           <LanguageSwitcher />
           <ThemeToggle />
 
-          {isSignedIn ? (
+          {!isClient ? (
+            // Placeholder during hydration to prevent mismatch
+            <div className="w-20 h-8"></div>
+          ) : isSignedIn ? (
             <div className="flex items-center space-x-3">
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm" className="p-2">

@@ -95,14 +95,14 @@ export default function Dashboard() {
   // Show loading while auth is loading or while data is loading
   if (!isLoaded || !isSignedIn || assistants === undefined) {
     return (
-      <div className="bg-background min-h-screen">
+      <div className="bg-background">
         <CenteredLoading message={t("dashboard.loadingDashboard")} />
       </div>
     );
   }
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background">
       {/* Stats Bar with Create Button */}
       <div className="border-b bg-muted/20">
         <div className="container mx-auto px-4 py-3">
