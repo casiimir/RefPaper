@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from "convex/react";
 import { useAuth } from "@clerk/nextjs";
 import { useTranslation } from "@/components/providers/TranslationProvider";
@@ -11,6 +11,7 @@ import {
   MessageSquare,
   ExternalLink,
   Crown,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +39,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AssistantIcon } from "@/components/ui/assistant-icon";
 import { DebugDialog } from "@/components/dev/debug-dialog";
 import { getAssistantTheme } from "@/lib/assistant-colors";
+import { SearchBar } from "@/components/dashboard/SearchBar";
 
 export default function Dashboard() {
   const { isLoaded, isSignedIn, has } = useAuth();
@@ -46,6 +48,7 @@ export default function Dashboard() {
   const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(
     null
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Only fetch data when auth is loaded and user is signed in
   const assistants = useQuery(
@@ -57,6 +60,21 @@ export default function Dashboard() {
     isLoaded && isSignedIn ? {} : "skip"
   );
   const isPro = has ? has({ plan: "pro" }) : false;
+
+  // Filtered assistants based on search query
+  const filteredAssistants = useMemo(() => {
+    if (!assistants || !searchQuery.trim()) return assistants || [];
+
+    const query = searchQuery.toLowerCase().trim();
+    return assistants.filter((assistant) => {
+      const matchesName = assistant.name.toLowerCase().includes(query);
+      const matchesDescription = assistant.description?.toLowerCase().includes(query) || false;
+      const matchesUrl = assistant.docsUrl.toLowerCase().includes(query);
+      const matchesDomain = new URL(assistant.docsUrl).hostname.toLowerCase().includes(query);
+
+      return matchesName || matchesDescription || matchesUrl || matchesDomain;
+    });
+  }, [assistants, searchQuery]);
 
   const canCreateAssistant = () => {
     if (!isLoaded || !isSignedIn) return false;
@@ -218,6 +236,16 @@ export default function Dashboard() {
             />
           )}
 
+        {/* Search Bar */}
+        {assistants && assistants.length > 0 && (
+          <SearchBar
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            resultsCount={filteredAssistants.length}
+            totalCount={assistants.length}
+          />
+        )}
+
         {assistants.length === 0 ? (
           <div className="text-center py-20">
             <div className="max-w-md mx-auto">
@@ -237,9 +265,19 @@ export default function Dashboard() {
               </p>
             </div>
           </div>
+        ) : searchQuery && filteredAssistants.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="max-w-md mx-auto">
+              <Search className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+              <h2 className="text-xl font-semibold mb-2">{t("dashboard.noResults")}</h2>
+              <p className="text-muted-foreground mb-4">
+                {t("dashboard.noResultsDescription", { query: searchQuery })}
+              </p>
+            </div>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {assistants.map((assistant) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {(searchQuery ? filteredAssistants : assistants).map((assistant) => (
               <Card
                 key={assistant._id}
                 className={`hover:shadow-lg transition-all duration-300 flex flex-col h-full bg-gradient-to-br ${

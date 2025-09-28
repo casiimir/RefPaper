@@ -13,6 +13,7 @@ import {
 import { useTranslation } from "@/components/providers/TranslationProvider";
 import { AssistantIcon } from "@/components/ui/assistant-icon";
 import { getAssistantTheme } from "@/lib/assistant-colors";
+import { AssistantSearch } from "./AssistantSearch";
 
 interface AssistantSidebarProps {
   assistants: Assistant[];
@@ -88,9 +89,19 @@ export function AssistantSidebar({
           </div>
         </div>
 
-        {/* Assistants List */}
-        <div className="flex-1 overflow-y-auto p-2">
-          {assistants.map((assistant) => (
+        {/* Assistants List with Search */}
+        <div className="flex-1 overflow-y-auto">
+          <AssistantSearch assistants={assistants}>
+            {(filteredAssistants) => (
+              <div className="p-2">
+                {filteredAssistants.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-xs text-muted-foreground">
+                      {t("chat.noAssistantsFound")}
+                    </p>
+                  </div>
+                ) : (
+                  filteredAssistants.map((assistant) => (
             <Link
               key={assistant._id}
               href={`/assistant/${assistant._id}`}
@@ -127,7 +138,11 @@ export function AssistantSidebar({
                 </div>
               </div>
             </Link>
-          ))}
+                  ))
+                )}
+              </div>
+            )}
+          </AssistantSearch>
         </div>
 
         {/* Footer */}
