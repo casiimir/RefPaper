@@ -142,54 +142,6 @@ export default function NotFound() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes matrix-fall {
-          0% {
-            transform: translateY(-100vh);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100vh);
-            opacity: 0;
-          }
-        }
-
-        @keyframes float-random {
-          0% {
-            transform: translateY(0px) scale(1);
-            opacity: 0.3;
-          }
-          50% {
-            transform: translateY(-40px) scale(1.1);
-            opacity: 0.6;
-          }
-          100% {
-            transform: translateY(0px) scale(1);
-            opacity: 0.3;
-          }
-        }
-
-        @keyframes pulse-slow {
-          0%,
-          100% {
-            opacity: 0.2;
-          }
-          50% {
-            opacity: 0.8;
-          }
-        }
-
-        .animate-matrix-fall {
-          animation: matrix-fall linear infinite;
-        }
-        .animate-float-random {
-          animation: float-random 6s ease-in-out infinite;
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 }

@@ -163,5 +163,60 @@
     "backHome": "Ritorna alla Base",
     "backDashboard": "Accedi alla Dashboard",
     "tryThese": "Moduli di sistema disponibili"
+  },
+  "pricing": {
+    "title": "Semplice, Trasparente",
+    "titleHighlight": "Prezzi",
+    "subtitle": "Scegli il piano perfetto per le tue esigenze di documentazione. Inizia gratis, aggiorna quando sei pronto.",
+    "choosePlan": "Scegli il Tuo Piano",
+    "choosePlanDescription": "Seleziona il piano che meglio si adatta alle tue esigenze e inizia a trasformare la tua documentazione oggi.",
+    "whyChoose": "Perché Scegliere RefPaper?",
+    "whyChooseDescription": "Funzionalità potenti che fanno lavorare la tua documentazione per te",
+    "faqTitle": "Domande Frequenti",
+    "faqDescription": "Tutto quello che devi sapere sui nostri prezzi",
+    "ctaTitle": "Pronto a Trasformare la Tua Documentazione?",
+    "ctaDescription": "Unisciti a migliaia di team che hanno rivoluzionato il loro flusso di lavoro di documentazione con RefPaper.",
+    "startFreeTrial": "Inizia Prova Gratuita",
+    "scheduleDemo": "Programma Demo",
+    "features": {
+      "aiPowered": {
+        "title": "Documentazione Potenziata dall'AI",
+        "description": "Trasforma qualsiasi documentazione in un assistente intelligente che comprende il contesto e fornisce risposte accurate."
+      },
+      "lightningFast": {
+        "title": "Risposte Fulminee",
+        "description": "Ottieni risposte istantanee dalla tua documentazione con il nostro sistema di elaborazione AI e caching ottimizzato."
+      },
+      "naturalConversations": {
+        "title": "Conversazioni Naturali",
+        "description": "Chatta naturalmente con la tua documentazione utilizzando l'elaborazione avanzata del linguaggio naturale."
+      }
+    },
+    "faqs": {
+      "freePlan": {
+        "question": "Come funziona il piano gratuito?",
+        "answer": "Il piano gratuito ti offre 3 assistenti AI e 20 domande al mese. Perfetto per testare RefPaper con set di documentazione più piccoli."
+      },
+      "whatCounts": {
+        "question": "Cosa conta come 'domanda'?",
+        "answer": "Ogni messaggio che invii a un assistente AI conta come una domanda. Anche le domande di follow-up nella stessa conversazione contano."
+      },
+      "upgradeDowngrade": {
+        "question": "Posso aggiornare o declassare in qualsiasi momento?",
+        "answer": "Sì! Puoi aggiornare a Pro in qualsiasi momento. Se declassi, manterrai le funzionalità Pro fino alla fine del tuo periodo di fatturazione."
+      },
+      "documentationTypes": {
+        "question": "Che tipi di documentazione posso usare?",
+        "answer": "RefPaper funziona con qualsiasi documentazione basata sul web inclusi wiki, documenti API, basi di conoscenza e altro."
+      },
+      "sizeLimit": {
+        "question": "C'è un limite sulla dimensione della documentazione?",
+        "answer": "Piano gratuito: fino a 30 pagine per assistente. Piano Pro: pagine illimitate con capacità di crawling avanzate."
+      },
+      "enterprise": {
+        "question": "Offrite piani enterprise personalizzati?",
+        "answer": "Sì! Contattaci per soluzioni enterprise personalizzate con supporto dedicato, integrazioni personalizzate e prezzi per volumi."
+      }
+    }
   }
 }

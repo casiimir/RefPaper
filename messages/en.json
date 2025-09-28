@@ -163,5 +163,60 @@
     "backHome": "Return to Base",
     "backDashboard": "Access Dashboard",
     "tryThese": "Available system modules"
+  },
+  "pricing": {
+    "title": "Simple, Transparent",
+    "titleHighlight": "Pricing",
+    "subtitle": "Choose the perfect plan for your documentation needs. Start free, upgrade when you're ready.",
+    "choosePlan": "Choose Your Plan",
+    "choosePlanDescription": "Select the plan that best fits your needs and start transforming your documentation today.",
+    "whyChoose": "Why Choose RefPaper?",
+    "whyChooseDescription": "Powerful features that make your documentation work for you",
+    "faqTitle": "Frequently Asked Questions",
+    "faqDescription": "Everything you need to know about our pricing",
+    "ctaTitle": "Ready to Transform Your Documentation?",
+    "ctaDescription": "Join thousands of teams who have revolutionized their documentation workflow with RefPaper.",
+    "startFreeTrial": "Start Free Trial",
+    "scheduleDemo": "Schedule Demo",
+    "features": {
+      "aiPowered": {
+        "title": "AI-Powered Documentation",
+        "description": "Transform any documentation into an intelligent assistant that understands context and provides accurate answers."
+      },
+      "lightningFast": {
+        "title": "Lightning Fast Responses",
+        "description": "Get instant answers from your documentation with our optimized AI processing and caching system."
+      },
+      "naturalConversations": {
+        "title": "Natural Conversations",
+        "description": "Chat naturally with your documentation using advanced natural language processing."
+      }
+    },
+    "faqs": {
+      "freePlan": {
+        "question": "How does the free plan work?",
+        "answer": "The free plan gives you 3 AI assistants and 20 questions per month. Perfect for testing RefPaper with smaller documentation sets."
+      },
+      "whatCounts": {
+        "question": "What counts as a 'question'?",
+        "answer": "Each message you send to an AI assistant counts as one question. Follow-up questions in the same conversation also count."
+      },
+      "upgradeDowngrade": {
+        "question": "Can I upgrade or downgrade anytime?",
+        "answer": "Yes! You can upgrade to Pro anytime. If you downgrade, you'll keep Pro features until the end of your billing period."
+      },
+      "documentationTypes": {
+        "question": "What types of documentation can I use?",
+        "answer": "RefPaper works with any web-based documentation including wikis, API docs, knowledge bases, and more."
+      },
+      "sizeLimit": {
+        "question": "Is there a limit on documentation size?",
+        "answer": "Free plan: up to 30 pages per assistant. Pro plan: unlimited pages with advanced crawling capabilities."
+      },
+      "enterprise": {
+        "question": "Do you offer custom enterprise plans?",
+        "answer": "Yes! Contact us for custom enterprise solutions with dedicated support, custom integrations, and volume pricing."
+      }
+    }
   }
 }

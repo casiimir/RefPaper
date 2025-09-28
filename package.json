@@ -13,6 +13,7 @@
     "@clerk/themes": "^2.4.21",
     "@mendable/firecrawl-js": "^4.3.5",
     "@pinecone-database/pinecone": "^6.1.2",
+    "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-progress": "^1.1.7",
