@@ -11,6 +11,7 @@ import {
   MessageSquare,
   ExternalLink,
   Crown,
+  Ticket,
   Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -177,10 +178,21 @@ export default function Dashboard() {
             {/* Stats Left Side */}
             <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Crown className="h-4 w-4" />
-                <span className="capitalize font-medium">
-                  {isPro ? t("plans.proPlan") : t("plans.freePlan")}
-                </span>
+                {isPro ? (
+                  <>
+                    <Crown className="h-4 w-4 text-active" />
+                    <span className="capitalize font-medium text-active">
+                      {t("plans.proPlan")}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Ticket className="h-4 w-4" />
+                    <span className="capitalize font-medium">
+                      {t("plans.freePlan")}
+                    </span>
+                  </>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">
@@ -283,7 +295,7 @@ export default function Dashboard() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {(searchQuery ? filteredAssistants : assistants).map(
               (assistant) => (
                 <Card
