@@ -155,5 +155,13 @@
     "toggleTheme": "Toggle theme",
     "switchToLanguage": "Switch to {language}",
     "suggestions": "💡 Suggestions:"
+  },
+  "notFound": {
+    "title": "Resource not found in knowledge matrix",
+    "description": "The requested documentation node has been disconnected from the system.",
+    "searchPlaceholder": "Search for knowledge...",
+    "backHome": "Return to Base",
+    "backDashboard": "Access Dashboard",
+    "tryThese": "Available system modules"
   }
 }

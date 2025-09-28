@@ -155,5 +155,13 @@
     "toggleTheme": "Toggle theme",
     "switchToLanguage": "Switch to {language}",
     "suggestions": "💡 Suggerimenti:"
+  },
+  "notFound": {
+    "title": "Risorsa non trovata nella matrice di conoscenza",
+    "description": "Il nodo di documentazione richiesto è stato disconnesso dal sistema.",
+    "searchPlaceholder": "Cerca conoscenza...",
+    "backHome": "Ritorna alla Base",
+    "backDashboard": "Accedi alla Dashboard",
+    "tryThese": "Moduli di sistema disponibili"
   }
 }

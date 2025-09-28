@@ -50,7 +50,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
       </Button>
 
       {isOpen && (
-        <div className="absolute left-0 mt-3 w-40 bg-background border-b border-x rounded-b-md shadow-lg z-50">
+        <div className="absolute left-0 mt-3 w-40 bg-background border-b border-x rounded-b-md shadow-lg z-[999]">
           <div className="py-0">
             {Object.entries(languages).map(([locale, language]) => (
               <button
