@@ -15,9 +15,9 @@ export interface ParsedError {
   limit?: number;
 }
 
-export function parseApiError(error: any): ParsedError {
+export function parseApiError(error: unknown): ParsedError {
   // Handle fetch/network errors
-  if (error instanceof TypeError || error.message?.includes("fetch")) {
+  if (error instanceof TypeError || (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string' && error.message.includes("fetch"))) {
     return {
       type: "network_error",
       title: "Connection Error",
@@ -26,7 +26,7 @@ export function parseApiError(error: any): ParsedError {
   }
 
   // Handle API response errors
-  if (error.error || error.message) {
+  if (error && typeof error === 'object' && ('error' in error || 'message' in error)) {
     const errorData = error as ApiErrorResponse;
 
     // Rate limit errors
@@ -52,7 +52,9 @@ export function parseApiError(error: any): ParsedError {
   return {
     type: "unknown",
     title: "Error",
-    message: error.message || "An unexpected error occurred. Please try again.",
+    message: (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string')
+      ? error.message
+      : "An unexpected error occurred. Please try again.",
   };
 }
 

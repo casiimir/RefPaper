@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import { queryAssistant } from "@/lib/pinecone";
 import { withAuth } from "@/lib/api-middleware";
 import { checkChatMessageLimits } from "@/lib/plan-utils";
@@ -29,7 +30,7 @@ export async function POST(
 
     // Get assistant and verify ownership
     const assistant = await context.convex.query(api.assistants.getAssistant, {
-      id: assistantId as any,
+      id: assistantId as Id<"assistants">,
     });
 
     if (assistant.status !== "ready") {
@@ -69,7 +70,7 @@ export async function POST(
 
     // Add user message
     await context.convex.mutation(api.messages.addMessage, {
-      assistantId: assistantId as any,
+      assistantId: assistantId as Id<"assistants">,
       role: "user",
       content: message,
     });
@@ -91,10 +92,10 @@ export async function POST(
       if ("answer" in response && response.answer) {
         // Add assistant response with sources
         await context.convex.mutation(api.messages.addMessage, {
-          assistantId: assistantId as any,
+          assistantId: assistantId as Id<"assistants">,
           role: "assistant",
           content: response.answer,
-          sources: response.sources.map((source: any) => ({
+          sources: response.sources.map((source: { sourceUrl: string; title: string; preview?: string }) => ({
             url: source.sourceUrl,
             title: source.title,
             preview: source.preview || source.title || "Documentation snippet",
@@ -104,7 +105,7 @@ export async function POST(
         return NextResponse.json({
           success: true,
           answer: response.answer,
-          sources: response.sources.map((source: any) => ({
+          sources: response.sources.map((source: { sourceUrl: string; title: string; preview?: string }) => ({
             url: source.sourceUrl,
             title: source.title,
             preview: source.preview || source.title || "Documentation snippet",
@@ -119,7 +120,7 @@ export async function POST(
 
       // Add error message
       await context.convex.mutation(api.messages.addMessage, {
-        assistantId: assistantId as any,
+        assistantId: assistantId as Id<"assistants">,
         role: "assistant",
         content:
           "I'm sorry, I encountered an error while processing your request. Please try again.",

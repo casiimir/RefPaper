@@ -100,8 +100,10 @@ export const ERROR_CONFIGS: Record<ErrorType, ErrorDetails> = {
   },
 };
 
-export default {
+const errorConstants = {
   ERROR_TYPES,
   ERROR_PATTERNS,
   ERROR_CONFIGS,
 };
+
+export default errorConstants;

@@ -1,9 +1,8 @@
-import { Pinecone } from "@pinecone-database/pinecone";
+import { Pinecone, Index, RecordMetadata, ScoredPineconeRecord } from "@pinecone-database/pinecone";
 import OpenAI from "openai";
 import {
   Document,
   DocumentChunk,
-  DocumentVector,
   SearchResult,
   AssistantCreationResult,
 } from "@/types/document";
@@ -18,6 +17,7 @@ import {
 } from "@/types/pinecone";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 
 // Configuration
 const CONFIG: PineconeConfig = {
@@ -257,9 +257,9 @@ export const generateNamespace = (assistantId: string): string => {
 };
 
 const upsertVectors = async (
-  index: any,
+  index: Index,
   namespace: string,
-  vectors: DocumentVector[],
+  vectors: Array<{ id: string; values: number[]; metadata: RecordMetadata }>,
   callbacks?: ProgressCallback
 ): Promise<void> => {
   const batchSize = CONFIG.MAX_CONCURRENT_UPSERTS;
@@ -321,7 +321,7 @@ export const createAssistantWithConvexDocs = async (
   callbacks?.onProgress?.("processing", 2, 4);
 
   // Step 3: Prepare vectors with minimal metadata (exclude content preview to reduce size)
-  const vectors: DocumentVector[] = chunks.map((chunk, idx) => ({
+  const vectors = chunks.map((chunk, idx) => ({
     id: chunk.id,
     values: embeddings[idx],
     metadata: {
@@ -331,7 +331,8 @@ export const createAssistantWithConvexDocs = async (
       chunkIndex: chunk.metadata.chunkIndex,
       totalChunks: chunk.metadata.totalChunks,
       documentId: chunk.metadata.documentId,
-    },
+      contentPreview: chunk.metadata.contentPreview,
+    } as RecordMetadata,
   }));
 
   // Step 4: Upsert to Pinecone
@@ -375,7 +376,7 @@ export const searchDocuments = async (
 
   // Filter by minimum score first
   const relevantMatches = searchResponse.matches.filter(
-    (match: any) => match.score >= minScore
+    (match: ScoredPineconeRecord) => (match.score ?? 0) >= minScore
   );
 
   if (relevantMatches.length === 0) {
@@ -390,10 +391,11 @@ export const searchDocuments = async (
 
       // For reranking, we need the actual content, not just titles
       // Since we don't store full content in Pinecone metadata, use titles + preview
-      const documentsForRerank = relevantMatches.map((match: any) => {
+      const documentsForRerank = relevantMatches.map((match: ScoredPineconeRecord) => {
         // Combine title and available metadata for better reranking
-        const title = match.metadata?.title || '';
-        const preview = match.metadata?.preview || '';
+        const metadata = match.metadata as RecordMetadata | undefined;
+        const title = metadata?.title as string || '';
+        const preview = metadata?.preview as string || '';
         const text = `${title}\n${preview}`.trim() || match.id;
 
         return {
@@ -416,7 +418,7 @@ export const searchDocuments = async (
       );
 
       // Map reranked results back to our format
-      const rerankedResults = rerankResponse.data.map((item: any) => {
+      const rerankedResults = rerankResponse.data.map((item: { index: number; score: number }) => {
         const originalMatch = relevantMatches[item.index];
         return {
           ...formatMatch(originalMatch),
@@ -439,17 +441,20 @@ export const searchDocuments = async (
   return relevantMatches.slice(0, topK).map(formatMatch);
 };
 
-const formatMatch = (match: any): SearchResult => ({
-  id: match.id,
-  score: match.score,
-  content: "", // Will be filled from file storage via documentId
-  metadata: {
-    title: match.metadata.title,
-    sourceUrl: match.metadata.sourceUrl,
-    preview: match.metadata.title, // Use title as preview for now
-    documentId: match.metadata.documentId, // Reference to full content
-  },
-});
+const formatMatch = (match: ScoredPineconeRecord): SearchResult => {
+  const metadata = match.metadata as RecordMetadata | undefined;
+  return {
+    id: match.id,
+    score: match.score ?? 0,
+    content: "", // Will be filled from file storage via documentId
+    metadata: {
+      title: metadata?.title as string || "Untitled",
+      sourceUrl: metadata?.sourceUrl as string || "",
+      preview: metadata?.title as string || "Documentation snippet", // Use title as preview for now
+      documentId: metadata?.documentId as string || "", // Reference to full content
+    },
+  };
+};
 
 const buildContext = (searchResults: SearchResult[]): string =>
   searchResults
@@ -538,13 +543,13 @@ export const queryAssistant = async (
       if (documentIds.length > 0) {
         const documents = await convexClient.query(
           api.documents.getDocumentsByIds,
-          { documentIds: documentIds as any }
+          { documentIds: documentIds as Id<"documents">[] }
         );
 
         // Enhance results with full content
         enhancedResults = searchResults.map((result) => {
           const doc = documents.find(
-            (d: any) => d && d._id === result.metadata.documentId
+            (d: { _id: string; fullContent?: string }) => d && d._id === result.metadata.documentId
           );
           if (doc) {
             return {

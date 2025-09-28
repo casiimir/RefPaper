@@ -7,7 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { Zap, MessageSquare, Bot } from "lucide-react";
 import { useTranslation } from "@/components/providers/TranslationProvider";
 

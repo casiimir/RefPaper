@@ -130,7 +130,7 @@ export function validateDomain(url: string): ValidationResult {
     const cleanHostname = hostname.replace(/^www\./, "");
 
     // Check for blocked domains
-    if (BLOCKED_DOMAINS.includes(cleanHostname as any)) {
+    if (BLOCKED_DOMAINS.includes(cleanHostname as typeof BLOCKED_DOMAINS[number])) {
       return {
         isValid: false,
         error: `Cannot crawl ${hostname} - this is a generic platform. Please provide a specific documentation URL.`,

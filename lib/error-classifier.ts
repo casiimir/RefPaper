@@ -62,10 +62,12 @@ export function formatErrorMessage(errorMessage: string): string {
   return details.description;
 }
 
-export default {
+const errorClassifier = {
   classifyError,
   getErrorDetails,
   processError,
   isErrorType,
   formatErrorMessage
 };
+
+export default errorClassifier;

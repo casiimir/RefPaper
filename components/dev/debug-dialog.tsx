@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "convex/react";
 import {
   Dialog,
@@ -21,10 +21,6 @@ interface DebugDialogProps {
   assistant?: Assistant;
 }
 
-// Helper to estimate tokens
-const estimateTokens = (text: string): number => {
-  return Math.ceil(text.length / 4);
-};
 
 // Helper to format numbers
 const formatNumber = (num: number): string => {
@@ -39,16 +35,15 @@ const getProgressPercentage = (current?: number, total?: number): number => {
 
 export function DebugDialog({ assistant }: DebugDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
-
   // Only show in development
+  const assistants = useQuery(api.assistants.getAssistants);
   const isDev = process.env.NODE_ENV === 'development';
 
   if (!isDev) return null;
 
-  const assistants = useQuery(api.assistants.getAssistants);
-
-  const refresh = () => setRefreshKey(prev => prev + 1);
+  const refresh = () => {
+    window.location.reload();
+  };
 
   const selectedAssistant = assistant || (assistants && assistants[0]);
 

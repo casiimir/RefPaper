@@ -32,7 +32,8 @@ export interface ChunkMetadata {
   chunkIndex: number;
   totalChunks: number;
   documentId: string;
-  contentPreview?: string; // Optional for backward compatibility
+  contentPreview: string; // Required to match index signature
+  [key: string]: string | number | boolean; // Index signature for Pinecone compatibility (no undefined)
 }
 
 // Vector representation for Pinecone
