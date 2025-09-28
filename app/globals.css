@@ -154,3 +154,10 @@
 .animate-pulse-slow {
   animation: pulse-slow 4s ease-in-out infinite;
 }
+
+/* Clerk Drawer Z-Index Fix */
+.cl-drawerRoot,
+.cl-drawer,
+.cl-drawerBackdrop {
+  z-index: 50;
+}
