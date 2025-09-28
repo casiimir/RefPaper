@@ -13,6 +13,7 @@ import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { Assistant } from "@/types/assistant";
 import { useTranslation } from "@/components/providers/TranslationProvider";
 import { AssistantIcon } from "@/components/ui/assistant-icon";
+import { getAssistantTheme } from "@/lib/assistant-colors";
 
 interface ChatInterfaceProps {
   assistant: Assistant;
@@ -183,7 +184,9 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="border-b p-2 flex items-center justify-between flex-shrink-0">
+      <div className={`border-b p-2 flex items-center justify-between flex-shrink-0 bg-gradient-to-r ${
+        getAssistantTheme(assistant._id).gradient
+      } ${getAssistantTheme(assistant._id).border}`}>
         <div className="flex items-center gap-3">
           <div className="flex gap-4">
             <AssistantIcon

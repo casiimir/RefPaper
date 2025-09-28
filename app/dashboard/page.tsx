@@ -37,6 +37,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { AssistantIcon } from "@/components/ui/assistant-icon";
 import { DebugDialog } from "@/components/dev/debug-dialog";
+import { getAssistantTheme } from "@/lib/assistant-colors";
 
 export default function Dashboard() {
   const { isLoaded, isSignedIn, has } = useAuth();
@@ -162,8 +163,10 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">
-                  {questionsThisMonth === undefined ? "..." : questionsThisMonth}/
-                  {isPro ? "∞" : PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}
+                  {questionsThisMonth === undefined
+                    ? "..."
+                    : questionsThisMonth}
+                  /{isPro ? "∞" : PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}
                 </span>
                 <span>{t("dashboard.questionsThisMonth")}</span>
               </div>
@@ -226,7 +229,9 @@ export default function Dashboard() {
                   <Plus className="w-12 h-12 text-muted-foreground" />
                 </div>
               )}
-              <h2 className="text-2xl font-semibold mb-4">{t("dashboard.noAssistants")}</h2>
+              <h2 className="text-2xl font-semibold mb-4">
+                {t("dashboard.noAssistants")}
+              </h2>
               <p className="text-muted-foreground mb-6">
                 {t("dashboard.noAssistantsDescription")}
               </p>
@@ -237,16 +242,20 @@ export default function Dashboard() {
             {assistants.map((assistant) => (
               <Card
                 key={assistant._id}
-                className="hover:shadow-md transition-shadow flex flex-col h-full"
+                className={`hover:shadow-lg transition-all duration-300 flex flex-col h-full bg-gradient-to-br ${
+                  getAssistantTheme(assistant._id).gradient
+                } border-1 hover:border-primary/20`}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <AssistantIcon
-                          docsUrl={assistant.docsUrl}
-                          className="w-5 h-5"
-                        />
+                        <div className="p-1 rounded-lg bg-background/50 backdrop-blur-sm shadow-sm">
+                          <AssistantIcon
+                            docsUrl={assistant.docsUrl}
+                            className="w-5 h-5"
+                          />
+                        </div>
                         <CardTitle className="text-lg">
                           {assistant.name}
                         </CardTitle>

@@ -12,6 +12,7 @@ import {
 } from "@/lib/status-utils";
 import { useTranslation } from "@/components/providers/TranslationProvider";
 import { AssistantIcon } from "@/components/ui/assistant-icon";
+import { getAssistantTheme } from "@/lib/assistant-colors";
 
 interface AssistantSidebarProps {
   assistants: Assistant[];
@@ -47,10 +48,11 @@ export function AssistantSidebar({
 
       <div
         className={cn(
-          "w-64 border-r bg-background flex flex-col transition-all duration-300 ease-out relative",
-          isMobile ? "fixed inset-y-0 left-0 z-50 shadow-lg" : "relative z-40",
+          "border-r bg-background flex flex-col transition-all duration-300 ease-out relative",
+          isMobile ? "w-64 fixed inset-y-0 left-0 z-50 shadow-lg" : "relative z-40",
           isMobile && !isOpen && "-translate-x-full",
-          !isMobile && !isOpen && "-translate-x-full"
+          !isMobile && isOpen && "w-64",
+          !isMobile && !isOpen && "w-0 border-r-0 overflow-hidden"
         )}
       >
         {/* Close toggle button inside sidebar */}
@@ -91,8 +93,11 @@ export function AssistantSidebar({
               key={assistant._id}
               href={`/assistant/${assistant._id}`}
               className={cn(
-                "flex items-center gap-3 p-3 rounded-lg mb-2 hover:bg-muted/50 transition-colors",
-                currentAssistantId === assistant._id && "bg-muted"
+                `flex items-center gap-3 p-3 rounded-lg mb-2 transition-all duration-300 bg-gradient-to-r ${
+                  getAssistantTheme(assistant._id).gradient
+                } hover:shadow-md`,
+                currentAssistantId === assistant._id &&
+                  "ring-2 ring-primary/30 shadow-lg"
               )}
               onClick={() => isMobile && onClose()}
             >

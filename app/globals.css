@@ -80,20 +80,6 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  /* Force cursor pointer on all interactive elements */
-  button,
-  [role="button"],
-  .cursor-pointer,
-  a[href] {
-    cursor: pointer !important;
-  }
-
-  /* Ensure buttons maintain pointer cursor */
-  button:hover,
-  [role="button"]:hover {
-    cursor: pointer !important;
-  }
 }
 
 @keyframes matrix-fall {
