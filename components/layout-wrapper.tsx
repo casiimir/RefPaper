@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { BinaryParticles } from "@/components/ui/binary-particles";
 
 interface LayoutWrapperProps {
   children: React.ReactNode;
@@ -22,21 +23,23 @@ export function LayoutWrapper({ children }: LayoutWrapperProps) {
     return <div className="h-screen w-full overflow-hidden">{children}</div>;
   }
 
-  // App pages layout (no footer)
+  // App pages layout (no footer, with particles)
   if (isAppPage) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col relative">
+        <BinaryParticles particleCount={30} />
         <Navbar />
-        <main className="flex-1 pt-14">{children}</main>
+        <main className="flex-1 pt-14 relative z-10">{children}</main>
       </div>
     );
   }
 
-  // Default layout with navbar and footer (marketing pages)
+  // Default layout with navbar and footer (marketing pages, with particles)
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      <BinaryParticles particleCount={40} />
       <Navbar />
-      <main className="flex-1 pt-14">{children}</main>
+      <main className="flex-1 pt-14 relative z-10">{children}</main>
       <Footer />
     </div>
   );

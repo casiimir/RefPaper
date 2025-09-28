@@ -84,12 +84,28 @@
 
 @keyframes matrix-fall {
   0% {
-    transform: translateY(-100vh);
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
     opacity: 1;
   }
   100% {
     transform: translateY(100vh);
     opacity: 0;
+  }
+}
+
+@keyframes matrix-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.4;
   }
 }
 
@@ -120,6 +136,9 @@
 
 .animate-matrix-fall {
   animation: matrix-fall linear infinite;
+}
+.animate-matrix-fade {
+  animation: matrix-fade 3s ease-in-out infinite;
 }
 .animate-float-random {
   animation: float-random 6s ease-in-out infinite;

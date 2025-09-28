@@ -5,15 +5,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import { useTranslation } from "@/components/providers/TranslationProvider";
+import { BinaryParticles } from "@/components/ui/binary-particles";
 
 export default function NotFound() {
   const { t } = useTranslation();
   const [glitchText, setGlitchText] = useState("404");
-  const [particleCount, setParticleCount] = useState(0);
-  const [matrixRain, setMatrixRain] = useState<
-    Array<{ id: number; delay: number; duration: number }>
-  >([]);
-  const [isClient, setIsClient] = useState(false);
 
   // Matrix-style glitch effect for 404 text
   useEffect(() => {
@@ -40,46 +36,9 @@ export default function NotFound() {
     return () => clearInterval(interval);
   }, []);
 
-  // Client-side hydration check
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Matrix rain effect
-  useEffect(() => {
-    if (!isClient) return;
-
-    const rainDrops = Array.from({ length: 25 }, (_, i) => ({
-      id: i,
-      delay: (i * 0.2) % 5,
-      duration: 8 + (i % 3),
-    }));
-    setMatrixRain(rainDrops);
-
-    const timer = setTimeout(() => setParticleCount(100), 200);
-    return () => clearTimeout(timer);
-  }, [isClient]);
-
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Floating binary particles */}
-        {isClient &&
-          Array.from({ length: particleCount }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-xs text-primary/40 font-mono animate-float-random select-none"
-              style={{
-                left: `${(i * 37) % 100}%`,
-                top: `${(i * 23) % 100}%`,
-                animationDelay: `${(i * 0.1) % 5}s`,
-                animationDuration: `${8 + (i % 6)}s`,
-              }}
-            >
-              {i % 2 === 0 ? "1" : "0"}
-            </div>
-          ))}
-      </div>
+      <BinaryParticles particleCount={80} />
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-4 text-center py-12">
         <div className="mb-12">
