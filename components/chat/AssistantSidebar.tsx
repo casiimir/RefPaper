@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { Bot, Plus, ChevronRight, ChevronLeft } from "lucide-react";
+import { Plus, ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Assistant } from "@/types/assistant";
-import { isReadyStatus, isProcessingStatus, isErrorStatus } from "@/lib/status-utils";
+import {
+  isReadyStatus,
+  isProcessingStatus,
+  isErrorStatus,
+} from "@/lib/status-utils";
 import { useTranslation } from "@/components/providers/TranslationProvider";
+import { AssistantIcon } from "@/components/ui/assistant-icon";
 
 interface AssistantSidebarProps {
   assistants: Assistant[];
@@ -43,11 +48,9 @@ export function AssistantSidebar({
       <div
         className={cn(
           "w-64 border-r bg-background flex flex-col transition-all duration-300 ease-out relative",
-          isMobile
-            ? "fixed inset-y-0 left-0 z-50 shadow-lg"
-            : "relative z-40",
+          isMobile ? "fixed inset-y-0 left-0 z-50 shadow-lg" : "relative z-40",
           isMobile && !isOpen && "-translate-x-full",
-          !isMobile && !isOpen && "hidden"
+          !isMobile && !isOpen && "-translate-x-full"
         )}
       >
         {/* Close toggle button inside sidebar */}
@@ -58,16 +61,20 @@ export function AssistantSidebar({
             onClick={onToggle}
             className={cn(
               "absolute top-1/2 -translate-y-1/2 z-10 bg-background shadow-lg hover:bg-accent rounded-l-lg rounded-r-none pr-2 pl-3",
-              isMobile ? "-right-0 border-y border-l" : "-right-4 border"
+              isMobile
+                ? "-right-0 border-y border-l"
+                : "-right-4 border-y border-l -translate-x-4 "
             )}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
         )}
         {/* Header */}
-        <div className="p-4 border-b">
+        <div className="p-3 border-b">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-lg">{t("chat.assistantsSidebar")}</h2>
+            <h2 className="font-semibold text-lg">
+              {t("chat.assistantsSidebar")}
+            </h2>
             <Link href="/dashboard">
               <Button size="sm" variant="outline">
                 <Plus className="h-4 w-4 mr-1" />
@@ -89,7 +96,10 @@ export function AssistantSidebar({
               )}
               onClick={() => isMobile && onClose()}
             >
-              <Bot className="h-5 w-5 text-muted-foreground" />
+              <AssistantIcon
+                docsUrl={assistant.docsUrl}
+                className="h-5 w-5 flex-shrink-0"
+              />
               <div className="flex-1 min-w-0">
                 <div className="font-medium truncate">{assistant.name}</div>
                 <div className="text-xs text-muted-foreground truncate">
@@ -114,7 +124,7 @@ export function AssistantSidebar({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t">
+        <div className="p-4.5 border-t">
           <Link href="/dashboard" onClick={() => isMobile && onClose()}>
             <Button variant="ghost" className="w-full justify-start">
               {t("dashboard.backToDashboard")}

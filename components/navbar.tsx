@@ -9,12 +9,12 @@ import { User, LayoutDashboard } from "lucide-react";
 import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export function Navbar() {
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn } = useUser();
   const { t } = useTranslation();
 
   return (
     <nav className="fixed top-0 left-0 right-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
-      <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="container px-4 h-14 flex items-center justify-between min-w-full">
         <Link href="/" className="flex items-center space-x-2">
           <span className="font-bold text-xl">{t("app.name")}</span>
         </Link>

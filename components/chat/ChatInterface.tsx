@@ -12,6 +12,7 @@ import { Send, Loader2, User } from "lucide-react";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { Assistant } from "@/types/assistant";
 import { useTranslation } from "@/components/providers/TranslationProvider";
+import { AssistantIcon } from "@/components/ui/assistant-icon";
 
 interface ChatInterfaceProps {
   assistant: Assistant;
@@ -182,13 +183,26 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="border-b p-4 flex items-center justify-between flex-shrink-0">
+      <div className="border-b p-2 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div>
-            <h1 className="text-xl font-semibold">{assistant.name}</h1>
-            <p className="text-sm text-muted-foreground">
-              {t("chat.documentationFrom", { hostname: new URL(assistant.docsUrl).hostname })}
-            </p>
+          <div className="flex gap-4">
+            <AssistantIcon
+              docsUrl={assistant.docsUrl}
+              className="w-8 h-8 self-center"
+            />
+            <div>
+              <h1 className="text-md font-semibold">{assistant.name}</h1>
+              <p className="text-xs text-muted-foreground">
+                {(() => {
+                  const text = t("chat.documentationFrom", {
+                    hostname: new URL(assistant.docsUrl).hostname,
+                  });
+                  return text.length > 64
+                    ? `${text.substring(0, 64)}...`
+                    : text;
+                })()}
+              </p>
+            </div>
           </div>
         </div>
         <Button
@@ -206,9 +220,13 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         {messages.length === 0 ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center max-w-md">
-              <h3 className="text-lg font-medium mb-2">{t("chat.startConversation")}</h3>
+              <h3 className="text-lg font-medium mb-2">
+                {t("chat.startConversation")}
+              </h3>
               <p className="text-muted-foreground mb-4">
-                {t("chat.askAnything", { hostname: new URL(assistant.docsUrl).hostname })}
+                {t("chat.askAnything", {
+                  hostname: new URL(assistant.docsUrl).hostname,
+                })}
               </p>
               <div className="text-sm text-muted-foreground space-y-1">
                 <p>{t("chat.tryAsking")}</p>
@@ -273,7 +291,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
 
       {/* Input */}
       <div className="border-t p-4 flex-shrink-0">
-        <form onSubmit={handleSendMessage} className="flex gap-2">
+        <form onSubmit={handleSendMessage} className="flex items-center gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -284,13 +302,20 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
                 ? t("chat.assistantNotReady", { status: assistant.status })
                 : t("chat.askQuestion")
             }
-            disabled={isLoading || !!rateLimitError || assistant.status !== "ready"}
+            disabled={
+              isLoading || !!rateLimitError || assistant.status !== "ready"
+            }
             className="flex-1"
           />
           <Button
             type="submit"
-            disabled={!input.trim() || isLoading || !!rateLimitError || assistant.status !== "ready"}
-            size="sm"
+            disabled={
+              !input.trim() ||
+              isLoading ||
+              !!rateLimitError ||
+              assistant.status !== "ready"
+            }
+            size="icon"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

@@ -34,7 +34,7 @@ import {
   getStatusLabel,
   getStatusColor,
 } from "@/lib/status-utils";
-import { CenteredLoading } from "@/components/ui/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import { AssistantIcon } from "@/components/ui/assistant-icon";
 import { DebugDialog } from "@/components/dev/debug-dialog";
 
@@ -96,7 +96,52 @@ export default function Dashboard() {
   if (!isLoaded || !isSignedIn || assistants === undefined) {
     return (
       <div className="bg-background">
-        <CenteredLoading message={t("dashboard.loadingDashboard")} />
+        {/* Stats Bar Skeleton */}
+        <div className="border-b bg-muted/20">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center gap-6">
+                <Skeleton className="h-6 w-20" />
+                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-6 w-16" />
+                <Skeleton className="h-7 w-20" />
+              </div>
+              <Skeleton className="h-8 w-20" />
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Card key={i} className="flex flex-col h-full">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="w-5 h-5 rounded" />
+                        <Skeleton className="h-6 w-24" />
+                      </div>
+                    </div>
+                    <Skeleton className="h-6 w-16 rounded-full" />
+                  </div>
+                  <Skeleton className="h-4 w-20" />
+                </CardHeader>
+                <CardContent className="flex-1">
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-4 w-32" />
+                  </div>
+                </CardContent>
+                <CardFooter className="gap-2">
+                  <Skeleton className="h-8 flex-1" />
+                  <Skeleton className="h-8 w-8" />
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -117,7 +162,7 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">
-                  {questionsThisMonth === undefined ? t("common.loading") : questionsThisMonth}/
+                  {questionsThisMonth === undefined ? "..." : questionsThisMonth}/
                   {isPro ? "∞" : PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH}
                 </span>
                 <span>{t("dashboard.questionsThisMonth")}</span>

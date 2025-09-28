@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,19 +16,32 @@ export function AssistantIcon({
 }: AssistantIconProps) {
   const [imageError, setImageError] = useState(false);
 
-  const domain = new URL(docsUrl).hostname;
-  const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+  let domain: string;
+  let faviconUrl: string;
+
+  try {
+    const parsedUrl = new URL(docsUrl);
+    domain = parsedUrl.hostname;
+    faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+  } catch (error) {
+    return <FileText className={cn("text-muted-foreground", className)} />;
+  }
 
   if (imageError) {
     return <FileText className={cn("text-muted-foreground", className)} />;
   }
 
   return (
-    <img
-      src={faviconUrl}
-      alt={`${domain} favicon`}
-      className={cn("rounded object-cover", className)}
-      onError={() => setImageError(true)}
-    />
+    <div className={cn("relative overflow-hidden rounded", className)}>
+      <Image
+        src={faviconUrl}
+        alt={`${domain} favicon`}
+        width={32}
+        height={32}
+        className="object-cover"
+        onError={() => setImageError(true)}
+        unoptimized
+      />
+    </div>
   );
 }

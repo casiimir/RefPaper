@@ -11,6 +11,8 @@ import { redirect } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useTranslation } from "@/components/providers/TranslationProvider";
+import { CenteredLoading } from "@/components/ui/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AssistantPage() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -39,12 +41,44 @@ export default function AssistantPage() {
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   if (!isLoaded) {
-    return <div className="flex h-screen items-center justify-center">{t("common.loading")}</div>;
+    return (
+      <div className="flex flex-col h-screen w-full bg-background">
+        <div className="h-14 border-b bg-background">
+          <Skeleton className="h-full w-full" />
+        </div>
+        <div className="flex flex-1 overflow-hidden pt-14">
+          <div className="w-80 border-r bg-background p-4 space-y-4">
+            <Skeleton className="h-8 w-32" />
+            <div className="space-y-2">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1 p-4 space-y-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex gap-3">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-16 w-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="border-t p-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!isSignedIn) {
@@ -52,13 +86,42 @@ export default function AssistantPage() {
   }
 
   if (assistant === undefined || assistants === undefined) {
-    return <div className="flex h-screen items-center justify-center">{t("common.loading")}</div>;
+    return (
+      <div className="flex flex-col h-screen w-full bg-background">
+        <Navbar />
+        <div className="flex flex-1 overflow-hidden pt-14">
+          <div className="w-80 border-r bg-background p-4 space-y-4">
+            <Skeleton className="h-8 w-32" />
+            <div className="space-y-2">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1 p-4 space-y-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex gap-3">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-16 w-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="border-t p-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (assistant === null) {
     redirect("/dashboard");
   }
-
 
   return (
     <div className="flex flex-col h-screen w-full bg-background">
@@ -66,7 +129,7 @@ export default function AssistantPage() {
       <Navbar />
 
       {/* Main Content Area */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden pt-14">
         {/* Sidebar */}
         <AssistantSidebar
           assistants={assistants}

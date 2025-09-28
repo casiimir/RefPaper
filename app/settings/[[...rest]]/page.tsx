@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { User, BarChart3 } from "lucide-react";
 import { PLAN_LIMITS } from "@/lib/constants";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
-import { CenteredLoading } from "@/components/ui/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "@/components/providers/TranslationProvider";
 
 export default function SettingsPage() {
@@ -31,13 +31,33 @@ export default function SettingsPage() {
   const isPro = has ? has({ plan: "pro" }) : false;
 
   if (!isLoaded) {
-    return <CenteredLoading message={t("common.loading")} />;
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="mb-8">
+          <Skeleton className="h-9 w-32 mb-2" />
+          <Skeleton className="h-5 w-64" />
+        </div>
+        <div className="space-y-6">
+          <div className="grid w-full grid-cols-2">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+          <div className="space-y-6">
+            <div className="flex justify-center w-full">
+              <div className="max-w-4xl w-full">
+                <Skeleton className="h-96 w-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!isSignedIn) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <CenteredLoading message={t("navigation.signIn")} />
+        <Skeleton className="h-20 w-full" />
       </div>
     );
   }
