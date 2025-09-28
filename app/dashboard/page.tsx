@@ -68,9 +68,12 @@ export default function Dashboard() {
     const query = searchQuery.toLowerCase().trim();
     return assistants.filter((assistant) => {
       const matchesName = assistant.name.toLowerCase().includes(query);
-      const matchesDescription = assistant.description?.toLowerCase().includes(query) || false;
+      const matchesDescription =
+        assistant.description?.toLowerCase().includes(query) || false;
       const matchesUrl = assistant.docsUrl.toLowerCase().includes(query);
-      const matchesDomain = new URL(assistant.docsUrl).hostname.toLowerCase().includes(query);
+      const matchesDomain = new URL(assistant.docsUrl).hostname
+        .toLowerCase()
+        .includes(query);
 
       return matchesName || matchesDescription || matchesUrl || matchesDomain;
     });
@@ -198,10 +201,12 @@ export default function Dashboard() {
                 <span>{t("dashboard.assistants")}</span>
               </div>
               {!isPro && (
-                <Button variant="outline" size="sm" className="text-xs h-7">
-                  <Crown className="h-3 w-3 mr-1" />
-                  {t("common.upgrade")}
-                </Button>
+                <Link href="/pricing">
+                  <Button variant="outline" size="sm" className="text-xs h-7">
+                    <Crown className="h-3 w-3 mr-1" />
+                    {t("common.upgrade")}
+                  </Button>
+                </Link>
               )}
             </div>
 
@@ -269,7 +274,9 @@ export default function Dashboard() {
           <div className="text-center py-20">
             <div className="max-w-md mx-auto">
               <Search className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-              <h2 className="text-xl font-semibold mb-2">{t("dashboard.noResults")}</h2>
+              <h2 className="text-xl font-semibold mb-2">
+                {t("dashboard.noResults")}
+              </h2>
               <p className="text-muted-foreground mb-4">
                 {t("dashboard.noResultsDescription", { query: searchQuery })}
               </p>
@@ -277,122 +284,125 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {(searchQuery ? filteredAssistants : assistants).map((assistant) => (
-              <Card
-                key={assistant._id}
-                className={`hover:shadow-lg transition-all duration-300 flex flex-col h-full bg-gradient-to-br ${
-                  getAssistantTheme(assistant._id).gradient
-                } border-1 hover:border-primary/20`}
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <div className="p-1 rounded-lg bg-background/50 backdrop-blur-sm shadow-sm">
-                          <AssistantIcon
-                            docsUrl={assistant.docsUrl}
-                            className="w-5 h-5"
-                          />
-                        </div>
-                        <CardTitle className="text-lg">
-                          {assistant.name}
-                        </CardTitle>
-                      </div>
-                    </div>
-                    <Badge className={getStatusColor(assistant.status)}>
-                      <div className="flex items-center gap-1">
-                        {getStatusIcon(assistant.status)}
-                        {getStatusLabel(assistant.status)}
-                      </div>
-                    </Badge>
-                  </div>
-
-                  {assistant.status === "ready" && assistant.totalPages && (
-                    <div className="text-xs text-ring">
-                      {assistant.totalPages} {t("dashboard.documentsProcessed")}
-                    </div>
-                  )}
-                </CardHeader>
-
-                <CardContent className="flex-1">
-                  <div className="space-y-2">
-                    {assistant.description && (
-                      <CardDescription className="text-sm break-all">
-                        {assistant.description.length > 128
-                          ? `${assistant.description.substring(0, 128)}...`
-                          : assistant.description}
-                      </CardDescription>
-                    )}
-                    <Link
-                      target="_blank"
-                      href={assistant.docsUrl}
-                      className="flex items-center gap-2 text-xs text-muted-foreground"
-                    >
-                      <ExternalLink className="w-3 h-3" />
-                      <span className="truncate">{assistant.docsUrl}</span>
-                    </Link>
-                    {assistant.status === "processing" &&
-                      assistant.totalPages && (
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-xs text-muted-foreground">
-                            <span>{t("dashboard.processingDocuments")}</span>
-                            <span>
-                              {assistant.processedPages || 0}/
-                              {assistant.totalPages}
-                            </span>
+            {(searchQuery ? filteredAssistants : assistants).map(
+              (assistant) => (
+                <Card
+                  key={assistant._id}
+                  className={`hover:shadow-lg transition-all duration-300 flex flex-col h-full bg-gradient-to-br ${
+                    getAssistantTheme(assistant._id).gradient
+                  } border-1 hover:border-primary/20`}
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <div className="p-1 rounded-lg bg-background/50 backdrop-blur-sm shadow-sm">
+                            <AssistantIcon
+                              docsUrl={assistant.docsUrl}
+                              className="w-5 h-5"
+                            />
                           </div>
-                          <Progress
-                            value={
-                              ((assistant.processedPages || 0) /
-                                assistant.totalPages) *
-                              100
-                            }
-                            className="h-1"
-                          />
+                          <CardTitle className="text-lg">
+                            {assistant.name}
+                          </CardTitle>
+                        </div>
+                      </div>
+                      <Badge className={getStatusColor(assistant.status)}>
+                        <div className="flex items-center gap-1">
+                          {getStatusIcon(assistant.status)}
+                          {getStatusLabel(assistant.status)}
+                        </div>
+                      </Badge>
+                    </div>
+
+                    {assistant.status === "ready" && assistant.totalPages && (
+                      <div className="text-xs text-ring">
+                        {assistant.totalPages}{" "}
+                        {t("dashboard.documentsProcessed")}
+                      </div>
+                    )}
+                  </CardHeader>
+
+                  <CardContent className="flex-1">
+                    <div className="space-y-2">
+                      {assistant.description && (
+                        <CardDescription className="text-sm break-all">
+                          {assistant.description.length > 128
+                            ? `${assistant.description.substring(0, 128)}...`
+                            : assistant.description}
+                        </CardDescription>
+                      )}
+                      <Link
+                        target="_blank"
+                        href={assistant.docsUrl}
+                        className="flex items-center gap-2 text-xs text-muted-foreground"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        <span className="truncate">{assistant.docsUrl}</span>
+                      </Link>
+                      {assistant.status === "processing" &&
+                        assistant.totalPages && (
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs text-muted-foreground">
+                              <span>{t("dashboard.processingDocuments")}</span>
+                              <span>
+                                {assistant.processedPages || 0}/
+                                {assistant.totalPages}
+                              </span>
+                            </div>
+                            <Progress
+                              value={
+                                ((assistant.processedPages || 0) /
+                                  assistant.totalPages) *
+                                100
+                              }
+                              className="h-1"
+                            />
+                          </div>
+                        )}
+
+                      {assistant.status === "error" && (
+                        <div className="text-xs text-red-600">
+                          {t("dashboard.failedToCreate")}
                         </div>
                       )}
+                    </div>
+                  </CardContent>
 
-                    {assistant.status === "error" && (
-                      <div className="text-xs text-red-600">
-                        {t("dashboard.failedToCreate")}
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-
-                <CardFooter className="gap-2">
-                  {assistant.status === "ready" ? (
-                    <Link
-                      href={`/assistant/${assistant._id}`}
-                      className="flex-1"
-                    >
-                      <Button variant="outline" size="sm" className="w-full">
+                  <CardFooter className="gap-2">
+                    {assistant.status === "ready" ? (
+                      <Link
+                        href={`/assistant/${assistant._id}`}
+                        className="flex-1"
+                      >
+                        <Button variant="outline" size="sm" className="w-full">
+                          <MessageSquare className="w-3 h-3 mr-1" />
+                          {t("dashboard.chat")}
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={true}
+                        className="flex-1"
+                      >
                         <MessageSquare className="w-3 h-3 mr-1" />
                         {t("dashboard.chat")}
                       </Button>
-                    </Link>
-                  ) : (
+                    )}
                     <Button
                       variant="outline"
                       size="sm"
-                      disabled={true}
-                      className="flex-1"
+                      disabled={assistant.status !== "ready"}
+                      onClick={() => setSelectedAssistant(assistant)}
                     >
-                      <MessageSquare className="w-3 h-3 mr-1" />
-                      {t("dashboard.chat")}
+                      <Settings className="w-3 h-3" />
                     </Button>
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={assistant.status !== "ready"}
-                    onClick={() => setSelectedAssistant(assistant)}
-                  >
-                    <Settings className="w-3 h-3" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                  </CardFooter>
+                </Card>
+              )
+            )}
           </div>
         )}
       </div>
