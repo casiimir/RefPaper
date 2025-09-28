@@ -13,7 +13,19 @@ import {
   Crown,
   Ticket,
   Search,
+  X,
+  AlertTriangle,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -50,6 +62,8 @@ export default function Dashboard() {
     null
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [assistantToCancel, setAssistantToCancel] = useState<Assistant | null>(null);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   // Only fetch data when auth is loaded and user is signed in
   const assistants = useQuery(
@@ -113,6 +127,28 @@ export default function Dashboard() {
     }
 
     return "";
+  };
+
+  const handleCancelAssistant = async (assistant: Assistant) => {
+    try {
+      setIsCancelling(true);
+      const response = await fetch(`/api/assistant/${assistant._id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to cancel assistant");
+      }
+
+      // Refresh the page to show updated assistant list
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to cancel assistant:", error);
+      throw error;
+    } finally {
+      setIsCancelling(false);
+      setAssistantToCancel(null);
+    }
   };
 
   // Show loading while auth is loading or while data is loading
@@ -392,6 +428,17 @@ export default function Dashboard() {
                           {t("dashboard.chat")}
                         </Button>
                       </Link>
+                    ) : (assistant.status === "creating" || assistant.status === "crawling" || assistant.status === "processing") ? (
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => setAssistantToCancel(assistant)}
+                        disabled={isCancelling}
+                      >
+                        <X className="w-3 h-3 mr-1" />
+                        {isCancelling && assistantToCancel?._id === assistant._id ? t("assistant.cancelling") : t("assistant.cancel")}
+                      </Button>
                     ) : (
                       <Button
                         variant="outline"
@@ -434,6 +481,37 @@ export default function Dashboard() {
 
       {/* Debug Dialog - Only in development TODO: remove in prod */}
       <DebugDialog />
+
+      {/* Cancel confirmation dialog */}
+      <AlertDialog open={!!assistantToCancel} onOpenChange={(open: boolean) => !open && setAssistantToCancel(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-orange-500" />
+              {t("assistant.cancelTitle")}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("assistant.cancelDescription", { name: assistantToCancel?.name || "" })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isCancelling}>
+              {t("common.cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={isCancelling}
+              onClick={async () => {
+                if (assistantToCancel) {
+                  await handleCancelAssistant(assistantToCancel);
+                }
+              }}
+            >
+              {isCancelling ? t("assistant.cancelling") : t("assistant.confirmCancel")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

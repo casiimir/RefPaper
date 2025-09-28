@@ -206,7 +206,12 @@
       "specificSubpages": "Sottopagine specifiche consigliate: es. https://docs.convex.dev/functions invece di https://docs.convex.dev/",
       "pageLimit": "Limite 30 pagine: Se inserisci URL completi, analizzeremo solo le prime 30 pagine",
       "depthLimit": "Profondità limitata: Solo 3 livelli di sottopagine"
-    }
+    },
+    "cancel": "Annulla",
+    "cancelling": "Annullamento...",
+    "cancelTitle": "Annulla Creazione Assistente",
+    "cancelDescription": "Sei sicuro di voler annullare la creazione di '{name}'? Questa azione non può essere annullata e tutto il progresso andrà perso.",
+    "confirmCancel": "Sì, Annulla"
   },
   "status": {
     "creating": "Creating",

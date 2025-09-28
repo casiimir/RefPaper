@@ -40,6 +40,14 @@ export const processAssistantCreation = internalAction({
         throw new Error("No documents found during crawling");
       }
 
+      // Check if assistant was cancelled during crawling
+      const assistantExists = await ctx.runQuery(internal.assistants.getAssistantInternal, {
+        id: assistantId,
+      });
+      if (!assistantExists) {
+        return { success: false, message: "Assistant was cancelled" };
+      }
+
       // Update status to processing with document count
       await ctx.runMutation(internal.assistants.updateAssistantStatus, {
         id: assistantId,
@@ -68,6 +76,14 @@ export const processAssistantCreation = internalAction({
         totalPages: documents.length,
         processedPages: 0,
       });
+
+      // Check if assistant was cancelled during document processing
+      const assistantStillExists = await ctx.runQuery(internal.assistants.getAssistantInternal, {
+        id: assistantId,
+      });
+      if (!assistantStillExists) {
+        return { success: false, message: "Assistant was cancelled" };
+      }
 
       // Step 2.2: Create assistant with Pinecone (external API call)
       const result: any = await createAssistantWithConvexDocs(

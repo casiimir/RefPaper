@@ -178,7 +178,12 @@
     "documentsProcessed": "documents processed",
     "processingDocuments": "Processing documents",
     "failedToCreate": "Failed to create assistant. Check settings for details.",
-    "backToDashboard": "← Back to Dashboard"
+    "backToDashboard": "← Back to Dashboard",
+    "cancel": "Cancel",
+    "cancelling": "Cancelling...",
+    "cancelTitle": "Cancel Assistant Creation",
+    "cancelDescription": "Are you sure you want to cancel the creation of '{name}'? This action cannot be undone and all progress will be lost.",
+    "confirmCancel": "Yes, Cancel"
   },
   "plans": {
     "freePlan": "Free Plan",
@@ -254,7 +259,12 @@
       "specificSubpages": "Specific subpages recommended: e.g. https://docs.convex.dev/functions instead of https://docs.convex.dev/",
       "pageLimit": "30 pages limit: If you enter complete URLs, we'll only crawl the first 30 pages",
       "depthLimit": "Limited depth: Only 3 levels of subpages"
-    }
+    },
+    "cancel": "Cancel",
+    "cancelling": "Cancelling...",
+    "cancelTitle": "Cancel Assistant Creation",
+    "cancelDescription": "Are you sure you want to cancel the creation of '{name}'? This action cannot be undone and all progress will be lost.",
+    "confirmCancel": "Yes, Cancel"
   },
   "status": {
     "creating": "Creating",

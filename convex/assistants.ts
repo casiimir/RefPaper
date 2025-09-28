@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query, internalMutation } from "./_generated/server";
+import { mutation, query, internalMutation, internalQuery } from "./_generated/server";
 import { internal } from "./_generated/api";
 
 // Plan limits are now handled by Clerk billing system in API routes
@@ -38,6 +38,14 @@ export const getAssistant = query({
     }
 
     return assistant;
+  },
+});
+
+// Internal version without authentication - only for use within the system
+export const getAssistantInternal = internalQuery({
+  args: { id: v.id("assistants") },
+  handler: async (ctx, { id }) => {
+    return await ctx.db.get(id);
   },
 });
 
@@ -125,6 +133,14 @@ export const updateAssistantStatus = internalMutation({
   },
   handler: async (ctx, args) => {
     const { id, ...updates } = args;
+
+    // Check if the assistant still exists before updating
+    const assistant = await ctx.db.get(id);
+    if (!assistant) {
+      // Assistant was deleted (likely cancelled), silently ignore the update
+      return;
+    }
+
     await ctx.db.patch(id, {
       ...updates,
       updatedAt: Date.now(),
@@ -214,9 +230,15 @@ export const deleteAssistantRecord = mutation({
       assistantId: id,
     });
 
-    // Delete Pinecone namespace if it exists
-    if (assistant.pineconeNamespace) {
-      // Schedule async deletion of Pinecone namespace
+    // Delete Pinecone namespace - always try to delete the namespace based on assistant ID
+    // This handles cases where the namespace was created but not yet saved to the database
+    const expectedNamespace = `assistant_${id}`;
+    await ctx.scheduler.runAfter(0, internal.assistantActions.deletePineconeNamespace, {
+      namespace: expectedNamespace,
+    });
+
+    // Also delete the saved namespace if it's different (legacy support)
+    if (assistant.pineconeNamespace && assistant.pineconeNamespace !== expectedNamespace) {
       await ctx.scheduler.runAfter(0, internal.assistantActions.deletePineconeNamespace, {
         namespace: assistant.pineconeNamespace,
       });

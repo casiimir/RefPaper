@@ -121,7 +121,13 @@ export const deleteNamespace = async (namespace: string): Promise<void> => {
   try {
     const index = await getOrCreateIndex();
     await index.deleteNamespace(namespace);
-  } catch (error) {
+  } catch (error: unknown) {
+    // Check if it's a 404 error (namespace doesn't exist)
+    const errorObj = error as { name?: string; message?: string };
+    if (errorObj?.name === 'PineconeNotFoundError' || errorObj?.message?.includes('404')) {
+      // Namespace already deleted or never existed - this is fine
+      return;
+    }
     console.error(`Failed to delete Pinecone namespace ${namespace}:`, error);
     // Don't throw error to avoid blocking assistant deletion if Pinecone fails
     // The assistant deletion should succeed even if namespace cleanup fails
