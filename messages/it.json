@@ -218,5 +218,53 @@
         "answer": "Sì! Contattaci per soluzioni enterprise personalizzate con supporto dedicato, integrazioni personalizzate e prezzi per volumi."
       }
     }
+  },
+  "homepage": {
+    "hero": {
+      "badge": "Assistente AI per Documentazione",
+      "title": "Trasforma la Documentazione in",
+      "titleHighlight": "Assistenti AI Intelligenti",
+      "subtitle": "Converti qualsiasi documentazione in un assistente AI conversazionale in pochi secondi. Riduci il carico di supporto, migliora l'esperienza utente e scala la conoscenza senza sforzo.",
+      "ctaPrimary": "Inizia Gratis Oggi",
+      "ctaSecondary": "Guarda Demo",
+      "trustedBy": "Di fiducia per team di"
+    },
+    "features": {
+      "title": "Perché Scegliere RefPaper?",
+      "subtitle": "Tutto quello che serve per trasformare il tuo flusso di lavoro di documentazione",
+      "instant": {
+        "title": "Setup da 30 Secondi",
+        "description": "Semplicemente incolla l'URL della tua documentazione. La nostra AI analizza, elabora e crea il tuo assistente istantaneamente."
+      },
+      "intelligent": {
+        "title": "AI Consapevole del Contesto",
+        "description": "Modelli linguistici avanzati comprendono profondamente i tuoi documenti, fornendo risposte accurate e contestuali."
+      },
+      "multilingual": {
+        "title": "Supporto Multilingue",
+        "description": "Supporta gli utenti nella loro lingua preferita con capacità di traduzione integrate."
+      },
+      "crawling": {
+        "title": "Crawling Web Intelligente",
+        "description": "Scopre ed elabora automaticamente l'intera struttura della tua documentazione da un singolo URL."
+      },
+      "unlimited": {
+        "title": "Conversazioni Illimitate",
+        "description": "Gli utenti Pro ottengono domande e conversazioni illimitate senza restrizioni mensili."
+      },
+      "realtime": {
+        "title": "Assistenza in Tempo Reale",
+        "description": "Risposte istantanee alimentate da AI avanzata che comprende il contesto della tua documentazione."
+      }
+    },
+    "social": {
+      "title": "Unisciti a Migliaia di Team Felici",
+      "subtitle": "Guarda cosa dicono i nostri clienti di RefPaper"
+    },
+    "cta": {
+      "title": "Pronto a Trasformare la Tua Documentazione?",
+      "subtitle": "Unisciti a migliaia di team che già usano RefPaper per scalare la loro conoscenza e ridurre il carico di supporto.",
+      "button": "Inizia Gratis"
+    }
   }
 }

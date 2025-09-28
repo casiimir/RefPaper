@@ -17,6 +17,54 @@
     "ctaButton": "Start Free",
     "description": "Turn documentation into an AI knowledge assistant. RefPaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge."
   },
+  "homepage": {
+    "hero": {
+      "badge": "AI-Powered Documentation Assistant",
+      "title": "Transform Documentation Into",
+      "titleHighlight": "Intelligent AI Assistants",
+      "subtitle": "Convert any documentation into a conversational AI assistant in seconds. Reduce support workload, improve user experience, and scale knowledge effortlessly.",
+      "ctaPrimary": "Start Free Today",
+      "ctaSecondary": "View Demo",
+      "trustedBy": "Trusted by teams at"
+    },
+    "features": {
+      "title": "Why Choose RefPaper?",
+      "subtitle": "Everything you need to transform your documentation workflow",
+      "instant": {
+        "title": "30-Second Setup",
+        "description": "Simply paste your documentation URL. Our AI crawls, processes, and creates your assistant instantly."
+      },
+      "intelligent": {
+        "title": "Context-Aware AI",
+        "description": "Advanced language models understand your docs deeply, providing accurate and contextual responses."
+      },
+      "multilingual": {
+        "title": "Multilingual Support",
+        "description": "Support users in their preferred language with built-in translation capabilities."
+      },
+      "crawling": {
+        "title": "Smart Web Crawling",
+        "description": "Automatically discovers and processes your entire documentation structure from a single URL."
+      },
+      "unlimited": {
+        "title": "Unlimited Conversations",
+        "description": "Pro users get unlimited questions and conversations with no monthly restrictions."
+      },
+      "realtime": {
+        "title": "Real-time Assistance",
+        "description": "Instant responses powered by advanced AI that understands your documentation context."
+      }
+    },
+    "social": {
+      "title": "Join Thousands of Happy Teams",
+      "subtitle": "See what our customers are saying about RefPaper"
+    },
+    "cta": {
+      "title": "Ready to Transform Your Documentation?",
+      "subtitle": "Join thousands of teams already using RefPaper to scale their knowledge and reduce support overhead.",
+      "button": "Get Started Free"
+    }
+  },
   "navigation": {
     "signIn": "Sign In",
     "signOut": "Sign Out",
