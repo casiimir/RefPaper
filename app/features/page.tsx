@@ -183,7 +183,7 @@ export default function FeaturesPage() {
               {t("features.sections.core.subtitle")}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Essential tools that make RefPaper powerful and easy to use
+              Essential tools that make REFpaper powerful and easy to use
             </p>
           </div>
 
@@ -197,7 +197,9 @@ export default function FeaturesPage() {
                   <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
                     {feature.icon}
                   </div>
-                  <CardTitle className="text-2xl mb-2">{feature.title}</CardTitle>
+                  <CardTitle className="text-2xl mb-2">
+                    {feature.title}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed text-center">
@@ -236,7 +238,9 @@ export default function FeaturesPage() {
                   <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
                     {feature.icon}
                   </div>
-                  <CardTitle className="text-2xl mb-2">{feature.title}</CardTitle>
+                  <CardTitle className="text-2xl mb-2">
+                    {feature.title}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed text-center">
@@ -275,7 +279,9 @@ export default function FeaturesPage() {
                   <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
                     {feature.icon}
                   </div>
-                  <CardTitle className="text-2xl mb-2">{feature.title}</CardTitle>
+                  <CardTitle className="text-2xl mb-2">
+                    {feature.title}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base leading-relaxed text-center">
