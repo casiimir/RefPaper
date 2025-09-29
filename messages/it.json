@@ -17,15 +17,10 @@
     "reject": "Rifiuta Tutto"
   },
   "app": {
-    "name": "REFpaper",
-    "tagline": "Trasforma qualsiasi documentazione in un assistente AI in 30 secondi.",
-    "subtitle": "Migliora il supporto, riduci i costi e scala la conoscenza.",
-    "ctaButton": "Inizia Gratis",
-    "description": "Trasforma la documentazione in un assistente AI. REFpaper aiuta team, startup e aziende a migliorare il supporto, ridurre i costi e scalare la conoscenza."
+    "name": "REFpaper"
   },
   "features": {
     "title": "Funzionalità Potenti",
-    "subtitle": "Tutto quello che serve per trasformare la documentazione in assistenti intelligenti",
     "hero": {
       "title": "Sblocca il Pieno Potenziale",
       "titleHighlight": "della Tua Documentazione",
@@ -121,7 +116,6 @@
     "pricing": "Prezzi"
   },
   "dashboard": {
-    "loadingDashboard": "Caricamento dashboard...",
     "questionsThisMonth": "domande questo mese",
     "assistants": "assistenti",
     "chat": "Chat",
@@ -145,7 +139,6 @@
     "freePlan": "Piano Gratuito",
     "proPlan": "Piano Pro",
     "of": "di",
-    "remaining": "rimanenti",
     "unlimited": "illimitato",
     "unlimitedQuestions": "∞ Domande illimitate con il piano Pro"
   },
@@ -184,7 +177,6 @@
     "assistantNotReady": "L'assistente è {status}... Attendi",
     "assistantNotReadyLong": "L'assistente è {status}. Attendi che sia pronto prima di fare domande.",
     "monthlyLimitReachedTitle": "Limite mensile raggiunto!",
-    "suggestions": "Suggerimenti:",
     "consultingDocs": "Sto consultando la documentazione"
   },
   "assistant": {
@@ -224,11 +216,6 @@
       "pageLimit": "Limite 30 pagine: Se inserisci URL completi, analizzeremo solo le prime 30 pagine",
       "depthLimit": "Profondità limitata: Solo 3 livelli di sottopagine"
     },
-    "cancel": "Annulla",
-    "cancelling": "Annullamento...",
-    "cancelTitle": "Annulla Creazione Assistente",
-    "cancelDescription": "Sei sicuro di voler annullare la creazione di '{name}'? Questa azione non può essere annullata e tutto il progresso andrà perso.",
-    "confirmCancel": "Sì, Annulla",
     "queuePosition": "Posizione in coda: #{position}",
     "estimatedWait": "Attesa stimata: {time}",
     "creationError": "Creazione Assistente Fallita",
@@ -236,12 +223,7 @@
     "errorSuggestion": "Puoi modificare le impostazioni e riprovare a creare l'assistente, o eliminarlo."
   },
   "status": {
-    "creating": "Creazione",
-    "queued": "In coda",
-    "crawling": "Scansione",
-    "processing": "Elaborazione",
-    "ready": "Pronto",
-    "error": "Errore"
+    "queued": "In coda"
   },
   "errors": {
     "unauthorized": "Non autorizzato",
@@ -272,26 +254,15 @@
     "required": "Aggiornamento Richiesto",
     "description": "Hai raggiunto il limite del tuo piano. Aggiorna a Pro per più assistenti e domande illimitate.",
     "toPro": "Aggiorna a Pro",
-    "getUnlimited": "Ottieni {feature} illimitati",
-    "suggestions": "💡 Suggerimenti:"
+    "getUnlimited": "Ottieni {feature} illimitati"
   },
   "footer": {
     "description": "Trasforma qualsiasi documentazione in un assistente AI in pochi secondi. Migliora il supporto, riduci i costi e scala la conoscenza senza sforzo.",
     "product": "Prodotto",
-    "about": "Chi siamo",
-    "privacy": "Privacy",
-    "terms": "Termini",
     "copyright": "© 2025 REFpaper."
-  },
-  "ui": {
-    "toggleTheme": "Toggle theme",
-    "switchToLanguage": "Switch to {language}",
-    "suggestions": "💡 Suggerimenti:"
   },
   "notFound": {
     "title": "Risorsa non trovata nella matrice di conoscenza",
-    "description": "Il nodo di documentazione richiesto è stato disconnesso dal sistema.",
-    "searchPlaceholder": "Cerca conoscenza...",
     "backHome": "Ritorna alla Base",
     "backDashboard": "Accedi alla Dashboard",
     "tryThese": "Moduli di sistema disponibili"
@@ -388,10 +359,6 @@
         "title": "Assistenza in Tempo Reale",
         "description": "Risposte istantanee alimentate da AI avanzata che comprende il contesto della tua documentazione."
       }
-    },
-    "social": {
-      "title": "Unisciti a Migliaia di Team Felici",
-      "subtitle": "Guarda cosa dicono i nostri clienti di REFpaper"
     },
     "cta": {
       "title": "Pronto a Trasformare la Tua Documentazione?",

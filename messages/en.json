@@ -17,11 +17,7 @@
     "reject": "Reject All"
   },
   "app": {
-    "name": "REFpaper",
-    "tagline": "Turn any documentation into an AI knowledge assistant in 30 seconds.",
-    "subtitle": "Boost support, reduce costs, and scale knowledge.",
-    "ctaButton": "Start Free",
-    "description": "Turn documentation into an AI knowledge assistant. REFpaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge."
+    "name": "REFpaper"
   },
   "homepage": {
     "hero": {
@@ -61,10 +57,6 @@
         "description": "Instant responses powered by advanced AI that understands your documentation context."
       }
     },
-    "social": {
-      "title": "Join Thousands of Happy Teams",
-      "subtitle": "See what our customers are saying about REFpaper"
-    },
     "cta": {
       "title": "Ready to Transform Your Documentation?",
       "subtitle": "Join thousands of teams already using REFpaper to scale their knowledge and reduce support overhead.",
@@ -73,7 +65,6 @@
   },
   "features": {
     "title": "Powerful Features",
-    "subtitle": "Everything you need to transform your documentation into intelligent assistants",
     "hero": {
       "title": "Unlock the Full Potential",
       "titleHighlight": "of Your Documentation",
@@ -169,7 +160,6 @@
     "pricing": "Pricing"
   },
   "dashboard": {
-    "loadingDashboard": "Loading dashboard...",
     "questionsThisMonth": "questions this month",
     "assistants": "assistants",
     "chat": "Chat",
@@ -185,11 +175,6 @@
     "processingDocuments": "Processing documents",
     "failedToCreate": "Failed to create assistant. Check settings for details.",
     "backToDashboard": "← Back to Dashboard",
-    "cancel": "Cancel",
-    "cancelling": "Cancelling...",
-    "cancelTitle": "Cancel Assistant Creation",
-    "cancelDescription": "Are you sure you want to cancel the creation of '{name}'? This action cannot be undone and all progress will be lost.",
-    "confirmCancel": "Yes, Cancel",
     "queuePosition": "Position in queue: #{position}",
     "estimatedWait": "Estimated wait: {time}"
   },
@@ -197,7 +182,6 @@
     "freePlan": "Free Plan",
     "proPlan": "Pro Plan",
     "of": "of",
-    "remaining": "remaining",
     "unlimited": "unlimited",
     "unlimitedQuestions": "∞ Unlimited questions with Pro plan"
   },
@@ -236,7 +220,6 @@
     "assistantNotReady": "Assistant is {status}... Please wait",
     "assistantNotReadyLong": "Assistant is {status}. Please wait for it to be ready before asking questions.",
     "monthlyLimitReachedTitle": "Monthly limit reached!",
-    "suggestions": "Suggestions:",
     "consultingDocs": "I'm consulting the documentation"
   },
   "assistant": {
@@ -276,22 +259,12 @@
       "pageLimit": "30 pages limit: If you enter complete URLs, we'll only crawl the first 30 pages",
       "depthLimit": "Limited depth: Only 3 levels of subpages"
     },
-    "cancel": "Cancel",
-    "cancelling": "Cancelling...",
-    "cancelTitle": "Cancel Assistant Creation",
-    "cancelDescription": "Are you sure you want to cancel the creation of '{name}'? This action cannot be undone and all progress will be lost.",
-    "confirmCancel": "Yes, Cancel",
     "creationError": "Assistant Creation Failed",
     "errorDetails": "Error details",
     "errorSuggestion": "You can modify the settings and try creating the assistant again, or delete it."
   },
   "status": {
-    "creating": "Creating",
-    "queued": "Queued",
-    "crawling": "Crawling",
-    "processing": "Processing",
-    "ready": "Ready",
-    "error": "Error"
+    "queued": "Queued"
   },
   "errors": {
     "unauthorized": "Unauthorized",
@@ -322,26 +295,15 @@
     "required": "Upgrade Required",
     "description": "You've reached your plan limit. Upgrade to Pro for more assistants and unlimited questions.",
     "toPro": "Upgrade to Pro",
-    "getUnlimited": "Get unlimited {feature}",
-    "suggestions": "💡 Suggestions:"
+    "getUnlimited": "Get unlimited {feature}"
   },
   "footer": {
     "description": "Transform any documentation into an AI knowledge assistant in seconds. Boost support, reduce costs, and scale knowledge effortlessly.",
     "product": "Product",
-    "about": "About",
-    "privacy": "Privacy",
-    "terms": "Terms",
     "copyright": "© 2025 REFpaper."
-  },
-  "ui": {
-    "toggleTheme": "Toggle theme",
-    "switchToLanguage": "Switch to {language}",
-    "suggestions": "💡 Suggestions:"
   },
   "notFound": {
     "title": "Resource not found in knowledge matrix",
-    "description": "The requested documentation node has been disconnected from the system.",
-    "searchPlaceholder": "Search for knowledge...",
     "backHome": "Return to Base",
     "backDashboard": "Access Dashboard",
     "tryThese": "Available system modules"
