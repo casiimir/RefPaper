@@ -272,7 +272,10 @@
     "cancelling": "Cancelling...",
     "cancelTitle": "Cancel Assistant Creation",
     "cancelDescription": "Are you sure you want to cancel the creation of '{name}'? This action cannot be undone and all progress will be lost.",
-    "confirmCancel": "Yes, Cancel"
+    "confirmCancel": "Yes, Cancel",
+    "creationError": "Assistant Creation Failed",
+    "errorDetails": "Error details",
+    "errorSuggestion": "You can modify the settings and try creating the assistant again, or delete it."
   },
   "status": {
     "creating": "Creating",
@@ -300,6 +303,7 @@
     "networkError": "Connection failed. Please check your internet connection and try again.",
     "crawlTimeout": "Documentation crawling took too long. The website might be slow or have too many pages. Try using a more specific URL like /docs/getting-started instead of /docs.",
     "serverError": "Server error occurred. Please try again in a few moments.",
+    "systemError": "We're experiencing a temporary issue with our services. Please try again later or contact support if the problem persists.",
     "unknownError": "An unexpected error occurred. Please try again or contact support if the problem persists.",
     "minLength": "{fieldName} must be at least {count} characters",
     "maxLength": "{fieldName} must be no more than {count} characters",

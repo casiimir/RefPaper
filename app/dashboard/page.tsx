@@ -453,7 +453,7 @@ export default function Dashboard() {
                     <Button
                       variant="outline"
                       size="sm"
-                      disabled={assistant.status !== "ready"}
+                      disabled={assistant.status === "creating" || assistant.status === "crawling" || assistant.status === "processing"}
                       onClick={() => setSelectedAssistant(assistant)}
                     >
                       <Settings className="w-3 h-3" />

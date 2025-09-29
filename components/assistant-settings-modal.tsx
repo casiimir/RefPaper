@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/loading";
-import { Trash2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Trash2, AlertTriangle } from "lucide-react";
 import { ErrorAlert } from "@/components/ui/error-alert";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -144,8 +145,29 @@ export function AssistantSettingsModal({
         footer={settingsFooter}
         loading={isLoading}
       >
-        <form id="settings-form" onSubmit={handleSave} className="space-y-4">
-          {error && <ErrorAlert errorMessage={error} />}
+        <div className="space-y-4">
+          {/* Show error status if assistant failed */}
+          {assistant?.status === "error" && (
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="space-y-2">
+                  <div className="font-medium">{t("assistant.creationError")}</div>
+                  {assistant.errorMessage && (
+                    <div className="text-sm">
+                      <strong>{t("assistant.errorDetails")}:</strong> {assistant.errorMessage}
+                    </div>
+                  )}
+                  <div className="text-sm text-muted-foreground">
+                    {t("assistant.errorSuggestion")}
+                  </div>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          <form id="settings-form" onSubmit={handleSave} className="space-y-4">
+            {error && <ErrorAlert errorMessage={error} />}
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
@@ -180,7 +202,8 @@ export function AssistantSettingsModal({
               />
             </div>
           </div>
-        </form>
+          </form>
+        </div>
       </BaseModal>
 
       <ConfirmationModal

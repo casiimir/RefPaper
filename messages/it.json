@@ -219,7 +219,10 @@
     "cancelling": "Annullamento...",
     "cancelTitle": "Annulla Creazione Assistente",
     "cancelDescription": "Sei sicuro di voler annullare la creazione di '{name}'? Questa azione non può essere annullata e tutto il progresso andrà perso.",
-    "confirmCancel": "Sì, Annulla"
+    "confirmCancel": "Sì, Annulla",
+    "creationError": "Creazione Assistente Fallita",
+    "errorDetails": "Dettagli errore",
+    "errorSuggestion": "Puoi modificare le impostazioni e riprovare a creare l'assistente, o eliminarlo."
   },
   "status": {
     "creating": "Creating",
@@ -247,6 +250,7 @@
     "networkError": "Connessione fallita. Controlla la tua connessione internet e riprova.",
     "crawlTimeout": "Il crawling della documentazione ha richiesto troppo tempo. Il sito potrebbe essere lento o avere troppe pagine. Prova con un URL più specifico come /docs/getting-started invece di /docs.",
     "serverError": "Errore del server. Riprova tra qualche istante.",
+    "systemError": "Stiamo riscontrando un problema temporaneo con i nostri servizi. Riprova più tardi o contatta il supporto se il problema persiste.",
     "unknownError": "Si è verificato un errore imprevisto. Riprova o contatta il supporto se il problema persiste.",
     "minLength": "{fieldName} must be at least {count} characters",
     "maxLength": "{fieldName} must be no more than {count} characters",

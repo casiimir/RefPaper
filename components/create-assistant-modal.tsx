@@ -73,6 +73,14 @@ export function CreateAssistantModal({
             // Keep the original limit message as it's already handled well
             errorMessage = errorData.error;
             errorType = "limit";
+          } else if (errorText.includes("api key") || errorText.includes("pinecone") ||
+                     errorText.includes("openai") || errorText.includes("authentication") ||
+                     errorText.includes("unauthorized") || errorText.includes("forbidden") ||
+                     errorText.includes("rate limit") || errorText.includes("quota") ||
+                     errorText.includes("service unavailable") || errorText.includes("internal error")) {
+            // Technical/system errors - show user-friendly message
+            errorMessage = t("errors.systemError");
+            errorType = "server";
           }
         }
 
@@ -99,10 +107,17 @@ export function CreateAssistantModal({
         errorMessage = t("errors.networkError");
         errorType = "network";
       } else if (error instanceof Error) {
+        const errorMsg = error.message.toLowerCase();
         // Check if the error message indicates a timeout
-        if (error.message.includes("timeout") || error.message.includes("timed out")) {
+        if (errorMsg.includes("timeout") || errorMsg.includes("timed out")) {
           errorMessage = t("errors.crawlTimeout");
           errorType = "timeout";
+        } else if (errorMsg.includes("api key") || errorMsg.includes("pinecone") ||
+                   errorMsg.includes("openai") || errorMsg.includes("authentication") ||
+                   errorMsg.includes("service") || errorMsg.includes("internal")) {
+          // Technical errors in client-side
+          errorMessage = t("errors.systemError");
+          errorType = "server";
         } else {
           errorMessage = t("errors.unknownError");
           errorType = "error";
