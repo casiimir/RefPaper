@@ -39,18 +39,22 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
 
       return {
         syntaxTheme: isDarkTheme ? oneDark : oneLight,
-        textStyles: "text-foreground/85 leading-relaxed text-[15px]",
+        textStyles: "text-foreground/90 leading-[1.7] text-base tracking-wide",
         codeStyles: isDarkTheme
-          ? "bg-slate-800/80 text-amber-200 border-slate-600/50"
-          : "bg-slate-50 text-slate-700 border-slate-200",
+          ? "bg-slate-800/90 text-amber-200 border-slate-600/30"
+          : "bg-slate-100/80 text-slate-700 border-slate-200/60",
         codeBlockStyles: {
           margin: 0,
-          borderRadius: "0.5rem",
-          fontSize: "0.9rem",
-          lineHeight: "1.5",
+          borderRadius: "0.75rem",
+          fontSize: "0.875rem",
+          lineHeight: "1.6",
+          padding: "1.5rem",
           backgroundColor: isDarkTheme
-            ? "rgb(30, 30, 30)"
-            : "rgb(248, 248, 248)",
+            ? "rgb(24, 24, 27)"
+            : "rgb(250, 250, 250)",
+          border: isDarkTheme
+            ? "1px solid rgb(39, 39, 42)"
+            : "1px solid rgb(229, 229, 234)",
         },
       };
     }, [theme]);
@@ -116,7 +120,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
         if (codeBlockMatch) {
           const [, language, code] = codeBlockMatch;
           return (
-            <div key={index} className="my-4">
+            <div key={index} className="my-6">
               <SafeCodeBlock code={code} language={language || "text"} />
             </div>
           );
@@ -140,7 +144,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
           return (
             <h3
               key={key}
-              className="text-lg font-semibold mt-6 mb-3 text-foreground/90 tracking-tight"
+              className="text-xl font-bold mt-8 mb-4 text-foreground/95 tracking-tight border-b border-border/20 pb-2"
               role="heading"
               aria-level={3}
               tabIndex={0}
@@ -155,7 +159,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
           return (
             <h2
               key={key}
-              className="text-xl font-bold mt-8 mb-4 text-foreground tracking-tight"
+              className="text-2xl font-bold mt-10 mb-5 text-foreground/95 tracking-tight border-b border-border/30 pb-3"
               role="heading"
               aria-level={2}
               tabIndex={0}
@@ -170,7 +174,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
           return (
             <h1
               key={key}
-              className="text-2xl font-bold mt-8 mb-5 text-foreground tracking-tight"
+              className="text-3xl font-bold mt-12 mb-6 text-foreground tracking-tight border-b-2 border-primary/20 pb-4"
               role="heading"
               aria-level={1}
               tabIndex={0}
@@ -180,14 +184,17 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
           );
         }
 
-        // Lists - convert to regular paragraphs using pre-compiled regex
+        // Lists - styled as proper list items with elegant bullets
         const listMatch = line.match(REGEX_PATTERNS.listItem);
         if (listMatch) {
           const content = processInlineCode(listMatch[1]);
           return (
-            <p key={key} className={`mb-4 ${textStyles}`}>
-              {content}
-            </p>
+            <div key={key} className="flex items-start gap-3 mb-3">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-3 flex-shrink-0"></div>
+              <p className={`${textStyles} flex-1`}>
+                {content}
+              </p>
+            </div>
           );
         }
 
@@ -199,7 +206,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
         // Regular paragraphs with inline code processing
         const content = processInlineCode(line);
         return (
-          <p key={key} className={`mb-4 ${textStyles}`}>
+          <p key={key} className={`mb-6 ${textStyles}`}>
             {content}
           </p>
         );
@@ -218,7 +225,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
         if (part.startsWith("**") && part.endsWith("**")) {
           const boldText = part.slice(2, -2);
           return (
-            <strong key={index} className="font-semibold text-foreground">
+            <strong key={index} className="font-bold text-foreground/95 tracking-tight">
               {boldText}
             </strong>
           );
@@ -232,7 +239,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
             return (
               <code
                 key={`${index}-${codeIndex}`}
-                className={`px-2 py-1 mx-0.5 rounded-md text-xs font-mono transition-colors border shadow-sm ${codeStyles}`}
+                className={`px-2.5 py-1.5 mx-1 rounded-lg text-sm font-mono transition-all duration-200 border shadow-sm hover:shadow-md ${codeStyles}`}
                 role="code"
                 aria-label={`Inline code: ${code}`}
               >
