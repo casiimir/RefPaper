@@ -3,7 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Lightbulb, AlertCircle } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Lightbulb, AlertCircle, HelpCircle } from "lucide-react";
 import { PLAN_LIMITS } from "@/lib/constants";
 import { useFormValidation, FormValidationUtils } from "./FormValidation";
 import { FormErrorDisplay, ValidationErrorDisplay } from "./FormErrorDisplay";
@@ -108,34 +109,63 @@ export function AssistantForm({
 
   return (
     <div className="space-y-4">
-      {/* Free Plan Limitations */}
-      {userPlan === "free" &&
-        questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
-          <Alert>
-            <Lightbulb className="h-4 w-4" />
-            <AlertDescription>
-              <div className="space-y-2">
-                <div className="font-medium">
-                  {t("assistant.freePlanLimits.title")}
+      {/* Information Accordion */}
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="crawling-info" className="border-none">
+          <AccordionTrigger className="py-3 text-sm font-medium text-muted-foreground hover:text-foreground" tabIndex={-1}>
+            <div className="flex items-center gap-2">
+              <HelpCircle className="h-4 w-4" />
+              {t("assistant.form.infoTitle")}
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="space-y-3 max-h-[40vh] md:max-h-none overflow-y-auto md:overflow-y-visible">
+            {/* Crawling Explanation */}
+            <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-md border border-blue-200 dark:border-blue-800">
+              <div className="flex items-start gap-2">
+                <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div className="text-xs text-blue-700 dark:text-blue-300">
+                  <div className="font-medium mb-1">{t("assistant.form.crawlExplanation.title")}</div>
+                  <div className="space-y-1">
+                    <div>• {t("assistant.form.crawlExplanation.step1")}</div>
+                    <div>• {t("assistant.form.crawlExplanation.step2")}</div>
+                    <div>• {t("assistant.form.crawlExplanation.step3")}</div>
+                    <div className="font-medium mt-2">• {t("assistant.form.crawlExplanation.result")}</div>
+                  </div>
                 </div>
-                <ul className="text-xs space-y-1 ml-4">
-                  <li>
-                    • <strong>Specific subpages recommended:</strong>{" "}
-                    {t("assistant.freePlanLimits.specificSubpages")}
-                  </li>
-                  <li>
-                    • <strong>30 pages limit:</strong>{" "}
-                    {t("assistant.freePlanLimits.pageLimit")}
-                  </li>
-                  <li>
-                    • <strong>Limited depth:</strong>{" "}
-                    {t("assistant.freePlanLimits.depthLimit")}
-                  </li>
-                </ul>
               </div>
-            </AlertDescription>
-          </Alert>
-        )}
+            </div>
+
+            {/* Free Plan Limitations */}
+            {userPlan === "free" &&
+              questionsThisMonth < PLAN_LIMITS.FREE.QUESTIONS_PER_MONTH && (
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    <div className="space-y-2">
+                      <div className="font-medium">
+                        {t("assistant.freePlanLimits.title")}
+                      </div>
+                      <ul className="text-xs space-y-1 ml-4">
+                        <li>
+                          • <strong>Specific subpages recommended:</strong>{" "}
+                          {t("assistant.freePlanLimits.specificSubpages")}
+                        </li>
+                        <li>
+                          • <strong>30 pages limit:</strong>{" "}
+                          {t("assistant.freePlanLimits.pageLimit")}
+                        </li>
+                        <li>
+                          • <strong>Limited depth:</strong>{" "}
+                          {t("assistant.freePlanLimits.depthLimit")}
+                        </li>
+                      </ul>
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       {/* Assistant Name */}
       <div className="grid grid-cols-4 items-center gap-4">
@@ -170,9 +200,6 @@ export function AssistantForm({
             disabled={disabled || !canCreateAssistant}
             required
           />
-          <p className="text-xs text-muted-foreground mt-1">
-            {t("assistant.form.crawlNote")}
-          </p>
           <ValidationErrorDisplay error={fieldErrors.docsUrl} />
 
           {/* URL Validation Errors */}

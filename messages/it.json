@@ -199,7 +199,15 @@
       "namePlaceholder": "Il Mio Assistente Documentazione",
       "urlPlaceholder": "https://docs.example.com",
       "descriptionPlaceholder": "Breve descrizione di cosa aiuta questo assistente...",
-      "crawlNote": "L'URL di partenza da cui analizzeremo la tua documentazione"
+      "crawlNote": "L'URL di partenza da cui analizzeremo la tua documentazione",
+      "crawlExplanation": {
+        "title": "Come funziona l'analisi:",
+        "step1": "Partiamo dal tuo URL ed esploriamo automaticamente",
+        "step2": "Seguiamo i link verso il basso (docs.com/guida → docs.com/guida/setup)",
+        "step3": "Non risaliamo alle pagine superiori (docs.com/guida non trova docs.com/api)",
+        "result": "Risultato: Un assistente che conosce tutta la documentazione collegata dal tuo punto di partenza"
+      },
+      "infoTitle": "Come funziona"
     },
     "freePlanLimits": {
       "title": "Piano Gratuito - Limitazioni:",

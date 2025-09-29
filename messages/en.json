@@ -252,7 +252,15 @@
       "namePlaceholder": "My Documentation Assistant",
       "urlPlaceholder": "https://docs.example.com",
       "descriptionPlaceholder": "Brief description of what this assistant helps with...",
-      "crawlNote": "The starting URL where we'll crawl your documentation"
+      "crawlNote": "The starting URL where we'll crawl your documentation",
+      "crawlExplanation": {
+        "title": "How the crawling works:",
+        "step1": "We start from your URL and explore automatically",
+        "step2": "We follow links going deeper (docs.com/guide → docs.com/guide/setup)",
+        "step3": "We don't go up to parent pages (docs.com/guide won't find docs.com/api)",
+        "result": "Result: An assistant that knows all connected documentation from your starting point"
+      },
+      "infoTitle": "How it works"
     },
     "freePlanLimits": {
       "title": "Free Plan - Limitations:",
