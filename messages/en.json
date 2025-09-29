@@ -10,12 +10,18 @@
     "upgrade": "Upgrade",
     "actionCannotBeUndone": "This action cannot be undone."
   },
+  "cookies": {
+    "description": "We use cookies to enhance your browsing experience and analyze our traffic. By clicking 'Accept', you consent to our use of cookies.",
+    "privacyPolicy": "Privacy Policy",
+    "accept": "Accept All",
+    "reject": "Reject All"
+  },
   "app": {
-    "name": "RefPaper",
+    "name": "REFpaper",
     "tagline": "Turn any documentation into an AI knowledge assistant in 30 seconds.",
     "subtitle": "Boost support, reduce costs, and scale knowledge.",
     "ctaButton": "Start Free",
-    "description": "Turn documentation into an AI knowledge assistant. RefPaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge."
+    "description": "Turn documentation into an AI knowledge assistant. REFpaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge."
   },
   "homepage": {
     "hero": {
@@ -28,7 +34,7 @@
       "trustedBy": "Trusted by teams at"
     },
     "features": {
-      "title": "Why Choose RefPaper?",
+      "title": "Why Choose REFpaper?",
       "subtitle": "Everything you need to transform your documentation workflow",
       "instant": {
         "title": "30-Second Setup",
@@ -57,11 +63,11 @@
     },
     "social": {
       "title": "Join Thousands of Happy Teams",
-      "subtitle": "See what our customers are saying about RefPaper"
+      "subtitle": "See what our customers are saying about REFpaper"
     },
     "cta": {
       "title": "Ready to Transform Your Documentation?",
-      "subtitle": "Join thousands of teams already using RefPaper to scale their knowledge and reduce support overhead.",
+      "subtitle": "Join thousands of teams already using REFpaper to scale their knowledge and reduce support overhead.",
       "button": "Get Started Free"
     }
   },
@@ -71,12 +77,12 @@
     "hero": {
       "title": "Unlock the Full Potential",
       "titleHighlight": "of Your Documentation",
-      "subtitle": "Discover how RefPaper's advanced features can revolutionize the way your team works with documentation and knowledge sharing."
+      "subtitle": "Discover how REFpaper's advanced features can revolutionize the way your team works with documentation and knowledge sharing."
     },
     "sections": {
       "core": {
         "title": "Core Features",
-        "subtitle": "Essential tools that make RefPaper powerful"
+        "subtitle": "Essential tools that make REFpaper powerful"
       },
       "advanced": {
         "title": "Advanced Capabilities",
@@ -151,7 +157,7 @@
     ],
     "cta": {
       "title": "Ready to Get Started?",
-      "subtitle": "Join thousands of teams already using RefPaper to transform their documentation workflow.",
+      "subtitle": "Join thousands of teams already using REFpaper to transform their documentation workflow.",
       "button": "Start Free Today"
     }
   },
@@ -325,7 +331,7 @@
     "about": "About",
     "privacy": "Privacy",
     "terms": "Terms",
-    "copyright": "© 2025 RefPaper."
+    "copyright": "© 2025 REFpaper."
   },
   "ui": {
     "toggleTheme": "Toggle theme",
@@ -346,12 +352,12 @@
     "subtitle": "Choose the perfect plan for your documentation needs. Start free, upgrade when you're ready.",
     "choosePlan": "Choose Your Plan",
     "choosePlanDescription": "Select the plan that best fits your needs and start transforming your documentation today.",
-    "whyChoose": "Why Choose RefPaper?",
+    "whyChoose": "Why Choose REFpaper?",
     "whyChooseDescription": "Powerful features that make your documentation work for you",
     "faqTitle": "Frequently Asked Questions",
     "faqDescription": "Everything you need to know about our pricing",
     "ctaTitle": "Ready to Transform Your Documentation?",
-    "ctaDescription": "Join thousands of teams who have revolutionized their documentation workflow with RefPaper.",
+    "ctaDescription": "Join thousands of teams who have revolutionized their documentation workflow with REFpaper.",
     "startFreeTrial": "Start Free Trial",
     "scheduleDemo": "Schedule Demo",
     "features": {
@@ -371,7 +377,7 @@
     "faqs": {
       "freePlan": {
         "question": "How does the free plan work?",
-        "answer": "The free plan gives you 3 AI assistants and 20 questions per month. Perfect for testing RefPaper with smaller documentation sets."
+        "answer": "The free plan gives you 3 AI assistants and 20 questions per month. Perfect for testing REFpaper with smaller documentation sets."
       },
       "whatCounts": {
         "question": "What counts as a 'question'?",
@@ -383,7 +389,7 @@
       },
       "documentationTypes": {
         "question": "What types of documentation can I use?",
-        "answer": "RefPaper works with any web-based documentation including wikis, API docs, knowledge bases, and more."
+        "answer": "REFpaper works with any web-based documentation including wikis, API docs, knowledge bases, and more."
       },
       "sizeLimit": {
         "question": "Is there a limit on documentation size?",

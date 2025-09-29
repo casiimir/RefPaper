@@ -9,9 +9,9 @@ import { getDictionary, defaultLocale } from "@/lib/i18n";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "RefPaper",
+  title: "REFpaper",
   description:
-    "Turn documentation into an AI knowledge assistant. RefPaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge.",
+    "Turn documentation into an AI knowledge assistant. REFpaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge.",
 };
 
 export default async function RootLayout({
@@ -31,7 +31,10 @@ export default async function RootLayout({
         >
           <ConvexClientProvider>
             <ThemeProvider defaultTheme="system" storageKey="refpaper-theme">
-              <TranslationProvider dictionary={dictionary} locale={defaultLocale}>
+              <TranslationProvider
+                dictionary={dictionary}
+                locale={defaultLocale}
+              >
                 <LayoutWrapper>{children}</LayoutWrapper>
               </TranslationProvider>
             </ThemeProvider>
