@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./TypingIndicator";
+import { ChatRobot } from "./ChatRobot";
 import { Send, Loader2, User } from "lucide-react";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { Assistant } from "@/types/assistant";
@@ -109,7 +110,6 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         const inputCost = (estimatedInputTokens / 1000000) * 0.05;
         const outputCost = (Math.max(0, realOutputTokens) / 1000000) * 0.4;
 
-
         setDebugMetrics((prev) => ({
           totalQueries: prev.totalQueries + 1,
           totalInputTokens: prev.totalInputTokens + estimatedInputTokens,
@@ -121,7 +121,6 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         // Fallback to old estimation method
         const inputTokens = Math.ceil(message.length / 4) + 2000;
         const inputCost = (inputTokens / 1000000) * 0.05;
-
 
         setDebugMetrics((prev) => ({
           totalQueries: prev.totalQueries + 1,
@@ -159,9 +158,11 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className={`border-b p-2 flex items-center justify-between flex-shrink-0 bg-gradient-to-r ${
-        getAssistantTheme(assistant._id).gradient
-      } ${getAssistantTheme(assistant._id).border}`}>
+      <div
+        className={`border-b p-2 flex items-center justify-between flex-shrink-0 bg-gradient-to-r ${
+          getAssistantTheme(assistant._id).gradient
+        } ${getAssistantTheme(assistant._id).border}`}
+      >
         <div className="flex items-center gap-3">
           <div className="flex gap-4">
             <AssistantIcon
@@ -266,6 +267,9 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
           />
         )}
       </div>
+
+      {/* Robot above input when loading */}
+      {isLoading && <ChatRobot isVisible={isLoading} />}
 
       {/* Input */}
       <div className="border-t p-4 flex-shrink-0">
