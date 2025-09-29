@@ -3,7 +3,7 @@ export interface Assistant {
   name: string;
   description?: string;
   docsUrl: string;
-  status: string;
+  status: "creating" | "queued" | "crawling" | "processing" | "ready" | "error";
   totalPages?: number;
   processedPages?: number;
   pineconeNamespace?: string;

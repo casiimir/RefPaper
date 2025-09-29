@@ -139,6 +139,106 @@ export const processAssistantCreation = internalAction({
   },
 });
 
+/**
+ * Queue-based assistant crawling with rate limit handling
+ */
+export const processAssistantCrawl = internalAction({
+  args: {
+    assistantId: v.id("assistants"),
+    queueId: v.id("crawlQueue"),
+  },
+  handler: async (ctx, { assistantId, queueId }): Promise<any> => {
+    try {
+      // Get assistant details
+      const assistant: any = await ctx.runQuery(internal.assistants.getAssistantInternal, {
+        id: assistantId,
+      });
+
+      if (!assistant) {
+        await ctx.runMutation(internal.crawlQueue.markAsFailed, {
+          queueId,
+          errorMessage: "Assistant not found",
+        });
+        return;
+      }
+
+      // Update assistant status to crawling
+      await ctx.runMutation(internal.assistants.updateAssistantStatus, {
+        id: assistantId,
+        status: "crawling",
+      });
+
+      // Get the queue item to retrieve the user plan
+      const queueItem = await ctx.runQuery(internal.crawlQueue.getQueueItemById, {
+        queueId,
+      });
+
+      if (!queueItem) {
+        await ctx.runMutation(internal.crawlQueue.markAsFailed, {
+          queueId,
+          errorMessage: "Queue item not found",
+        });
+        return;
+      }
+
+      const userPlan = queueItem.userPlan || "free"; // Fallback to free for old records
+
+      // Perform the original crawling process
+      const result: any = await ctx.runAction(internal.assistantActions.processAssistantCreation, {
+        assistantId,
+        docsUrl: assistant.docsUrl,
+        name: assistant.name,
+        userPlan,
+      });
+
+      // Mark queue item as completed
+      await ctx.runMutation(internal.crawlQueue.markAsCompleted, {
+        queueId,
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Queue-based crawl failed:", error);
+
+      const errorMessage = error instanceof Error ? error.message : String(error);
+
+      // Check if it's a rate limit error
+      const isRateLimit =
+        errorMessage.includes('Rate limit exceeded') ||
+        errorMessage.includes('429') ||
+        errorMessage.includes('rate limit') ||
+        errorMessage.includes('too many requests');
+
+      // Mark queue item as failed with retry logic
+      await ctx.runMutation(internal.crawlQueue.markAsFailed, {
+        queueId,
+        errorMessage,
+        isRateLimit,
+      });
+
+      // Get the updated queue item to check if it was marked as permanently failed
+      const updatedQueueItem = await ctx.runQuery(internal.crawlQueue.getQueueItemById, {
+        queueId,
+      });
+
+      if (!updatedQueueItem || updatedQueueItem.status === "failed") {
+        // Max retries reached, mark assistant as error
+        await ctx.runMutation(internal.assistants.updateAssistantStatus, {
+          id: assistantId,
+          status: "error",
+          errorMessage,
+        });
+      } else {
+        // Will be retried, keep assistant in queued state
+        await ctx.runMutation(internal.assistants.updateAssistantStatus, {
+          id: assistantId,
+          status: "queued",
+        });
+      }
+    }
+  },
+});
+
 export const deletePineconeNamespace = internalAction({
   args: {
     namespace: v.string(),

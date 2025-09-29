@@ -106,11 +106,18 @@ export const triggerAssistantCreation = mutation({
     userPlan: v.union(v.literal("free"), v.literal("pro")),
   },
   handler: async (ctx, { assistantId, docsUrl, name, userPlan }) => {
-    // Schedule the background processing action
-    await ctx.scheduler.runAfter(0, internal.assistantActions.processAssistantCreation, {
+    // Update assistant status to queued
+    await ctx.runMutation(internal.assistants.updateAssistantStatus, {
+      id: assistantId,
+      status: "queued",
+    });
+
+    // Add to crawl queue with priority based on user plan
+    const priority = userPlan === "pro" ? 0 : 1; // Pro users get higher priority
+
+    await ctx.runMutation(internal.crawlQueue.addToQueue, {
       assistantId,
-      docsUrl,
-      name,
+      priority,
       userPlan,
     });
   },
@@ -121,6 +128,7 @@ export const updateAssistantStatus = internalMutation({
     id: v.id("assistants"),
     status: v.union(
       v.literal("creating"),
+      v.literal("queued"),
       v.literal("crawling"),
       v.literal("processing"),
       v.literal("ready"),
@@ -224,6 +232,11 @@ export const deleteAssistantRecord = mutation({
       await ctx.db.delete(message._id);
     }
 
+
+    // Remove from crawl queue if exists
+    await ctx.runMutation(internal.crawlQueue.removeFromQueue, {
+      assistantId: id,
+    });
 
     // Delete associated documents
     await ctx.runMutation(internal.documents.deleteDocumentsByAssistant, {

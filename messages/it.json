@@ -130,7 +130,10 @@
     "documentsProcessed": "documenti elaborati",
     "processingDocuments": "Elaborazione documenti",
     "failedToCreate": "Impossibile creare l'assistente. Controlla le impostazioni per i dettagli.",
-    "backToDashboard": "← Torna alla Dashboard"
+    "backToDashboard": "← Torna alla Dashboard",
+    "confirmCancel": "Si, cancella",
+    "queuePosition": "Posizione in coda: #{position}",
+    "estimatedWait": "Tempo stimato: {time}"
   },
   "plans": {
     "freePlan": "Piano Gratuito",
@@ -220,16 +223,19 @@
     "cancelTitle": "Annulla Creazione Assistente",
     "cancelDescription": "Sei sicuro di voler annullare la creazione di '{name}'? Questa azione non può essere annullata e tutto il progresso andrà perso.",
     "confirmCancel": "Sì, Annulla",
+    "queuePosition": "Posizione in coda: #{position}",
+    "estimatedWait": "Attesa stimata: {time}",
     "creationError": "Creazione Assistente Fallita",
     "errorDetails": "Dettagli errore",
     "errorSuggestion": "Puoi modificare le impostazioni e riprovare a creare l'assistente, o eliminarlo."
   },
   "status": {
-    "creating": "Creating",
-    "crawling": "Crawling",
-    "processing": "Processing",
-    "ready": "Ready",
-    "error": "Error"
+    "creating": "Creazione",
+    "queued": "In coda",
+    "crawling": "Scansione",
+    "processing": "Elaborazione",
+    "ready": "Pronto",
+    "error": "Errore"
   },
   "errors": {
     "unauthorized": "Non autorizzato",

@@ -43,6 +43,7 @@ import { AssistantSettingsModal } from "@/components/assistant-settings-modal";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { PLAN_LIMITS, UI_MESSAGES } from "@/lib/constants";
 import { Assistant } from "@/types/assistant";
+import { Id } from "@/convex/_generated/dataModel";
 import {
   getStatusIcon,
   getStatusLabel,
@@ -53,6 +54,37 @@ import { AssistantIcon } from "@/components/ui/assistant-icon";
 import { DebugDialog } from "@/components/dev/debug-dialog";
 import { getAssistantTheme } from "@/lib/assistant-colors";
 import { SearchBar } from "@/components/dashboard/SearchBar";
+
+// Queue status component
+function QueueStatus({ assistantId }: { assistantId: Id<"assistants"> }) {
+  const { t } = useTranslation();
+  const queuePosition = useQuery(api.crawlQueue.getQueuePosition, { assistantId });
+
+  if (!queuePosition) {
+    return (
+      <div className="text-xs text-muted-foreground">
+        {t("status.queued")}...
+      </div>
+    );
+  }
+
+  const formatWaitTime = (minutes: number) => {
+    if (minutes < 1) return "< 1 min";
+    if (minutes === 1) return "1 min";
+    return `${minutes} min`;
+  };
+
+  return (
+    <div className="space-y-1">
+      <div className="text-xs text-muted-foreground">
+        {t("dashboard.queuePosition", { position: queuePosition.position })}
+      </div>
+      <div className="text-xs text-muted-foreground">
+        {t("dashboard.estimatedWait", { time: formatWaitTime(queuePosition.estimatedWaitTime) })}
+      </div>
+    </div>
+  );
+}
 
 export default function Dashboard() {
   const { isLoaded, isSignedIn, has } = useAuth();
@@ -409,6 +441,10 @@ export default function Dashboard() {
                           </div>
                         )}
 
+                      {assistant.status === "queued" && (
+                        <QueueStatus assistantId={assistant._id} />
+                      )}
+
                       {assistant.status === "error" && (
                         <div className="text-xs text-red-600">
                           {t("dashboard.failedToCreate")}
@@ -428,7 +464,7 @@ export default function Dashboard() {
                           {t("dashboard.chat")}
                         </Button>
                       </Link>
-                    ) : (assistant.status === "creating" || assistant.status === "crawling" || assistant.status === "processing") ? (
+                    ) : (assistant.status === "creating" || assistant.status === "queued" || assistant.status === "crawling" || assistant.status === "processing") ? (
                       <Button
                         variant="destructive"
                         size="sm"
@@ -453,7 +489,7 @@ export default function Dashboard() {
                     <Button
                       variant="outline"
                       size="sm"
-                      disabled={assistant.status === "creating" || assistant.status === "crawling" || assistant.status === "processing"}
+                      disabled={assistant.status === "creating" || assistant.status === "queued" || assistant.status === "crawling" || assistant.status === "processing"}
                       onClick={() => setSelectedAssistant(assistant)}
                     >
                       <Settings className="w-3 h-3" />

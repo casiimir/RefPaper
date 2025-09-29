@@ -83,6 +83,45 @@ export async function crawlDocumentation(
 }
 
 /**
+ * Retry crawl with exponential backoff for rate limit errors
+ */
+async function crawlWithRetry(
+  firecrawl: FirecrawlApp,
+  docUrl: string,
+  crawlConfig: CrawlConfig,
+  maxRetries: number = 3
+): Promise<CrawlResponse> {
+  let lastError: Error;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await firecrawl.crawl(docUrl, crawlConfig);
+    } catch (error) {
+      lastError = error as Error;
+
+      // Check if it's a rate limit error
+      const isRateLimit =
+        error instanceof Error &&
+        (error.message.includes('Rate limit exceeded') ||
+         error.message.includes('429') ||
+         error.message.includes('rate limit') ||
+         error.message.includes('too many requests'));
+
+      if (!isRateLimit || attempt === maxRetries) {
+        throw error;
+      }
+
+      // Calculate delay with exponential backoff (20s, 40s, 80s)
+      const delay = Math.min(20000 * Math.pow(2, attempt), 120000);
+
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+
+  throw lastError!;
+}
+
+/**
  * Internal function to perform the actual crawling
  */
 async function performCrawl(
@@ -124,8 +163,9 @@ async function performCrawl(
   };
 
   try {
-    // Start crawl
-    const crawlResponse: CrawlResponse = await firecrawl.crawl(
+    // Start crawl with retry logic for rate limits
+    const crawlResponse: CrawlResponse = await crawlWithRetry(
+      firecrawl,
       docUrl,
       crawlConfig
     );

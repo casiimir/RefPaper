@@ -109,25 +109,6 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         const inputCost = (estimatedInputTokens / 1000000) * 0.05;
         const outputCost = (Math.max(0, realOutputTokens) / 1000000) * 0.4;
 
-        // Debug logging for token analysis
-        console.log("🔍 Chat Debug Metrics:", {
-          userQuery: message,
-          queryLength: message.length,
-          estimatedQueryTokens: Math.ceil(message.length / 4),
-          estimatedContextTokens: 2000,
-          totalEstimatedInput: estimatedInputTokens,
-          realTotalTokens: realTotalTokens,
-          calculatedOutputTokens: realOutputTokens,
-          inputCost: inputCost,
-          outputCost: outputCost,
-          totalCost: inputCost + outputCost,
-          sources: responseData.sources?.length || 0,
-          assistantResponse: responseData.answer,
-          responseLength: responseData.answer?.length || 0,
-          estimatedResponseTokens: responseData.answer
-            ? Math.ceil(responseData.answer.length / 4)
-            : 0,
-        });
 
         setDebugMetrics((prev) => ({
           totalQueries: prev.totalQueries + 1,
@@ -141,12 +122,6 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         const inputTokens = Math.ceil(message.length / 4) + 2000;
         const inputCost = (inputTokens / 1000000) * 0.05;
 
-        console.log("⚠️ Chat Debug (No API tokens):", {
-          userQuery: message,
-          queryLength: message.length,
-          estimatedInputTokens: inputTokens,
-          fallbackMode: true,
-        });
 
         setDebugMetrics((prev) => ({
           totalQueries: prev.totalQueries + 1,
