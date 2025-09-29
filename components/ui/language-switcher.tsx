@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Globe, ChevronDown } from "lucide-react";
+import { Globe } from "lucide-react";
 import { languages, type Locale } from "@/lib/i18n";
 import { useTranslation } from "@/components/providers/TranslationProvider";
 import { cn } from "@/lib/utils";

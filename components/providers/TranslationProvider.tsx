@@ -32,7 +32,7 @@ export function TranslationProvider({
     if (storedLocale !== initialLocale) {
       changeLocale(storedLocale);
     }
-  }, []);
+  }, [initialLocale]);
 
   const changeLocale = async (newLocale: Locale) => {
     try {

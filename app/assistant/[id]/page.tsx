@@ -10,13 +10,10 @@ import { Navbar } from "@/components/navbar";
 import { redirect } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useTranslation } from "@/components/providers/TranslationProvider";
-import { CenteredLoading } from "@/components/ui/loading";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AssistantPage() {
   const { isLoaded, isSignedIn } = useAuth();
-  const { t } = useTranslation();
   const params = useParams();
   const assistantId = params.id as string;
   const [sidebarOpen, setSidebarOpen] = useState(false);

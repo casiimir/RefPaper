@@ -20,7 +20,7 @@ export interface ChatResponse {
 
 // Stream chat response
 export interface StreamChatResponse {
-  stream: any;
+  stream: unknown;
   sources: Array<{
     title: string;
     sourceUrl: string;
@@ -32,7 +32,7 @@ export interface StreamChatResponse {
 export interface SearchOptions {
   topK?: number;
   minScore?: number;
-  filter?: Record<string, any> | null;
+  filter?: Record<string, string | number | boolean> | null;
 }
 
 // Chat options

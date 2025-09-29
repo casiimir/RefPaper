@@ -8,7 +8,7 @@ import {
   createAssistantWithConvexDocs,
   deleteNamespace,
 } from "../lib/pinecone";
-import { Document } from "@/types/document";
+import { Document, AssistantCreationResult } from "@/types/document";
 import { ERROR_MESSAGES } from "@/lib/constants";
 
 export const processAssistantCreation = internalAction({
@@ -41,9 +41,12 @@ export const processAssistantCreation = internalAction({
       }
 
       // Check if assistant was cancelled during crawling
-      const assistantExists = await ctx.runQuery(internal.assistants.getAssistantInternal, {
-        id: assistantId,
-      });
+      const assistantExists = await ctx.runQuery(
+        internal.assistants.getAssistantInternal,
+        {
+          id: assistantId,
+        }
+      );
       if (!assistantExists) {
         return { success: false, message: "Assistant was cancelled" };
       }
@@ -78,19 +81,23 @@ export const processAssistantCreation = internalAction({
       });
 
       // Check if assistant was cancelled during document processing
-      const assistantStillExists = await ctx.runQuery(internal.assistants.getAssistantInternal, {
-        id: assistantId,
-      });
+      const assistantStillExists = await ctx.runQuery(
+        internal.assistants.getAssistantInternal,
+        {
+          id: assistantId,
+        }
+      );
       if (!assistantStillExists) {
         return { success: false, message: "Assistant was cancelled" };
       }
 
       // Step 2.2: Create assistant with Pinecone (external API call)
-      const result: any = await createAssistantWithConvexDocs(
-        documents,
-        documentIds,
-        assistantId
-      );
+      const result: AssistantCreationResult =
+        await createAssistantWithConvexDocs(
+          documents,
+          documentIds,
+          assistantId
+        );
 
       // Final success status update
       await ctx.runMutation(internal.assistants.updateAssistantStatus, {
@@ -150,9 +157,12 @@ export const processAssistantCrawl = internalAction({
   handler: async (ctx, { assistantId, queueId }): Promise<any> => {
     try {
       // Get assistant details
-      const assistant: any = await ctx.runQuery(internal.assistants.getAssistantInternal, {
-        id: assistantId,
-      });
+      const assistant: any = await ctx.runQuery(
+        internal.assistants.getAssistantInternal,
+        {
+          id: assistantId,
+        }
+      );
 
       if (!assistant) {
         await ctx.runMutation(internal.crawlQueue.markAsFailed, {
@@ -169,9 +179,12 @@ export const processAssistantCrawl = internalAction({
       });
 
       // Get the queue item to retrieve the user plan
-      const queueItem = await ctx.runQuery(internal.crawlQueue.getQueueItemById, {
-        queueId,
-      });
+      const queueItem = await ctx.runQuery(
+        internal.crawlQueue.getQueueItemById,
+        {
+          queueId,
+        }
+      );
 
       if (!queueItem) {
         await ctx.runMutation(internal.crawlQueue.markAsFailed, {
@@ -184,12 +197,15 @@ export const processAssistantCrawl = internalAction({
       const userPlan = queueItem.userPlan || "free"; // Fallback to free for old records
 
       // Perform the original crawling process
-      const result: any = await ctx.runAction(internal.assistantActions.processAssistantCreation, {
-        assistantId,
-        docsUrl: assistant.docsUrl,
-        name: assistant.name,
-        userPlan,
-      });
+      const result: any = await ctx.runAction(
+        internal.assistantActions.processAssistantCreation,
+        {
+          assistantId,
+          docsUrl: assistant.docsUrl,
+          name: assistant.name,
+          userPlan,
+        }
+      );
 
       // Mark queue item as completed
       await ctx.runMutation(internal.crawlQueue.markAsCompleted, {
@@ -200,14 +216,15 @@ export const processAssistantCrawl = internalAction({
     } catch (error) {
       console.error("Queue-based crawl failed:", error);
 
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
 
       // Check if it's a rate limit error
       const isRateLimit =
-        errorMessage.includes('Rate limit exceeded') ||
-        errorMessage.includes('429') ||
-        errorMessage.includes('rate limit') ||
-        errorMessage.includes('too many requests');
+        errorMessage.includes("Rate limit exceeded") ||
+        errorMessage.includes("429") ||
+        errorMessage.includes("rate limit") ||
+        errorMessage.includes("too many requests");
 
       // Mark queue item as failed with retry logic
       await ctx.runMutation(internal.crawlQueue.markAsFailed, {
@@ -217,9 +234,12 @@ export const processAssistantCrawl = internalAction({
       });
 
       // Get the updated queue item to check if it was marked as permanently failed
-      const updatedQueueItem = await ctx.runQuery(internal.crawlQueue.getQueueItemById, {
-        queueId,
-      });
+      const updatedQueueItem = await ctx.runQuery(
+        internal.crawlQueue.getQueueItemById,
+        {
+          queueId,
+        }
+      );
 
       if (!updatedQueueItem || updatedQueueItem.status === "failed") {
         // Max retries reached, mark assistant as error

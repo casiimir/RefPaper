@@ -268,7 +268,6 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
             )}
           </Button>
         </form>
-
       </div>
     </div>
   );

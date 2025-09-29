@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Lightbulb, AlertCircle, HelpCircle } from "lucide-react";
 import { PLAN_LIMITS } from "@/lib/constants";
-import { useFormValidation, FormValidationUtils } from "./FormValidation";
+import { useFormValidation } from "./FormValidation";
 import { FormErrorDisplay, ValidationErrorDisplay } from "./FormErrorDisplay";
 import { useTranslation } from "@/components/providers/TranslationProvider";
 
@@ -36,7 +36,7 @@ export function AssistantForm({
 }: AssistantFormProps) {
   const { t } = useTranslation();
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const { urlValidation, validateUrl, isValidating } = useFormValidation({
+  const { urlValidation, validateUrl } = useFormValidation({
     validateOnChange: true,
     debounceMs: 500,
   });
@@ -58,50 +58,6 @@ export function AssistantForm({
     }
   };
 
-  const validateForm = (): boolean => {
-    const errors: Record<string, string> = {};
-
-    // Required fields validation
-    const nameError = FormValidationUtils.validateRequired(
-      formData.name,
-      "Assistant name"
-    );
-    if (nameError) errors.name = nameError;
-
-    const urlError = FormValidationUtils.validateRequired(
-      formData.docsUrl,
-      "Documentation URL"
-    );
-    if (urlError) errors.docsUrl = urlError;
-
-    // Length validation
-    const nameLengthError = FormValidationUtils.validateLength(
-      formData.name,
-      2,
-      50,
-      "Assistant name"
-    );
-    if (nameLengthError) errors.name = nameLengthError;
-
-    const descLengthError = FormValidationUtils.validateLength(
-      formData.description,
-      0,
-      200,
-      "Description"
-    );
-    if (descLengthError) errors.description = descLengthError;
-
-    // URL format validation
-    if (formData.docsUrl && !urlValidation?.isValid) {
-      const formatError = FormValidationUtils.validateUrlFormat(
-        formData.docsUrl
-      );
-      if (formatError) errors.docsUrl = formatError;
-    }
-
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
 
   const canCreateAssistant =
     userPlan === "pro" ||

@@ -1,5 +1,10 @@
 import { v } from "convex/values";
-import { mutation, query, internalMutation, internalQuery } from "./_generated/server";
+import {
+  mutation,
+  query,
+  internalMutation,
+  internalQuery,
+} from "./_generated/server";
 import { internal } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
 
@@ -131,10 +136,16 @@ export const markAsFailed = internalMutation({
 
       if (args.isRateLimit) {
         // For rate limits, use longer delays: 1min, 2min, 4min, 8min, 16min
-        backoffDelay = Math.min(60000 * Math.pow(2, newRetryCount - 1), 16 * 60000);
+        backoffDelay = Math.min(
+          60000 * Math.pow(2, newRetryCount - 1),
+          16 * 60000
+        );
       } else {
         // For other errors, use shorter delays: 30s, 1min, 2min
-        backoffDelay = Math.min(30000 * Math.pow(2, newRetryCount - 1), 2 * 60000);
+        backoffDelay = Math.min(
+          30000 * Math.pow(2, newRetryCount - 1),
+          2 * 60000
+        );
       }
 
       const nextAttemptAt = now + backoffDelay;
@@ -236,7 +247,7 @@ export const getQueuePosition = query({
 export const cleanupOldQueueItems = internalMutation({
   args: {},
   handler: async (ctx) => {
-    const oneHourAgo = Date.now() - (60 * 60 * 1000); // 1 hour ago
+    const oneHourAgo = Date.now() - 60 * 60 * 1000; // 1 hour ago
 
     // Find old completed/failed items
     const oldItems = await ctx.db
@@ -261,7 +272,6 @@ export const cleanupOldQueueItems = internalMutation({
   },
 });
 
-
 /**
  * Process queue - scheduled function to handle queued items
  */
@@ -280,7 +290,7 @@ export const processQueue = internalMutation({
 
       // Check for stuck processing items and reset them
       for (const item of processingItems) {
-        if (item.lastAttemptAt && (now - item.lastAttemptAt) > timeoutDuration) {
+        if (item.lastAttemptAt && now - item.lastAttemptAt > timeoutDuration) {
           await ctx.runMutation(internal.crawlQueue.markAsFailed, {
             queueId: item._id,
             errorMessage: "Processing timeout - item was stuck",
@@ -300,11 +310,13 @@ export const processQueue = internalMutation({
         return {
           action: "skipped",
           reason: "Another item is currently processing",
-          processingCount: activeProcessingItems.length
+          processingCount: activeProcessingItems.length,
         };
       }
 
-      const nextItem: any = await ctx.runQuery(internal.crawlQueue.getNextQueueItem);
+      const nextItem: any = await ctx.runQuery(
+        internal.crawlQueue.getNextQueueItem
+      );
 
       if (!nextItem) {
         return { action: "no_items", message: "No items to process" };
@@ -315,7 +327,7 @@ export const processQueue = internalMutation({
       if (!currentItem || currentItem.status !== "pending") {
         return {
           action: "item_changed",
-          message: "Item status changed since query"
+          message: "Item status changed since query",
         };
       }
 
@@ -334,7 +346,7 @@ export const processQueue = internalMutation({
         return {
           action: "failed",
           reason: "Assistant not found",
-          queueId: nextItem._id
+          queueId: nextItem._id,
         };
       }
 
@@ -347,28 +359,31 @@ export const processQueue = internalMutation({
         return {
           action: "failed",
           reason: "Assistant not in queued state",
-          assistantStatus: assistant.status
+          assistantStatus: assistant.status,
         };
       }
 
       // Schedule the actual crawling
-      await ctx.scheduler.runAfter(0, internal.assistantActions.processAssistantCrawl, {
-        assistantId: assistant._id,
-        queueId: nextItem._id,
-      });
+      await ctx.scheduler.runAfter(
+        0,
+        internal.assistantActions.processAssistantCrawl,
+        {
+          assistantId: assistant._id,
+          queueId: nextItem._id,
+        }
+      );
 
       return {
         action: "started",
         assistantId: assistant._id,
         queueId: nextItem._id,
-        assistantName: assistant.name
+        assistantName: assistant.name,
       };
-
     } catch (error) {
       console.error("Error in processQueue:", error);
       return {
         action: "error",
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       };
     }
   },

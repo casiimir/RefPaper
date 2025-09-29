@@ -57,7 +57,9 @@ import { SearchBar } from "@/components/dashboard/SearchBar";
 // Queue status component
 function QueueStatus({ assistantId }: { assistantId: Id<"assistants"> }) {
   const { t } = useTranslation();
-  const queuePosition = useQuery(api.crawlQueue.getQueuePosition, { assistantId });
+  const queuePosition = useQuery(api.crawlQueue.getQueuePosition, {
+    assistantId,
+  });
 
   if (!queuePosition) {
     return (
@@ -79,7 +81,9 @@ function QueueStatus({ assistantId }: { assistantId: Id<"assistants"> }) {
         {t("dashboard.queuePosition", { position: queuePosition.position })}
       </div>
       <div className="text-xs text-muted-foreground">
-        {t("dashboard.estimatedWait", { time: formatWaitTime(queuePosition.estimatedWaitTime) })}
+        {t("dashboard.estimatedWait", {
+          time: formatWaitTime(queuePosition.estimatedWaitTime),
+        })}
       </div>
     </div>
   );
@@ -93,7 +97,9 @@ export default function Dashboard() {
     null
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [assistantToCancel, setAssistantToCancel] = useState<Assistant | null>(null);
+  const [assistantToCancel, setAssistantToCancel] = useState<Assistant | null>(
+    null
+  );
   const [isCancelling, setIsCancelling] = useState(false);
 
   // Only fetch data when auth is loaded and user is signed in
@@ -463,7 +469,10 @@ export default function Dashboard() {
                           {t("dashboard.chat")}
                         </Button>
                       </Link>
-                    ) : (assistant.status === "creating" || assistant.status === "queued" || assistant.status === "crawling" || assistant.status === "processing") ? (
+                    ) : assistant.status === "creating" ||
+                      assistant.status === "queued" ||
+                      assistant.status === "crawling" ||
+                      assistant.status === "processing" ? (
                       <Button
                         variant="destructive"
                         size="sm"
@@ -472,7 +481,10 @@ export default function Dashboard() {
                         disabled={isCancelling}
                       >
                         <X className="w-3 h-3 mr-1" />
-                        {isCancelling && assistantToCancel?._id === assistant._id ? t("assistant.cancelling") : t("assistant.cancel")}
+                        {isCancelling &&
+                        assistantToCancel?._id === assistant._id
+                          ? t("assistant.cancelling")
+                          : t("assistant.cancel")}
                       </Button>
                     ) : (
                       <Button
@@ -488,7 +500,12 @@ export default function Dashboard() {
                     <Button
                       variant="outline"
                       size="sm"
-                      disabled={assistant.status === "creating" || assistant.status === "queued" || assistant.status === "crawling" || assistant.status === "processing"}
+                      disabled={
+                        assistant.status === "creating" ||
+                        assistant.status === "queued" ||
+                        assistant.status === "crawling" ||
+                        assistant.status === "processing"
+                      }
                       onClick={() => setSelectedAssistant(assistant)}
                     >
                       <Settings className="w-3 h-3" />
@@ -514,9 +531,11 @@ export default function Dashboard() {
         assistant={selectedAssistant}
       />
 
-
       {/* Cancel confirmation dialog */}
-      <AlertDialog open={!!assistantToCancel} onOpenChange={(open: boolean) => !open && setAssistantToCancel(null)}>
+      <AlertDialog
+        open={!!assistantToCancel}
+        onOpenChange={(open: boolean) => !open && setAssistantToCancel(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
@@ -524,7 +543,9 @@ export default function Dashboard() {
               {t("assistant.cancelTitle")}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t("assistant.cancelDescription", { name: assistantToCancel?.name || "" })}
+              {t("assistant.cancelDescription", {
+                name: assistantToCancel?.name || "",
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -540,7 +561,9 @@ export default function Dashboard() {
                 }
               }}
             >
-              {isCancelling ? t("assistant.cancelling") : t("assistant.confirmCancel")}
+              {isCancelling
+                ? t("assistant.cancelling")
+                : t("assistant.confirmCancel")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

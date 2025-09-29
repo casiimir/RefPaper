@@ -16,10 +16,7 @@ export interface FormValidationHook {
 /**
  * Custom hook for form validation with URL domain checking
  */
-export function useFormValidation({
-  validateOnChange = true,
-  debounceMs = 300,
-}: UseFormValidationProps = {}): FormValidationHook {
+export function useFormValidation({}: UseFormValidationProps = {}): FormValidationHook {
   const [urlValidation, setUrlValidation] = useState<ValidationResult | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -37,7 +34,7 @@ export function useFormValidation({
       const result = await validateDomain(url);
       setUrlValidation(result);
       return result;
-    } catch (error) {
+    } catch {
       const errorResult: ValidationResult = {
         isValid: false,
         error: "Validation failed. Please check the URL format.",
@@ -49,23 +46,7 @@ export function useFormValidation({
     }
   }, []);
 
-  const debouncedValidateUrl = useCallback((url: string) => {
-    if (debounceTimeout) {
-      clearTimeout(debounceTimeout);
-    }
 
-    const timeout = setTimeout(() => {
-      validateUrl(url);
-    }, debounceMs);
-
-    setDebounceTimeout(timeout);
-  }, [validateUrl, debounceMs, debounceTimeout]);
-
-  const handleUrlChange = useCallback((url: string) => {
-    if (validateOnChange) {
-      debouncedValidateUrl(url);
-    }
-  }, [validateOnChange, debouncedValidateUrl]);
 
   const clearValidation = useCallback(() => {
     setUrlValidation(null);

@@ -23,7 +23,7 @@ export function AssistantIcon({
     const parsedUrl = new URL(docsUrl);
     domain = parsedUrl.hostname;
     faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-  } catch (error) {
+  } catch {
     return <FileText className={cn("text-muted-foreground", className)} />;
   }
 
