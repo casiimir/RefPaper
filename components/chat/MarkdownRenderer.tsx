@@ -159,7 +159,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
           return (
             <h2
               key={key}
-              className="text-2xl font-bold mt-10 mb-5 text-foreground/95 tracking-tight border-b border-border/30 pb-3"
+              className="text-2xl font-bold mt-3 mb-5 text-foreground/95 tracking-tight border-b border-border/30 pb-3"
               role="heading"
               aria-level={2}
               tabIndex={0}
@@ -191,9 +191,7 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
           return (
             <div key={key} className="flex items-start gap-3 mb-3">
               <div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-3 flex-shrink-0"></div>
-              <p className={`${textStyles} flex-1`}>
-                {content}
-              </p>
+              <p className={`${textStyles} flex-1`}>{content}</p>
             </div>
           );
         }
@@ -225,7 +223,10 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
         if (part.startsWith("**") && part.endsWith("**")) {
           const boldText = part.slice(2, -2);
           return (
-            <strong key={index} className="font-bold text-foreground/95 tracking-tight">
+            <strong
+              key={index}
+              className="font-bold text-foreground/95 tracking-tight"
+            >
               {boldText}
             </strong>
           );

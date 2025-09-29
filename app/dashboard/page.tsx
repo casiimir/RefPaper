@@ -51,7 +51,6 @@ import {
 } from "@/lib/status-utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AssistantIcon } from "@/components/ui/assistant-icon";
-import { DebugDialog } from "@/components/dev/debug-dialog";
 import { getAssistantTheme } from "@/lib/assistant-colors";
 import { SearchBar } from "@/components/dashboard/SearchBar";
 
@@ -515,8 +514,6 @@ export default function Dashboard() {
         assistant={selectedAssistant}
       />
 
-      {/* Debug Dialog - Only in development TODO: remove in prod */}
-      <DebugDialog />
 
       {/* Cancel confirmation dialog */}
       <AlertDialog open={!!assistantToCancel} onOpenChange={(open: boolean) => !open && setAssistantToCancel(null)}>

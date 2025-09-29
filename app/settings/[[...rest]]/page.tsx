@@ -162,7 +162,7 @@ export default function SettingsPage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-2xl font-bold">
-                      {questionsThisMonth || 0}
+                      {isPro ? "∞" : questionsThisMonth || 0}
                     </span>
                     <span className="text-sm text-muted-foreground">
                       {isPro
