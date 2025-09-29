@@ -275,8 +275,7 @@
     "about": "Chi siamo",
     "privacy": "Privacy",
     "terms": "Termini",
-    "copyright": "© 2025 RefPaper.",
-    "builtWith": "Realizzato con Next.js, Convex e Clerk"
+    "copyright": "© 2025 RefPaper."
   },
   "ui": {
     "toggleTheme": "Toggle theme",

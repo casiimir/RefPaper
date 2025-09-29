@@ -325,8 +325,7 @@
     "about": "About",
     "privacy": "Privacy",
     "terms": "Terms",
-    "copyright": "© 2025 RefPaper.",
-    "builtWith": "Built with Next.js, Convex, and Clerk"
+    "copyright": "© 2025 RefPaper."
   },
   "ui": {
     "toggleTheme": "Toggle theme",
