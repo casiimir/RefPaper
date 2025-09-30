@@ -64,8 +64,9 @@ export const sendWelcomeEmail = internalAction({
 
               <div style="text-align: center; margin: 32px 0;">
                 <a href="${
-                  process.env.NEXT_PUBLIC_APP_URL || "https://refpaper.xyz"
-                }/assistants/new"
+                  process.env.NEXT_PUBLIC_APP_URL ||
+                  "https://ref-paper.vercel.app"
+                }"
                    style="background: oklch(0.145 0 0); color: white; padding: 16px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
                   Create Your First Assistant →
                 </a>
@@ -78,8 +79,9 @@ export const sendWelcomeEmail = internalAction({
               <p style="margin: 8px 0;"><strong>The Refpaper Team</strong></p>
               <p style="margin: 16px 0 8px 0;">
                 <a href="${
-                  process.env.NEXT_PUBLIC_APP_URL || "https://refpaper.xyz"
-                }" style="color: #667eea; text-decoration: none;">refpaper.xyz</a>
+                  process.env.NEXT_PUBLIC_APP_URL ||
+                  "https://ref-paper.vercel.app"
+                }" style="color: #667eea; text-decoration: none;">RefPaper</a>
               </p>
             </div>
           </body>

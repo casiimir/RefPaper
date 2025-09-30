@@ -21,8 +21,8 @@ export function useWelcomeEmail() {
       const timeDiffMinutes =
         (now.getTime() - userCreatedAt.getTime()) / (1000 * 60);
 
-      // If user was created within the last 5 minutes, consider it a new signup
-      if (timeDiffMinutes <= 5) {
+      // If user was created within the last 30 seconds, consider it a new signup
+      if (timeDiffMinutes <= 0.5) {
         triggerWelcomeEmail()
           .then((result) => {
             console.log("Welcome email triggered successfully:", result);
