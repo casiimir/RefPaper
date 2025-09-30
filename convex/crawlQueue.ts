@@ -85,6 +85,13 @@ export const markAsProcessing = internalMutation({
   handler: async (ctx, args) => {
     const now = Date.now();
 
+    // Check if queue item still exists before updating
+    const queueItem = await ctx.db.get(args.queueId);
+    if (!queueItem) {
+      console.warn(`Queue item ${args.queueId} not found, skipping markAsProcessing`);
+      return;
+    }
+
     await ctx.db.patch(args.queueId, {
       status: "processing",
       lastAttemptAt: now,
@@ -102,6 +109,13 @@ export const markAsCompleted = internalMutation({
   },
   handler: async (ctx, args) => {
     const now = Date.now();
+
+    // Check if queue item still exists before updating
+    const queueItem = await ctx.db.get(args.queueId);
+    if (!queueItem) {
+      console.warn(`Queue item ${args.queueId} not found, skipping markAsCompleted`);
+      return;
+    }
 
     await ctx.db.patch(args.queueId, {
       status: "completed",
@@ -124,7 +138,8 @@ export const markAsFailed = internalMutation({
     const queueItem = await ctx.db.get(args.queueId);
 
     if (!queueItem) {
-      throw new Error("Queue item not found");
+      console.warn(`Queue item ${args.queueId} not found, skipping markAsFailed`);
+      return;
     }
 
     const newRetryCount = queueItem.retryCount + 1;
