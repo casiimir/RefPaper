@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./TypingIndicator";
 import { ChatRobot } from "./ChatRobot";
-import { Send, Loader2, User } from "lucide-react";
+import { Send, Loader2, User, X } from "lucide-react";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { Assistant } from "@/types/assistant";
 import { useTranslation } from "@/components/providers/TranslationProvider";
@@ -30,6 +30,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
     limit: number;
   } | null>(null);
   const [pendingMessage, setPendingMessage] = useState<string | null>(null);
+  const [showInfoAlert, setShowInfoAlert] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const messages = useQuery(api.messages.getMessages, {
@@ -156,6 +157,34 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
         </Button>
       </div>
 
+      {showInfoAlert && (
+        <div className="mx-4 mt-4">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4 relative shadow-sm">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute top-2 right-2 h-6 w-6 p-0 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-full transition-colors"
+              onClick={() => setShowInfoAlert(false)}
+            >
+              <X className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+            </Button>
+            <div className="flex items-start gap-3 pr-8">
+              <div className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mt-0.5">
+                <div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full"></div>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1">
+                  {t("chat.freshConversationInfo")}
+                </p>
+                <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+                  {t("chat.freshConversationDescription")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
         {messages.length === 0 ? (
@@ -169,6 +198,7 @@ export function ChatInterface({ assistant }: ChatInterfaceProps) {
                   hostname: new URL(assistant.docsUrl).hostname,
                 })}
               </p>
+
               <div className="text-sm text-muted-foreground space-y-1">
                 <p>{t("chat.tryAsking")}</p>
                 <ul className="list-disc list-inside space-y-1 text-left">

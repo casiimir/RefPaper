@@ -210,6 +210,8 @@
     "clearSearch": "Clear",
     "noAssistantsFound": "No assistants match your search",
     "startConversation": "Start a conversation",
+    "freshConversationInfo": "🎯 I don't save previous questions",
+    "freshConversationDescription": "Each question is completely independent to ensure accurate answers directly from your documentation without any interference from past conversations.",
     "askAnything": "Ask me anything about the documentation from {hostname}",
     "tryAsking": "Try asking:",
     "howToGetStarted": "How do I get started?",
@@ -236,6 +238,9 @@
     "deleteItem2": "• All chat messages and conversation history",
     "deleteItem3": "• All processed documents and embeddings",
     "assistantName": "Assistant: \"{name}\"",
+    "cancel": "Cancel",
+    "cancelling": "Cancelling",
+    "confirmCancel": "Confirm Cancel",
     "form": {
       "name": "Name",
       "docsUrl": "Docs URL",

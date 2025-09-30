@@ -167,6 +167,8 @@
     "clearSearch": "Cancella",
     "noAssistantsFound": "Nessun assistente corrisponde alla ricerca",
     "startConversation": "Inizia una conversazione",
+    "freshConversationInfo": "🎯 Non salvo le domande precedenti",
+    "freshConversationDescription": "Ogni domanda è completamente indipendente per garantire risposte accurate direttamente dalla tua documentazione senza interferenze dalle conversazioni passate.",
     "askAnything": "Chiedimi qualsiasi cosa sulla documentazione di {hostname}",
     "tryAsking": "Prova a chiedere:",
     "howToGetStarted": "Come posso iniziare?",
@@ -193,6 +195,9 @@
     "deleteItem2": "• Tutti i messaggi chat e la cronologia delle conversazioni",
     "deleteItem3": "• Tutti i documenti elaborati e gli embeddings",
     "assistantName": "Assistente: \"{name}\"",
+    "cancel": "Annulla",
+    "cancelling": "Annullamento",
+    "confirmCancel": "Conferma Annullamento",
     "form": {
       "name": "Nome",
       "docsUrl": "URL Documentazione",

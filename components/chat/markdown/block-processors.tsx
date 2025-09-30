@@ -6,7 +6,7 @@ interface BlockProcessorProps {
   key: string;
   line: string;
   isDark: boolean;
-  syntaxTheme: any;
+  syntaxTheme: object;
   processInline: (text: string) => React.ReactNode[];
 }
 
@@ -21,7 +21,7 @@ export const createHeaderProcessor = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
     6: "text-sm font-semibold mt-2 mb-2 text-foreground/85 tracking-tight",
   };
 
-  return ({ key, line, processInline }: BlockProcessorProps) => {
+  const HeaderProcessor: React.FC<BlockProcessorProps> = ({ key, line, processInline }) => {
     const pattern =
       MARKDOWN_PATTERNS[`heading${level}` as keyof typeof MARKDOWN_PATTERNS];
     const match = line.match(pattern as RegExp);
@@ -36,6 +36,9 @@ export const createHeaderProcessor = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
       </HeaderTag>
     );
   };
+
+  HeaderProcessor.displayName = `HeaderProcessor${level}`;
+  return HeaderProcessor;
 };
 
 // Code block processor
@@ -43,7 +46,7 @@ export const processCodeBlock = (
   key: string,
   codeBlockContent: string[],
   codeBlockLanguage: string,
-  syntaxTheme: any
+  syntaxTheme: object
 ) => (
   <div key={key} className="my-3">
     <SyntaxHighlighter
