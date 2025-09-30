@@ -119,22 +119,22 @@ export const MarkdownRenderer = memo(function MarkdownRenderer({
       }
 
       // Process headers (H6 to H1 to avoid conflicts)
-      let element = headerProcessors.h6({ key, line, isDark, syntaxTheme, processInline });
+      let element = headerProcessors.h6({ key, line, isDark, syntaxTheme, processInline }) as React.ReactElement | null;
       if (element) { elements.push(element); return; }
 
-      element = headerProcessors.h5({ key, line, isDark, syntaxTheme, processInline });
+      element = headerProcessors.h5({ key, line, isDark, syntaxTheme, processInline }) as React.ReactElement | null;
       if (element) { elements.push(element); return; }
 
-      element = headerProcessors.h4({ key, line, isDark, syntaxTheme, processInline });
+      element = headerProcessors.h4({ key, line, isDark, syntaxTheme, processInline }) as React.ReactElement | null;
       if (element) { elements.push(element); return; }
 
-      element = headerProcessors.h3({ key, line, isDark, syntaxTheme, processInline });
+      element = headerProcessors.h3({ key, line, isDark, syntaxTheme, processInline }) as React.ReactElement | null;
       if (element) { elements.push(element); return; }
 
-      element = headerProcessors.h2({ key, line, isDark, syntaxTheme, processInline });
+      element = headerProcessors.h2({ key, line, isDark, syntaxTheme, processInline }) as React.ReactElement | null;
       if (element) { elements.push(element); return; }
 
-      element = headerProcessors.h1({ key, line, isDark, syntaxTheme, processInline });
+      element = headerProcessors.h1({ key, line, isDark, syntaxTheme, processInline }) as React.ReactElement | null;
       if (element) { elements.push(element); return; }
 
       // Horizontal rules

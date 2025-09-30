@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { MARKDOWN_PATTERNS, getNestingLevel } from "./patterns";
 
@@ -6,7 +6,7 @@ interface BlockProcessorProps {
   key: string;
   line: string;
   isDark: boolean;
-  syntaxTheme: object;
+  syntaxTheme: { [key: string]: React.CSSProperties };
   processInline: (text: string) => React.ReactNode[];
 }
 
@@ -21,7 +21,11 @@ export const createHeaderProcessor = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
     6: "text-sm font-semibold mt-2 mb-2 text-foreground/85 tracking-tight",
   };
 
-  const HeaderProcessor: React.FC<BlockProcessorProps> = ({ key, line, processInline }) => {
+  const HeaderProcessor: React.FC<BlockProcessorProps> = ({
+    key,
+    line,
+    processInline,
+  }) => {
     const pattern =
       MARKDOWN_PATTERNS[`heading${level}` as keyof typeof MARKDOWN_PATTERNS];
     const match = line.match(pattern as RegExp);
@@ -46,7 +50,9 @@ export const processCodeBlock = (
   key: string,
   codeBlockContent: string[],
   codeBlockLanguage: string,
-  syntaxTheme: object
+  syntaxTheme: {
+    [key: string]: CSSProperties;
+  }
 ) => (
   <div key={key} className="my-3">
     <SyntaxHighlighter
