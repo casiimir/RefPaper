@@ -23,7 +23,7 @@ export function classifyError(errorMessage: string): ErrorType {
 }
 
 /**
- * Gets detailed error information for a specific error type
+ * Gets styling details for a specific error type
  */
 export function getErrorDetails(errorType: ErrorType): ErrorDetails {
   return ERROR_CONFIGS[errorType] || ERROR_CONFIGS[ERROR_TYPES.GENERIC];
@@ -54,20 +54,11 @@ export function isErrorType(errorMessage: string, errorType: ErrorType): boolean
   return classifyError(errorMessage) === errorType;
 }
 
-/**
- * Gets user-friendly error message from raw error
- */
-export function formatErrorMessage(errorMessage: string): string {
-  const { details } = processError(errorMessage);
-  return details.description;
-}
-
 const errorClassifier = {
   classifyError,
   getErrorDetails,
   processError,
   isErrorType,
-  formatErrorMessage
 };
 
 export default errorClassifier;

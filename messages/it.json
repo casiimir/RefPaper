@@ -250,6 +250,11 @@
     "invalidUrl": "Inserisci un URL valido",
     "networkError": "Connessione fallita. Controlla la tua connessione internet e riprova.",
     "crawlTimeout": "Il crawling della documentazione ha richiesto troppo tempo. Il sito potrebbe essere lento o avere troppe pagine. Prova con un URL più specifico come /docs/getting-started invece di /docs.",
+    "documentationTooLarge": "Questa pagina di documentazione è troppo estesa da elaborare. La struttura della pagina contiene troppo contenuto. Ti preghiamo di provare ad utilizzare sottopagine più specifiche come /getting-started, /api/reference, o /tutorials invece della radice principale della documentazione.",
+    "documentationTooLargeTitle": "Documentazione troppo estesa",
+    "documentationTooLargeSuggestion1": "Prova sottopagine più specifiche come /getting-started",
+    "documentationTooLargeSuggestion2": "Usa sezioni di documentazione API come /api/reference",
+    "documentationTooLargeSuggestion3": "Concentrati su guide individuali come /tutorials invece della radice principale",
     "serverError": "Errore del server. Riprova tra qualche istante.",
     "systemError": "Stiamo riscontrando un problema temporaneo con i nostri servizi. Riprova più tardi o contatta il supporto se il problema persiste.",
     "unknownError": "Si è verificato un errore imprevisto. Riprova o contatta il supporto se il problema persiste.",
@@ -372,5 +377,8 @@
       "subtitle": "Unisciti a migliaia di team che già usano RefPaper per scalare la loro conoscenza e ridurre il carico di supporto.",
       "button": "Inizia Gratis"
     }
+  },
+  "ui": {
+    "suggestions": "Suggerimenti:"
   }
 }

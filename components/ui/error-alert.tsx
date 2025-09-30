@@ -23,7 +23,31 @@ export function ErrorAlert({
     return null;
   }
 
-  const { details } = processError(errorMessage);
+  const { type, details } = processError(errorMessage);
+
+  // Get i18n keys for the error type
+  const getErrorI18nKeys = (errorType: string) => {
+    switch (errorType) {
+      case 'documentation_too_large':
+        return {
+          title: 'errors.documentationTooLargeTitle',
+          description: 'errors.documentationTooLarge',
+          suggestions: [
+            'errors.documentationTooLargeSuggestion1',
+            'errors.documentationTooLargeSuggestion2',
+            'errors.documentationTooLargeSuggestion3'
+          ]
+        };
+      default:
+        return {
+          title: 'errors.unknownError',
+          description: 'errors.unknownError',
+          suggestions: []
+        };
+    }
+  };
+
+  const i18nKeys = getErrorI18nKeys(type);
 
   const getIcon = () => {
     switch (details.icon) {
@@ -61,35 +85,38 @@ export function ErrorAlert({
       <AlertDescription>
         <div className="space-y-2">
           <div className="font-medium">
-            📚 {details.title}
+            📚 {t(i18nKeys.title)}
           </div>
           <div className="text-sm">
-            {details.description}
+            {t(i18nKeys.description)}
           </div>
 
-          {showSuggestions && details.suggestions && details.suggestions.length > 0 && (
+          {showSuggestions && i18nKeys.suggestions.length > 0 && (
             <div className="text-xs space-y-1 mt-3">
               <div className="font-medium">{t("ui.suggestions")}</div>
               <ul className="ml-4 space-y-1">
-                {details.suggestions.map((suggestion, index) => (
-                  <li key={index}>
-                    • {suggestion.includes('/') ? (
-                      <>
-                        {suggestion.split('/').map((part, i, arr) => (
-                          <span key={i}>
-                            {i > 0 && i < arr.length - 1 && part.trim() && (
-                              <code>/{part.trim()}</code>
-                            )}
-                            {i === 0 && part.trim()}
-                            {i === arr.length - 1 && part.trim() && !part.includes('code>') && part}
-                          </span>
-                        ))}
-                      </>
-                    ) : (
-                      suggestion
-                    )}
-                  </li>
-                ))}
+                {i18nKeys.suggestions.map((suggestionKey, index) => {
+                  const suggestion = t(suggestionKey);
+                  return (
+                    <li key={index}>
+                      • {suggestion.includes('/') ? (
+                        <>
+                          {suggestion.split('/').map((part, i, arr) => (
+                            <span key={i}>
+                              {i > 0 && i < arr.length - 1 && part.trim() && (
+                                <code>/{part.trim()}</code>
+                              )}
+                              {i === 0 && part.trim()}
+                              {i === arr.length - 1 && part.trim() && !part.includes('code>') && part}
+                            </span>
+                          ))}
+                        </>
+                      ) : (
+                        suggestion
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

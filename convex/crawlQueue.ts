@@ -6,7 +6,7 @@ import {
   internalQuery,
 } from "./_generated/server";
 import { internal } from "./_generated/api";
-import { Id } from "./_generated/dataModel";
+import { isPermanentError, isRateLimitError } from "../lib/errors";
 
 // Queue management functions
 
@@ -88,7 +88,9 @@ export const markAsProcessing = internalMutation({
     // Check if queue item still exists before updating
     const queueItem = await ctx.db.get(args.queueId);
     if (!queueItem) {
-      console.warn(`Queue item ${args.queueId} not found, skipping markAsProcessing`);
+      console.warn(
+        `Queue item ${args.queueId} not found, skipping markAsProcessing`
+      );
       return;
     }
 
@@ -113,7 +115,9 @@ export const markAsCompleted = internalMutation({
     // Check if queue item still exists before updating
     const queueItem = await ctx.db.get(args.queueId);
     if (!queueItem) {
-      console.warn(`Queue item ${args.queueId} not found, skipping markAsCompleted`);
+      console.warn(
+        `Queue item ${args.queueId} not found, skipping markAsCompleted`
+      );
       return;
     }
 
@@ -138,18 +142,35 @@ export const markAsFailed = internalMutation({
     const queueItem = await ctx.db.get(args.queueId);
 
     if (!queueItem) {
-      console.warn(`Queue item ${args.queueId} not found, skipping markAsFailed`);
+      console.warn(
+        `Queue item ${args.queueId} not found, skipping markAsFailed`
+      );
+      return;
+    }
+
+    // Check if the error is permanent (should not be retried)
+    const errorIsPermanent = isPermanentError(args.errorMessage);
+    const errorIsRateLimit =
+      args.isRateLimit || isRateLimitError(args.errorMessage);
+
+    if (errorIsPermanent) {
+      await ctx.db.patch(args.queueId, {
+        status: "failed",
+        retryCount: queueItem.retryCount + 1,
+        errorMessage: args.errorMessage,
+        updatedAt: now,
+      });
       return;
     }
 
     const newRetryCount = queueItem.retryCount + 1;
-    const maxRetries = args.isRateLimit ? 5 : 3; // More retries for rate limits
+    const maxRetries = errorIsRateLimit ? 5 : 3; // More retries for rate limits
 
     if (newRetryCount <= maxRetries) {
       // Calculate next attempt time with exponential backoff
       let backoffDelay: number;
 
-      if (args.isRateLimit) {
+      if (errorIsRateLimit) {
         // For rate limits, use longer delays: 1min, 2min, 4min, 8min, 16min
         backoffDelay = Math.min(
           60000 * Math.pow(2, newRetryCount - 1),

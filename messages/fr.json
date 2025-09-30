@@ -290,7 +290,12 @@
     "fieldRequired": "{fieldName} est requis",
     "invalidUrl": "Veuillez saisir une URL valide",
     "networkError": "Échec de connexion. Vérifiez votre connexion internet et réessayez.",
-    "crawlTimeout": "L’exploration de la documentation a pris trop de temps. Le site peut être lent ou avoir trop de pages. Essayez une URL plus spécifique comme /docs/getting-started au lieu de /docs.",
+    "crawlTimeout": "L'exploration de la documentation a pris trop de temps. Le site peut être lent ou avoir trop de pages. Essayez une URL plus spécifique comme /docs/getting-started au lieu de /docs.",
+    "documentationTooLarge": "Cette page de documentation est trop volumineuse à traiter. La structure de la page contient trop de contenu. Veuillez essayer d'utiliser des sous-pages plus spécifiques comme /getting-started, /api/reference, ou /tutorials au lieu de la racine principale de la documentation.",
+    "documentationTooLargeTitle": "Documentation trop volumineuse",
+    "documentationTooLargeSuggestion1": "Essayez des sous-pages plus spécifiques comme /getting-started",
+    "documentationTooLargeSuggestion2": "Utilisez des sections de documentation API comme /api/reference",
+    "documentationTooLargeSuggestion3": "Concentrez-vous sur des guides individuels comme /tutorials au lieu de la racine principale",
     "serverError": "Erreur serveur. Veuillez réessayer dans quelques instants.",
     "systemError": "Nous rencontrons un problème temporaire avec nos services. Veuillez réessayer plus tard ou contacter le support si le problème persiste.",
     "unknownError": "Une erreur inattendue est survenue. Veuillez réessayer ou contacter le support si le problème persiste.",
@@ -369,5 +374,8 @@
         "answer": "Oui ! Contactez-nous pour des solutions sur mesure avec support dédié, intégrations personnalisées et tarifs adaptés."
       }
     }
+  },
+  "ui": {
+    "suggestions": "Suggestions :"
   }
 }

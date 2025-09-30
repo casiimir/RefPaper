@@ -10,6 +10,7 @@ import {
 } from "../lib/pinecone";
 import { Document, AssistantCreationResult } from "@/types/document";
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { isRateLimitError } from "../lib/errors";
 
 export const processAssistantCreation = internalAction({
   args: {
@@ -219,12 +220,8 @@ export const processAssistantCrawl = internalAction({
       const errorMessage =
         error instanceof Error ? error.message : String(error);
 
-      // Check if it's a rate limit error
-      const isRateLimit =
-        errorMessage.includes("Rate limit exceeded") ||
-        errorMessage.includes("429") ||
-        errorMessage.includes("rate limit") ||
-        errorMessage.includes("too many requests");
+      // Check if it's a rate limit error using the centralized function
+      const isRateLimit = isRateLimitError(errorMessage);
 
       // Mark queue item as failed with retry logic
       await ctx.runMutation(internal.crawlQueue.markAsFailed, {

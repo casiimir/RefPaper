@@ -291,6 +291,11 @@
     "invalidUrl": "Please enter a valid URL",
     "networkError": "Connection failed. Please check your internet connection and try again.",
     "crawlTimeout": "Documentation crawling took too long. The website might be slow or have too many pages. Try using a more specific URL like /docs/getting-started instead of /docs.",
+    "documentationTooLarge": "This documentation page is too extensive to process. The page structure contains too much content. Please try using more specific subpages like /getting-started, /api/reference, or /tutorials instead of the main documentation root.",
+    "documentationTooLargeTitle": "Documentation too extensive",
+    "documentationTooLargeSuggestion1": "Try more specific subpages like /getting-started",
+    "documentationTooLargeSuggestion2": "Use API documentation sections like /api/reference",
+    "documentationTooLargeSuggestion3": "Focus on individual guides like /tutorials instead of the main documentation root",
     "serverError": "Server error occurred. Please try again in a few moments.",
     "systemError": "We're experiencing a temporary issue with our services. Please try again later or contact support if the problem persists.",
     "unknownError": "An unexpected error occurred. Please try again or contact support if the problem persists.",
@@ -369,5 +374,8 @@
         "answer": "Yes! Contact us for custom enterprise solutions with dedicated support, custom integrations, and volume pricing."
       }
     }
+  },
+  "ui": {
+    "suggestions": "Suggestions:"
   }
 }

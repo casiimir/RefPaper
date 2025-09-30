@@ -292,6 +292,11 @@
     "invalidUrl": "Por favor ingresa una URL válida",
     "networkError": "Conexión fallida. Verifica tu conexión a internet e intenta de nuevo.",
     "crawlTimeout": "El rastreo de la documentación tomó demasiado tiempo. El sitio podría ser lento o tener demasiadas páginas. Prueba con una URL más específica como /docs/getting-started en lugar de /docs.",
+    "documentationTooLarge": "Esta página de documentación es demasiado extensa para procesar. La estructura de la página contiene demasiado contenido. Por favor, intenta usar subpáginas más específicas como /getting-started, /api/reference, o /tutorials en lugar de la raíz principal de la documentación.",
+    "documentationTooLargeTitle": "Documentación demasiado extensa",
+    "documentationTooLargeSuggestion1": "Prueba subpáginas más específicas como /getting-started",
+    "documentationTooLargeSuggestion2": "Usa secciones de documentación API como /api/reference",
+    "documentationTooLargeSuggestion3": "Enfócate en guías individuales como /tutorials en lugar de la raíz principal",
     "serverError": "Ocurrió un error en el servidor. Por favor intenta nuevamente en unos momentos.",
     "systemError": "Estamos experimentando un problema temporal con nuestros servicios. Intenta nuevamente más tarde o contacta al soporte si el problema persiste.",
     "unknownError": "Ocurrió un error inesperado. Intenta nuevamente o contacta al soporte si el problema persiste.",
@@ -370,5 +375,8 @@
         "answer": "¡Sí! Contáctanos para soluciones empresariales personalizadas con soporte dedicado, integraciones personalizadas y precios por volumen."
       }
     }
+  },
+  "ui": {
+    "suggestions": "Sugerencias:"
   }
 }

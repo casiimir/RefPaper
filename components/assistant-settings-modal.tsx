@@ -147,23 +147,8 @@ export function AssistantSettingsModal({
       >
         <div className="space-y-4">
           {/* Show error status if assistant failed */}
-          {assistant?.status === "error" && (
-            <Alert variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="space-y-2">
-                  <div className="font-medium">{t("assistant.creationError")}</div>
-                  {assistant.errorMessage && (
-                    <div className="text-sm">
-                      <strong>{t("assistant.errorDetails")}:</strong> {assistant.errorMessage}
-                    </div>
-                  )}
-                  <div className="text-sm text-muted-foreground">
-                    {t("assistant.errorSuggestion")}
-                  </div>
-                </div>
-              </AlertDescription>
-            </Alert>
+          {assistant?.status === "error" && assistant.errorMessage && (
+            <ErrorAlert errorMessage={assistant.errorMessage} showSuggestions={true} />
           )}
 
           <form id="settings-form" onSubmit={handleSave} className="space-y-4">
