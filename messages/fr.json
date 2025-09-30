@@ -1,0 +1,373 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "create": "Créer",
+    "confirm": "Confirmer",
+    "tryAgain": "Réessayer",
+    "upgrade": "Mettre à niveau",
+    "actionCannotBeUndone": "Cette action est irréversible."
+  },
+  "cookies": {
+    "description": "Nous utilisons des cookies pour améliorer votre expérience de navigation et analyser notre trafic. En cliquant sur 'Accepter', vous consentez à notre utilisation des cookies.",
+    "privacyPolicy": "Politique de confidentialité",
+    "accept": "Tout accepter",
+    "reject": "Tout refuser"
+  },
+  "app": {
+    "name": "REFpaper"
+  },
+  "homepage": {
+    "hero": {
+      "badge": "Assistant de documentation alimenté par l'IA",
+      "title": "Transformez la documentation en",
+      "titleHighlight": "Assistants IA intelligents",
+      "subtitle": "Convertissez n’importe quelle documentation en un assistant conversationnel IA en quelques secondes. Réduisez la charge du support, améliorez l’expérience utilisateur et développez les connaissances sans effort.",
+      "ctaPrimary": "Commencez gratuitement aujourd’hui",
+      "ctaSecondary": "Voir la démo",
+      "trustedBy": "De confiance pour les équipes de"
+    },
+    "features": {
+      "title": "Pourquoi choisir REFpaper ?",
+      "subtitle": "Tout ce dont vous avez besoin pour transformer votre flux de documentation",
+      "instant": {
+        "title": "Configuration en 30 secondes",
+        "description": "Collez simplement l’URL de votre documentation. Notre IA explore, traite et crée instantanément votre assistant."
+      },
+      "intelligent": {
+        "title": "IA contextuelle",
+        "description": "Des modèles linguistiques avancés comprennent profondément vos documents, fournissant des réponses précises et contextuelles."
+      },
+      "multilingual": {
+        "title": "Support multilingue",
+        "description": "Quelle que soit la langue de la documentation, les réponses seront toujours dans la vôtre."
+      },
+      "crawling": {
+        "title": "Exploration web intelligente",
+        "description": "Découvre et traite automatiquement toute la structure de votre documentation à partir d’une seule URL."
+      },
+      "unlimited": {
+        "title": "Conversations illimitées",
+        "description": "Les utilisateurs Pro bénéficient de questions et conversations illimitées sans restrictions mensuelles."
+      },
+      "realtime": {
+        "title": "Assistance en temps réel",
+        "description": "Des réponses instantanées grâce à une IA avancée qui comprend le contexte de votre documentation."
+      }
+    },
+    "cta": {
+      "title": "Prêt à transformer votre documentation ?",
+      "subtitle": "Rejoignez des milliers d’équipes qui utilisent déjà REFpaper pour développer leurs connaissances et réduire la charge du support.",
+      "button": "Commencer gratuitement"
+    }
+  },
+  "features": {
+    "title": "Fonctionnalités puissantes",
+    "hero": {
+      "title": "Débloquez tout le potentiel",
+      "titleHighlight": "de votre documentation",
+      "subtitle": "Découvrez comment les fonctionnalités avancées de REFpaper peuvent révolutionner la façon dont votre équipe travaille avec la documentation et le partage de connaissances."
+    },
+    "sections": {
+      "core": {
+        "title": "Fonctionnalités de base",
+        "subtitle": "Outils essentiels qui rendent REFpaper puissant"
+      },
+      "advanced": {
+        "title": "Capacités avancées",
+        "subtitle": "Fonctionnalités professionnelles pour les équipes exigeantes"
+      },
+      "integration": {
+        "title": "Intégration et flux de travail",
+        "subtitle": "S’intègre parfaitement à votre flux de travail existant"
+      }
+    },
+    "core": {
+      "aiPowered": {
+        "title": "Documentation alimentée par l’IA",
+        "description": "Transformez n’importe quelle documentation en un assistant intelligent qui comprend le contexte, fournit des réponses précises et apprend de la structure de votre contenu."
+      },
+      "instantSetup": {
+        "title": "Configuration en 30 secondes",
+        "description": "Collez simplement l’URL de votre documentation. Notre IA explore, traite et crée instantanément votre assistant sans configuration complexe."
+      },
+      "smartCrawling": {
+        "title": "Exploration web intelligente",
+        "description": "Découvre et traite automatiquement toute votre structure documentaire, en suivant les liens et en comprenant les hiérarchies du site."
+      },
+      "multilingual": {
+        "title": "Support multilingue",
+        "description": "Assistez les utilisateurs dans leur langue préférée grâce à des capacités de traduction intégrées et une compréhension interlinguistique."
+      }
+    },
+    "advanced": {
+      "contextAware": {
+        "title": "Réponses contextuelles",
+        "description": "Des modèles linguistiques avancés comprennent les relations entre différentes parties de votre documentation pour fournir des réponses plus précises."
+      },
+      "unlimitedConversations": {
+        "title": "Conversations illimitées",
+        "description": "Les utilisateurs Pro bénéficient de questions et conversations illimitées sans restrictions ou limites d’utilisation mensuelles."
+      },
+      "realtime": {
+        "title": "Traitement en temps réel",
+        "description": "Réponses instantanées grâce à un traitement IA optimisé et une mise en cache intelligente pour des performances ultra-rapides."
+      },
+      "customization": {
+        "title": "Assistants personnalisés",
+        "description": "Créez plusieurs assistants spécialisés pour différents ensembles de documentation, chacun adapté à des domaines ou publics spécifiques."
+      }
+    },
+    "integration": {
+      "embeddings": {
+        "title": "Incrustations avancées",
+        "description": "Des représentations textuelles de pointe garantissent une compréhension sémantique et une récupération précise des informations pertinentes."
+      },
+      "smartParsing": {
+        "title": "Analyse intelligente des documents",
+        "description": "Extrait et structure intelligemment le contenu de tout format de documentation, en comprenant le contexte et les relations."
+      },
+      "performance": {
+        "title": "Recherche ultra-rapide",
+        "description": "La technologie de recherche vectorielle avancée fournit en quelques secondes des réponses instantanées et pertinentes à partir de votre documentation."
+      },
+      "reliability": {
+        "title": "Disponibilité de 99,9 %",
+        "description": "Une infrastructure fiable garantit que vos assistants IA sont toujours disponibles quand votre équipe en a besoin."
+      }
+    },
+    "benefits": [
+      "Réduire les tickets de support de 70 %",
+      "Aide documentaire instantanée 24/7",
+      "Support multilingue",
+      "Compréhension avancée de l’IA",
+      "Réponses en temps réel",
+      "Traitement sécurisé des documents"
+    ],
+    "cta": {
+      "title": "Prêt à commencer ?",
+      "subtitle": "Rejoignez des milliers d’équipes qui utilisent déjà REFpaper pour transformer leur flux de documentation.",
+      "button": "Commencez gratuitement aujourd’hui"
+    }
+  },
+  "navigation": {
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "dashboard": "Tableau de bord",
+    "features": "Fonctionnalités",
+    "pricing": "Tarification"
+  },
+  "dashboard": {
+    "questionsThisMonth": "questions ce mois-ci",
+    "assistants": "assistants",
+    "chat": "Chat",
+    "clearChat": "Effacer le chat",
+    "searchAssistants": "Rechercher des assistants par nom, description ou domaine...",
+    "noResults": "Aucun assistant trouvé",
+    "noResultsDescription": "Aucun assistant ne correspond à votre recherche \"{query}\". Essayez un autre terme.",
+    "searchResults": "{count} assistant(s) trouvé(s)",
+    "clearSearch": "Effacer la recherche",
+    "noAssistants": "Pas encore d’assistants",
+    "noAssistantsDescription": "Créez votre premier assistant IA en fournissant des URLs de documentation. Transformez n’importe quel document en une base de connaissances intelligente.",
+    "documentsProcessed": "documents traités",
+    "processingDocuments": "Traitement des documents",
+    "failedToCreate": "Échec de la création de l’assistant. Vérifiez les paramètres pour plus de détails.",
+    "backToDashboard": "← Retour au tableau de bord",
+    "queuePosition": "Position dans la file : #{position}",
+    "estimatedWait": "Temps d’attente estimé : {time}"
+  },
+  "plans": {
+    "freePlan": "Plan gratuit",
+    "proPlan": "Plan Pro",
+    "of": "de",
+    "unlimited": "illimité",
+    "unlimitedQuestions": "∞ Questions illimitées avec le plan Pro"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez votre compte et votre utilisation",
+    "accountBilling": "Compte et facturation",
+    "usage": "Utilisation",
+    "aiAssistants": "Assistants IA",
+    "assistantsUsage": "Utilisation actuelle de vos assistants",
+    "assistantsRemaining": "{count} assistants restants",
+    "monthlyQuestions": "Questions mensuelles",
+    "questionsDescription": "Questions posées ce mois-ci",
+    "questionsRemaining": "{count} questions restantes",
+    "approachingLimit": "Limite mensuelle bientôt atteinte",
+    "approachingLimitDescription": "Vous utilisez la plupart de vos questions gratuites. Passez au plan Pro pour des questions illimitées.",
+    "usageCount": "Utilisation : {used}/{limit} questions ce mois-ci"
+  },
+  "chat": {
+    "assistantsSidebar": "Assistants",
+    "new": "Nouveau",
+    "documentationFrom": "Documentation de {hostname}",
+    "searchAssistants": "Rechercher des assistants...",
+    "noResults": "Aucun assistant trouvé",
+    "searchResults": "{count} trouvé(s)",
+    "clearSearch": "Effacer",
+    "noAssistantsFound": "Aucun assistant ne correspond à votre recherche",
+    "startConversation": "Démarrer une conversation",
+    "freshConversationInfo": "🎯 Je n’enregistre pas les questions précédentes",
+    "freshConversationDescription": "Chaque question est totalement indépendante afin de garantir des réponses précises directement à partir de votre documentation, sans interférence des conversations passées.",
+    "askAnything": "Demandez-moi n’importe quoi sur la documentation de {hostname}",
+    "tryAsking": "Essayez de demander :",
+    "howToGetStarted": "Comment commencer ?",
+    "mainFeatures": "Quelles sont les principales fonctionnalités ?",
+    "showExamples": "Montrez-moi des exemples",
+    "askQuestion": "Posez une question sur la documentation...",
+    "monthlyLimitReached": "Limite mensuelle atteinte - passez au plan Pro pour des questions illimitées",
+    "assistantNotReady": "L’assistant est {status}... Veuillez patienter",
+    "assistantNotReadyLong": "L’assistant est {status}. Veuillez attendre qu’il soit prêt avant de poser des questions.",
+    "monthlyLimitReachedTitle": "Limite mensuelle atteinte !",
+    "consultingDocs": "Je consulte la documentation"
+  },
+  "assistant": {
+    "createNew": "Créer un nouvel assistant",
+    "createDescription": "Créez un assistant IA entraîné sur votre documentation",
+    "createAssistant": "Créer un assistant",
+    "settings": "Paramètres de l’assistant",
+    "settingsDescription": "Gérer les paramètres de \"{name}\"",
+    "saveChanges": "Enregistrer les modifications",
+    "deleteAssistant": "Supprimer l’assistant",
+    "deleteConfirmation": "Confirmer la suppression",
+    "deleteWarning": "Cela supprimera définitivement :",
+    "deleteItem1": "• L’assistant et tous ses paramètres",
+    "deleteItem2": "• Tous les messages de chat et l’historique des conversations",
+    "deleteItem3": "• Tous les documents traités et leurs embeddings",
+    "assistantName": "Assistant : \"{name}\"",
+    "cancel": "Annuler",
+    "cancelling": "Annulation en cours",
+    "confirmCancel": "Confirmer l’annulation",
+    "cancelTitle": "Annuler la création de l’assistant",
+    "cancelDescription": "Êtes-vous sûr de vouloir annuler la création de cet assistant ?",
+    "form": {
+      "name": "Nom",
+      "docsUrl": "URL de la documentation",
+      "description": "Description",
+      "namePlaceholder": "Mon assistant de documentation",
+      "urlPlaceholder": "https://docs.example.com",
+      "descriptionPlaceholder": "Brève description de l’aide fournie par cet assistant...",
+      "crawlNote": "L’URL de départ à partir de laquelle nous allons explorer votre documentation",
+      "crawlExplanation": {
+        "title": "Comment fonctionne l’exploration :",
+        "step1": "Nous commençons à partir de votre URL et explorons automatiquement",
+        "step2": "Nous suivons les liens en profondeur (docs.com/guide → docs.com/guide/setup)",
+        "step3": "Nous ne remontons pas aux pages parentes (docs.com/guide ne trouvera pas docs.com/api)",
+        "result": "Résultat : Un assistant qui connaît toute la documentation connectée à votre point de départ"
+      },
+      "infoTitle": "Comment ça marche"
+    },
+    "freePlanLimits": {
+      "title": "Plan gratuit - Limitations :",
+      "specificSubpages": "Sous-pages spécifiques recommandées : ex. https://docs.convex.dev/functions au lieu de https://docs.convex.dev/",
+      "pageLimit": "Limite de 30 pages : si vous saisissez des URLs complètes, nous n’explorerons que les 30 premières pages",
+      "depthLimit": "Profondeur limitée : seulement 3 niveaux de sous-pages"
+    },
+    "creationError": "Échec de la création de l’assistant",
+    "errorDetails": "Détails de l’erreur",
+    "errorSuggestion": "Vous pouvez modifier les paramètres et réessayer de créer l’assistant, ou le supprimer."
+  },
+  "status": {
+    "queued": "En file d’attente"
+  },
+  "errors": {
+    "unauthorized": "Non autorisé",
+    "assistantNotReady": "L’assistant n’est pas encore prêt",
+    "assistantNotFound": "Assistant introuvable ou non autorisé",
+    "monthlyLimitReached": "Limite mensuelle de questions atteinte. Passez au plan Pro pour des questions illimitées.",
+    "assistantLimitFree": "Le plan gratuit est limité à 3 assistants. Passez au plan Pro pour 20 assistants.",
+    "assistantLimitPro": "Le plan Pro est limité à 20 assistants au total.",
+    "messageRequired": "Message requis",
+    "nameAndUrlRequired": "Nom et URL de documentation requis",
+    "failedToSend": "Échec de l’envoi du message",
+    "failedToCreate": "Échec de la création de l’assistant",
+    "assistantLimitReached": "Limite d’assistants atteinte !",
+    "upgradeToCreateNew": "Vous devez passer au plan Pro pour créer de nouveaux assistants.",
+    "questionsExhausted": "Vous avez utilisé vos 20 questions gratuites ce mois-ci. Vous ne pouvez plus créer de nouveaux assistants ni poser de questions avant de passer au plan Pro.",
+    "fieldRequired": "{fieldName} est requis",
+    "invalidUrl": "Veuillez saisir une URL valide",
+    "networkError": "Échec de connexion. Vérifiez votre connexion internet et réessayez.",
+    "crawlTimeout": "L’exploration de la documentation a pris trop de temps. Le site peut être lent ou avoir trop de pages. Essayez une URL plus spécifique comme /docs/getting-started au lieu de /docs.",
+    "serverError": "Erreur serveur. Veuillez réessayer dans quelques instants.",
+    "systemError": "Nous rencontrons un problème temporaire avec nos services. Veuillez réessayer plus tard ou contacter le support si le problème persiste.",
+    "unknownError": "Une erreur inattendue est survenue. Veuillez réessayer ou contacter le support si le problème persiste.",
+    "minLength": "{fieldName} doit contenir au moins {count} caractères",
+    "maxLength": "{fieldName} ne doit pas dépasser {count} caractères",
+    "validationFailed": "Échec de la validation. Veuillez vérifier le format de l’URL."
+  },
+  "upgrade": {
+    "required": "Mise à niveau requise",
+    "description": "Vous avez atteint la limite de votre plan. Passez au plan Pro pour plus d’assistants et des questions illimitées.",
+    "toPro": "Passer au plan Pro",
+    "getUnlimited": "Obtenez {feature} illimités"
+  },
+  "footer": {
+    "description": "Transformez n’importe quelle documentation en assistant de connaissances IA en quelques secondes. Optimisez le support, réduisez les coûts et développez les connaissances sans effort.",
+    "product": "Produit",
+    "copyright": "© 2025 REFpaper."
+  },
+  "notFound": {
+    "title": "Ressource introuvable dans la matrice de connaissances",
+    "backHome": "Retour à la base",
+    "backDashboard": "Accéder au tableau de bord",
+    "tryThese": "Modules système disponibles"
+  },
+  "pricing": {
+    "title": "Simple, Transparent",
+    "titleHighlight": "Tarification",
+    "subtitle": "Choisissez le plan parfait pour vos besoins en documentation. Commencez gratuitement, passez à l’offre supérieure quand vous êtes prêt.",
+    "choosePlan": "Choisissez votre plan",
+    "choosePlanDescription": "Sélectionnez le plan qui correspond le mieux à vos besoins et commencez à transformer votre documentation dès aujourd’hui.",
+    "whyChoose": "Pourquoi choisir REFpaper ?",
+    "whyChooseDescription": "Des fonctionnalités puissantes qui rendent votre documentation efficace",
+    "faqTitle": "Foire aux questions",
+    "faqDescription": "Tout ce que vous devez savoir sur nos tarifs",
+    "ctaTitle": "Prêt à transformer votre documentation ?",
+    "ctaDescription": "Rejoignez des milliers d’équipes qui ont révolutionné leur flux de documentation avec REFpaper.",
+    "startFreeTrial": "Démarrer l’essai gratuit",
+    "scheduleDemo": "Planifier une démo",
+    "features": {
+      "aiPowered": {
+        "title": "Documentation alimentée par l’IA",
+        "description": "Transformez n’importe quelle documentation en un assistant intelligent qui comprend le contexte et fournit des réponses précises."
+      },
+      "lightningFast": {
+        "title": "Réponses ultra-rapides",
+        "description": "Obtenez des réponses instantanées à partir de votre documentation grâce à notre traitement IA optimisé et notre système de mise en cache."
+      },
+      "naturalConversations": {
+        "title": "Conversations naturelles",
+        "description": "Discutez naturellement avec votre documentation grâce au traitement avancé du langage naturel."
+      }
+    },
+    "faqs": {
+      "freePlan": {
+        "question": "Comment fonctionne le plan gratuit ?",
+        "answer": "Le plan gratuit vous offre 3 assistants IA et 20 questions par mois. Parfait pour tester REFpaper avec de petites documentations."
+      },
+      "whatCounts": {
+        "question": "Qu’est-ce qui compte comme une « question » ?",
+        "answer": "Chaque message que vous envoyez à un assistant IA compte comme une question. Les questions de suivi dans la même conversation comptent également."
+      },
+      "upgradeDowngrade": {
+        "question": "Puis-je mettre à niveau ou rétrograder à tout moment ?",
+        "answer": "Oui ! Vous pouvez passer au plan Pro à tout moment. Si vous rétrogradez, vous conservez les fonctionnalités Pro jusqu’à la fin de votre période de facturation."
+      },
+      "documentationTypes": {
+        "question": "Quels types de documentation puis-je utiliser ?",
+        "answer": "REFpaper fonctionne avec toute documentation en ligne, y compris les wikis, docs API, bases de connaissances et plus encore."
+      },
+      "sizeLimit": {
+        "question": "Y a-t-il une limite de taille pour la documentation ?",
+        "answer": "Plan gratuit : jusqu’à 30 pages par assistant. Plan Pro : pages illimitées avec des capacités d’exploration avancées."
+      },
+      "enterprise": {
+        "question": "Proposez-vous des plans entreprise personnalisés ?",
+        "answer": "Oui ! Contactez-nous pour des solutions sur mesure avec support dédié, intégrations personnalisées et tarifs adaptés."
+      }
+    }
+  }
+}

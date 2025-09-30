@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 // Define supported locales
-export const locales = ["en", "it"] as const;
+export const locales = ["en", "it", "fr", "es"] as const;
 export type Locale = (typeof locales)[number];
 
 // Default locale
@@ -28,6 +28,8 @@ export function getLocale(pathname: string): Locale {
 const dictionaries = {
   en: () => import("@/messages/en.json").then((module) => module.default),
   it: () => import("@/messages/it.json").then((module) => module.default),
+  fr: () => import("@/messages/fr.json").then((module) => module.default),
+  es: () => import("@/messages/es.json").then((module) => module.default),
 } as const;
 
 export async function getDictionary(locale: Locale) {
@@ -60,7 +62,7 @@ export function getTranslation(
   let value: unknown = dict;
 
   for (const k of keys) {
-    if (value && typeof value === 'object' && k in value) {
+    if (value && typeof value === "object" && k in value) {
       value = (value as Record<string, unknown>)[k];
     } else {
       value = undefined;
@@ -90,6 +92,16 @@ export const languages = {
   it: {
     name: "Italiano",
     flag: "🇮🇹",
+    dir: "ltr" as const,
+  },
+  fr: {
+    name: "Français",
+    flag: "🇫🇷",
+    dir: "ltr" as const,
+  },
+  es: {
+    name: "Español",
+    flag: "🇪🇸",
     dir: "ltr" as const,
   },
 } as const;
