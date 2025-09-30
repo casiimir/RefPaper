@@ -198,6 +198,8 @@
     "cancel": "Annulla",
     "cancelling": "Annullamento",
     "confirmCancel": "Conferma Annullamento",
+    "cancelTitle": "Annulla Creazione Assistente",
+    "cancelDescription": "Sei sicuro di voler annullare la creazione di questo assistente?",
     "form": {
       "name": "Nome",
       "docsUrl": "URL Documentazione",

@@ -241,6 +241,8 @@
     "cancel": "Cancel",
     "cancelling": "Cancelling",
     "confirmCancel": "Confirm Cancel",
+    "cancelTitle": "Cancel Assistant Creation",
+    "cancelDescription": "Are you sure you want to cancel creating this assistant?",
     "form": {
       "name": "Name",
       "docsUrl": "Docs URL",
