@@ -3,14 +3,24 @@
 import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
 import { ChatInterface } from "@/components/chat/ChatInterface";
 import { AssistantSidebar } from "@/components/chat/AssistantSidebar";
 import { Navbar } from "@/components/navbar";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Assistant } from "@/types/assistant";
+
+// Hook wrapper to safely handle Convex queries that might fail
+function useSafeQuery<T>(query: unknown, args: unknown): T | null | undefined {
+  try {
+    return useQuery(query as Parameters<typeof useQuery>[0], args as Parameters<typeof useQuery>[1]);
+  } catch (error) {
+    console.error("Query error:", error);
+    return null;
+  }
+}
 
 export default function AssistantPage() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -19,9 +29,20 @@ export default function AssistantPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  const assistant = useQuery(
-    api.assistants.getAssistant,
-    isLoaded && isSignedIn ? { id: assistantId as Id<"assistants"> } : "skip"
+  // Basic validation before querying
+  const isBasicValidId = assistantId && assistantId.length >= 16 && /^[a-zA-Z0-9_-]+$/.test(assistantId);
+
+  // If ID format is clearly invalid, show 404 immediately
+  useEffect(() => {
+    if (isLoaded && assistantId && !isBasicValidId) {
+      notFound();
+    }
+  }, [isLoaded, assistantId, isBasicValidId]);
+
+  // Use safe query wrapper only for potentially valid IDs
+  const assistant = useSafeQuery<Assistant>(
+    api.assistants.getAssistantSafe,
+    isLoaded && isSignedIn && isBasicValidId ? { id: assistantId } : "skip"
   );
 
   const assistants = useQuery(
@@ -117,7 +138,42 @@ export default function AssistantPage() {
   }
 
   if (assistant === null) {
-    redirect("/dashboard");
+    notFound();
+  }
+
+  // Type guard to ensure assistant is not null/undefined before rendering
+  if (!assistant || typeof assistant !== 'object' || !assistant._id) {
+    return (
+      <div className="flex flex-col h-screen w-full bg-background">
+        <Navbar />
+        <div className="flex flex-1 overflow-hidden pt-14">
+          <div className="w-80 border-r bg-background p-4 space-y-4">
+            <Skeleton className="h-8 w-32" />
+            <div className="space-y-2">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col">
+            <div className="flex-1 p-4 space-y-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex gap-3">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-16 w-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="border-t p-4">
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

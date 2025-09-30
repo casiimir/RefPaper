@@ -33,6 +33,13 @@ export async function POST(
       id: assistantId as Id<"assistants">,
     });
 
+    if (!assistant) {
+      return NextResponse.json(
+        { error: ERROR_MESSAGES.ASSISTANT_NOT_FOUND },
+        { status: 404 }
+      );
+    }
+
     if (assistant.status !== "ready") {
       return NextResponse.json(
         { error: ERROR_MESSAGES.ASSISTANT_NOT_READY },

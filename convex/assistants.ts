@@ -32,12 +32,45 @@ export const getAssistant = query({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
 
-    const assistant = await ctx.db.get(id);
-    if (!assistant || assistant.userId !== identity.subject) {
-      throw new Error("Assistant not found or unauthorized");
+    try {
+      const assistant = await ctx.db.get(id);
+      if (!assistant || assistant.userId !== identity.subject) {
+        return null;
+      }
+      return assistant;
+    } catch (error) {
+      // Invalid ID format or other errors - return null for 404 handling
+      return null;
+    }
+  },
+});
+
+// Safe version that accepts string and validates internally
+export const getAssistantSafe = query({
+  args: { id: v.string() },
+  handler: async (ctx, { id }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    // Basic validation - Convex IDs should be at least 16 chars and alphanumeric with _ and -
+    if (!id || id.length < 16 || !/^[a-zA-Z0-9_-]+$/.test(id)) {
+      return null;
     }
 
-    return assistant;
+    try {
+      // Query all user's assistants and find the one with matching ID
+      const assistants = await ctx.db
+        .query("assistants")
+        .withIndex("by_user", (q) => q.eq("userId", identity.subject))
+        .collect();
+
+      const assistant = assistants.find(a => a._id === id);
+      return assistant || null;
+    } catch (error) {
+      // Invalid ID format or other errors - return null for 404 handling
+      console.log("Invalid ID format:", id, error);
+      return null;
+    }
   },
 });
 

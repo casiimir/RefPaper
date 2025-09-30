@@ -1,5 +1,6 @@
 export interface Assistant {
   _id: string;
+  userId: string;
   name: string;
   description?: string;
   docsUrl: string;
@@ -9,4 +10,8 @@ export interface Assistant {
   pineconeNamespace?: string;
   errorMessage?: string;
   createdAt?: number;
+  updatedAt: number;
+  lastCrawledAt?: number;
+  isPublic?: boolean;
+  publicShareId?: string;
 }
