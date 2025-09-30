@@ -4,6 +4,7 @@ import { shadcn } from "@clerk/themes";
 import ConvexClientProvider from "@/components/providers/ConvexClientProvider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { TranslationProvider } from "@/components/providers/TranslationProvider";
+import { WelcomeEmailProvider } from "@/components/providers/WelcomeEmailProvider";
 import { LayoutWrapper } from "@/components/layout-wrapper";
 import { getDictionary, defaultLocale } from "@/lib/i18n";
 import "./globals.css";
@@ -35,7 +36,9 @@ export default async function RootLayout({
                 dictionary={dictionary}
                 locale={defaultLocale}
               >
-                <LayoutWrapper>{children}</LayoutWrapper>
+                <WelcomeEmailProvider>
+                  <LayoutWrapper>{children}</LayoutWrapper>
+                </WelcomeEmailProvider>
               </TranslationProvider>
             </ThemeProvider>
           </ConvexClientProvider>

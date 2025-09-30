@@ -20,6 +20,7 @@ import type * as crons from "../crons.js";
 import type * as documents from "../documents.js";
 import type * as messages from "../messages.js";
 import type * as usage from "../usage.js";
+import type * as welcome from "../welcome.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   documents: typeof documents;
   messages: typeof messages;
   usage: typeof usage;
+  welcome: typeof welcome;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
