@@ -17,7 +17,7 @@
     "reject": "Rechazar todo"
   },
   "app": {
-    "name": "REFpaper"
+    "name": "RefPaper"
   },
   "homepage": {
     "hero": {
@@ -30,7 +30,7 @@
       "trustedBy": "Confiado por equipos en"
     },
     "features": {
-      "title": "¿Por qué elegir REFpaper?",
+      "title": "¿Por qué elegir",
       "subtitle": "Todo lo que necesitas para transformar tu flujo de trabajo de documentación",
       "instant": {
         "title": "Configuración en 30 segundos",
@@ -59,7 +59,7 @@
     },
     "cta": {
       "title": "¿Listo para transformar tu documentación?",
-      "subtitle": "Únete a miles de equipos que ya usan REFpaper para escalar su conocimiento y reducir la carga de soporte.",
+      "subtitle": "Únete a miles de equipos que ya usan RefPaper para escalar su conocimiento y reducir la carga de soporte.",
       "button": "Empieza Gratis"
     }
   },
@@ -68,12 +68,12 @@
     "hero": {
       "title": "Desbloquea el Potencial Completo",
       "titleHighlight": "de tu Documentación",
-      "subtitle": "Descubre cómo las funciones avanzadas de REFpaper pueden revolucionar la forma en que tu equipo trabaja con la documentación y el intercambio de conocimiento."
+      "subtitle": "Descubre cómo las funciones avanzadas de RefPaper pueden revolucionar la forma en que tu equipo trabaja con la documentación y el intercambio de conocimiento."
     },
     "sections": {
       "core": {
         "title": "Funciones Básicas",
-        "subtitle": "Herramientas esenciales que hacen a REFpaper poderoso"
+        "subtitle": "Herramientas esenciales que hacen a RefPaper poderoso"
       },
       "advanced": {
         "title": "Capacidades Avanzadas",
@@ -148,7 +148,7 @@
     ],
     "cta": {
       "title": "¿Listo para comenzar?",
-      "subtitle": "Únete a miles de equipos que ya usan REFpaper para transformar su flujo de trabajo de documentación.",
+      "subtitle": "Únete a miles de equipos que ya usan RefPaper para transformar su flujo de trabajo de documentación.",
       "button": "Comienza Gratis Hoy"
     }
   },
@@ -308,7 +308,7 @@
   "footer": {
     "description": "Transforma cualquier documentación en un asistente de conocimiento de IA en segundos. Mejora soporte, reduce costos y escala el conocimiento sin esfuerzo.",
     "product": "Producto",
-    "copyright": "© 2025 REFpaper."
+    "copyright": "© 2025 RefPaper."
   },
   "notFound": {
     "title": "Recurso no encontrado en la matriz de conocimiento",
@@ -322,12 +322,12 @@
     "subtitle": "Elige el plan perfecto para tus necesidades de documentación. Comienza gratis, actualiza cuando estés listo.",
     "choosePlan": "Elige tu plan",
     "choosePlanDescription": "Selecciona el plan que mejor se adapte a tus necesidades y comienza a transformar tu documentación hoy.",
-    "whyChoose": "¿Por qué elegir REFpaper?",
+    "whyChoose": "¿Por qué elegir",
     "whyChooseDescription": "Funciones poderosas que hacen que tu documentación trabaje para ti",
     "faqTitle": "Preguntas frecuentes",
     "faqDescription": "Todo lo que necesitas saber sobre nuestros precios",
     "ctaTitle": "¿Listo para transformar tu documentación?",
-    "ctaDescription": "Únete a miles de equipos que han revolucionado su flujo de trabajo de documentación con REFpaper.",
+    "ctaDescription": "Únete a miles de equipos que han revolucionado su flujo de trabajo de documentación con RefPaper.",
     "startFreeTrial": "Comenzar prueba gratuita",
     "scheduleDemo": "Programar demo",
     "features": {
@@ -347,7 +347,7 @@
     "faqs": {
       "freePlan": {
         "question": "¿Cómo funciona el plan gratuito?",
-        "answer": "El plan gratuito te da 3 asistentes de IA y 20 preguntas por mes. Perfecto para probar REFpaper con conjuntos de documentación más pequeños."
+        "answer": "El plan gratuito te da 3 asistentes de IA y 20 preguntas por mes. Perfecto para probar RefPaper con conjuntos de documentación más pequeños."
       },
       "whatCounts": {
         "question": "¿Qué cuenta como 'pregunta'?",
@@ -359,7 +359,7 @@
       },
       "documentationTypes": {
         "question": "¿Qué tipos de documentación puedo usar?",
-        "answer": "REFpaper funciona con cualquier documentación basada en web incluyendo wikis, documentación API, bases de conocimiento y más."
+        "answer": "RefPaper funciona con cualquier documentación basada en web incluyendo wikis, documentación API, bases de conocimiento y más."
       },
       "sizeLimit": {
         "question": "¿Hay límite en el tamaño de la documentación?",

@@ -110,7 +110,11 @@ export default function PricingPage() {
         <div className="mb-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">
-              {t("pricing.whyChoose")}
+              <span>{t("homepage.features.title")} </span>
+              <span className="py-2 pl-4 bg-primary text-secondary">Ref</span>
+              <span className="py-2 pr-4 bg-primary text-secondary font-light">
+                Paper
+              </span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               {t("pricing.whyChooseDescription")}

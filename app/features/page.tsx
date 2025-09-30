@@ -183,7 +183,7 @@ export default function FeaturesPage() {
               {t("features.sections.core.subtitle")}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Essential tools that make REFpaper powerful and easy to use
+              Essential tools that make RefPaper powerful and easy to use
             </p>
           </div>
 

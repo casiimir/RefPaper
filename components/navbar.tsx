@@ -23,11 +23,14 @@ export function Navbar() {
   }, []);
 
   // Determine logo based on theme (only after mounting to avoid hydration mismatch)
-  const isDarkMode = mounted && (theme === "dark" ||
-    (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches));
+  const isDarkMode =
+    mounted &&
+    (theme === "dark" ||
+      (theme === "system" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches));
 
   const logoSrc = isDarkMode ? "/logo-white.png" : "/logo-black.png";
-  const logoAlt = isDarkMode ? "REFpaper logo white" : "REFpaper logo black";
+  const logoAlt = isDarkMode ? "RefPaper logo white" : "RefPaper logo black";
 
   return (
     <nav className="fixed top-0 left-0 right-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">

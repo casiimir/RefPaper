@@ -17,19 +17,19 @@
     "reject": "Rifiuta Tutto"
   },
   "app": {
-    "name": "REFpaper"
+    "name": "RefPaper"
   },
   "features": {
     "title": "Funzionalità Potenti",
     "hero": {
       "title": "Sblocca il Pieno Potenziale",
       "titleHighlight": "della Tua Documentazione",
-      "subtitle": "Scopri come le funzionalità avanzate di REFpaper possono rivoluzionare il modo in cui il tuo team lavora con la documentazione e la condivisione della conoscenza."
+      "subtitle": "Scopri come le funzionalità avanzate di RefPaper possono rivoluzionare il modo in cui il tuo team lavora con la documentazione e la condivisione della conoscenza."
     },
     "sections": {
       "core": {
         "title": "Funzionalità Principali",
-        "subtitle": "Strumenti essenziali che rendono REFpaper potente"
+        "subtitle": "Strumenti essenziali che rendono RefPaper potente"
       },
       "advanced": {
         "title": "Capacità Avanzate",
@@ -104,7 +104,7 @@
     ],
     "cta": {
       "title": "Pronto per Iniziare?",
-      "subtitle": "Unisciti a migliaia di team che già usano REFpaper per trasformare il loro flusso di lavoro di documentazione.",
+      "subtitle": "Unisciti a migliaia di team che già usano RefPaper per trasformare il loro flusso di lavoro di documentazione.",
       "button": "Inizia Gratis Oggi"
     }
   },
@@ -266,7 +266,7 @@
   "footer": {
     "description": "Trasforma qualsiasi documentazione in un assistente AI in pochi secondi. Migliora il supporto, riduci i costi e scala la conoscenza senza sforzo.",
     "product": "Prodotto",
-    "copyright": "© 2025 REFpaper."
+    "copyright": "© 2025 RefPaper."
   },
   "notFound": {
     "title": "Risorsa non trovata nella matrice di conoscenza",
@@ -280,12 +280,12 @@
     "subtitle": "Scegli il piano perfetto per le tue esigenze di documentazione. Inizia gratis, aggiorna quando sei pronto.",
     "choosePlan": "Scegli il Tuo Piano",
     "choosePlanDescription": "Seleziona il piano che meglio si adatta alle tue esigenze e inizia a trasformare la tua documentazione oggi.",
-    "whyChoose": "Perché Scegliere REFpaper?",
+    "whyChoose": "Perché Scegliere",
     "whyChooseDescription": "Funzionalità potenti che fanno lavorare la tua documentazione per te",
     "faqTitle": "Domande Frequenti",
     "faqDescription": "Tutto quello che devi sapere sui nostri prezzi",
     "ctaTitle": "Pronto a Trasformare la Tua Documentazione?",
-    "ctaDescription": "Unisciti a migliaia di team che hanno rivoluzionato il loro flusso di lavoro di documentazione con REFpaper.",
+    "ctaDescription": "Unisciti a migliaia di team che hanno rivoluzionato il loro flusso di lavoro di documentazione con RefPaper.",
     "startFreeTrial": "Inizia Prova Gratuita",
     "scheduleDemo": "Programma Demo",
     "features": {
@@ -305,7 +305,7 @@
     "faqs": {
       "freePlan": {
         "question": "Come funziona il piano gratuito?",
-        "answer": "Il piano gratuito ti offre 3 assistenti AI e 20 domande al mese. Perfetto per testare REFpaper con set di documentazione più piccoli."
+        "answer": "Il piano gratuito ti offre 3 assistenti AI e 20 domande al mese. Perfetto per testare RefPaper con set di documentazione più piccoli."
       },
       "whatCounts": {
         "question": "Cosa conta come 'domanda'?",
@@ -317,7 +317,7 @@
       },
       "documentationTypes": {
         "question": "Che tipi di documentazione posso usare?",
-        "answer": "REFpaper funziona con qualsiasi documentazione basata sul web inclusi wiki, documenti API, basi di conoscenza e altro."
+        "answer": "RefPaper funziona con qualsiasi documentazione basata sul web inclusi wiki, documenti API, basi di conoscenza e altro."
       },
       "sizeLimit": {
         "question": "C'è un limite sulla dimensione della documentazione?",
@@ -340,7 +340,7 @@
       "trustedBy": "Di fiducia per team di"
     },
     "features": {
-      "title": "Perché Scegliere REFpaper?",
+      "title": "Perché Scegliere",
       "subtitle": "Tutto quello che serve per trasformare il tuo flusso di lavoro di documentazione",
       "instant": {
         "title": "Setup da 30 Secondi",
@@ -369,7 +369,7 @@
     },
     "cta": {
       "title": "Pronto a Trasformare la Tua Documentazione?",
-      "subtitle": "Unisciti a migliaia di team che già usano REFpaper per scalare la loro conoscenza e ridurre il carico di supporto.",
+      "subtitle": "Unisciti a migliaia di team che già usano RefPaper per scalare la loro conoscenza e ridurre il carico di supporto.",
       "button": "Inizia Gratis"
     }
   }

@@ -17,7 +17,7 @@
     "reject": "Reject All"
   },
   "app": {
-    "name": "REFpaper"
+    "name": "RefPaper"
   },
   "homepage": {
     "hero": {
@@ -30,7 +30,7 @@
       "trustedBy": "Trusted by teams at"
     },
     "features": {
-      "title": "Why Choose REFpaper?",
+      "title": "Why Choose",
       "subtitle": "Everything you need to transform your documentation workflow",
       "instant": {
         "title": "30-Second Setup",
@@ -59,7 +59,7 @@
     },
     "cta": {
       "title": "Ready to Transform Your Documentation?",
-      "subtitle": "Join thousands of teams already using REFpaper to scale their knowledge and reduce support overhead.",
+      "subtitle": "Join thousands of teams already using RefPaper to scale their knowledge and reduce support overhead.",
       "button": "Get Started Free"
     }
   },
@@ -68,12 +68,12 @@
     "hero": {
       "title": "Unlock the Full Potential",
       "titleHighlight": "of Your Documentation",
-      "subtitle": "Discover how REFpaper's advanced features can revolutionize the way your team works with documentation and knowledge sharing."
+      "subtitle": "Discover how RefPaper's advanced features can revolutionize the way your team works with documentation and knowledge sharing."
     },
     "sections": {
       "core": {
         "title": "Core Features",
-        "subtitle": "Essential tools that make REFpaper powerful"
+        "subtitle": "Essential tools that make RefPaper powerful"
       },
       "advanced": {
         "title": "Advanced Capabilities",
@@ -148,7 +148,7 @@
     ],
     "cta": {
       "title": "Ready to Get Started?",
-      "subtitle": "Join thousands of teams already using REFpaper to transform their documentation workflow.",
+      "subtitle": "Join thousands of teams already using RefPaper to transform their documentation workflow.",
       "button": "Start Free Today"
     }
   },
@@ -307,7 +307,7 @@
   "footer": {
     "description": "Transform any documentation into an AI knowledge assistant in seconds. Boost support, reduce costs, and scale knowledge effortlessly.",
     "product": "Product",
-    "copyright": "© 2025 REFpaper."
+    "copyright": "© 2025 RefPaper."
   },
   "notFound": {
     "title": "Resource not found in knowledge matrix",
@@ -321,12 +321,12 @@
     "subtitle": "Choose the perfect plan for your documentation needs. Start free, upgrade when you're ready.",
     "choosePlan": "Choose Your Plan",
     "choosePlanDescription": "Select the plan that best fits your needs and start transforming your documentation today.",
-    "whyChoose": "Why Choose REFpaper?",
+    "whyChoose": "Why Choose",
     "whyChooseDescription": "Powerful features that make your documentation work for you",
     "faqTitle": "Frequently Asked Questions",
     "faqDescription": "Everything you need to know about our pricing",
     "ctaTitle": "Ready to Transform Your Documentation?",
-    "ctaDescription": "Join thousands of teams who have revolutionized their documentation workflow with REFpaper.",
+    "ctaDescription": "Join thousands of teams who have revolutionized their documentation workflow with RefPaper.",
     "startFreeTrial": "Start Free Trial",
     "scheduleDemo": "Schedule Demo",
     "features": {
@@ -346,7 +346,7 @@
     "faqs": {
       "freePlan": {
         "question": "How does the free plan work?",
-        "answer": "The free plan gives you 3 AI assistants and 20 questions per month. Perfect for testing REFpaper with smaller documentation sets."
+        "answer": "The free plan gives you 3 AI assistants and 20 questions per month. Perfect for testing RefPaper with smaller documentation sets."
       },
       "whatCounts": {
         "question": "What counts as a 'question'?",
@@ -358,7 +358,7 @@
       },
       "documentationTypes": {
         "question": "What types of documentation can I use?",
-        "answer": "REFpaper works with any web-based documentation including wikis, API docs, knowledge bases, and more."
+        "answer": "RefPaper works with any web-based documentation including wikis, API docs, knowledge bases, and more."
       },
       "sizeLimit": {
         "question": "Is there a limit on documentation size?",

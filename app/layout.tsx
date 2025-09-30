@@ -10,9 +10,9 @@ import { getDictionary, defaultLocale } from "@/lib/i18n";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "REFpaper",
+  title: "RefPaper",
   description:
-    "Turn documentation into an AI knowledge assistant. REFpaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge.",
+    "Turn documentation into an AI knowledge assistant. RefPaper helps teams, startups and enterprises boost support, reduce costs, and scale knowledge.",
 };
 
 export default async function RootLayout({
