@@ -387,7 +387,7 @@ export default function Dashboard() {
                               className="w-5 h-5"
                             />
                           </div>
-                          <CardTitle className="text-lg">
+                          <CardTitle className="text-lg break-words">
                             {assistant.name}
                           </CardTitle>
                         </div>

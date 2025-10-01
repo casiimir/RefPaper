@@ -77,7 +77,7 @@ export default function PricingPage() {
         {/* Clerk Pricing Table */}
         <div className="mb-16">
           <div
-            style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 1rem" }}
+            style={{ maxWidth: "700px", margin: "0 auto", padding: "0 1rem" }}
           >
             <PricingTable
               appearance={{
