@@ -220,7 +220,7 @@
     "showExamples": "Muéstrame ejemplos",
     "askQuestion": "Haz una pregunta sobre la documentación...",
     "monthlyLimitReached": "Límite mensual alcanzado - actualiza a Pro para preguntas ilimitadas",
-    "assistantNotReady": "El asistente está {status}... Por favor espera",
+    "assistantNotReady": "Asistente - {status}... Por favor espera",
     "assistantNotReadyLong": "El asistente está {status}. Espera a que esté listo antes de hacer preguntas.",
     "monthlyLimitReachedTitle": "¡Límite mensual alcanzado!",
     "consultingDocs": "Estoy consultando la documentación",

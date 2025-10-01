@@ -219,7 +219,7 @@
     "showExamples": "Montrez-moi des exemples",
     "askQuestion": "Posez une question sur la documentation...",
     "monthlyLimitReached": "Limite mensuelle atteinte - passez au plan Pro pour des questions illimitées",
-    "assistantNotReady": "L’assistant est {status}... Veuillez patienter",
+    "assistantNotReady": "Assistant - {status}... Veuillez patienter",
     "assistantNotReadyLong": "L’assistant est {status}. Veuillez attendre qu’il soit prêt avant de poser des questions.",
     "monthlyLimitReachedTitle": "Limite mensuelle atteinte !",
     "consultingDocs": "Je consulte la documentation",
