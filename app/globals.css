@@ -92,7 +92,8 @@
   }
 
   img {
-    user-select: none !important;
+    user-select: none;
+    -webkit-user-drag: none;
   }
 }
 
