@@ -24,6 +24,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useTranslation } from "@/components/providers/TranslationProvider";
+import { DemoDialog } from "@/components/DemoDialog";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -100,14 +101,12 @@ export default function Home() {
             <Authenticated>
               <Link href="/dashboard">
                 <Button size="lg" className="text-lg px-8 py-4 font-semibold">
-                  Go to Dashboard
+                  {t("navigation.dashboard")}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
             </Authenticated>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-4">
-              {t("homepage.hero.ctaSecondary")}
-            </Button>
+            <DemoDialog />
           </div>
 
           {/* Benefits List */}
@@ -185,7 +184,7 @@ export default function Home() {
             <Authenticated>
               <Link href="/dashboard">
                 <Button size="lg" className="text-lg px-8 py-4 font-semibold">
-                  Go to Dashboard
+                  {t("navigation.dashboard")}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>

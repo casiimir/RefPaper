@@ -5,7 +5,7 @@ const cspHeader = `
   img-src 'self' https://img.clerk.com https://*.google.com https://*.gstatic.com;
   worker-src 'self' blob:;
   style-src 'self' 'unsafe-inline';
-  frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com https://*.stripe.com;
+  frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com https://*.stripe.com https://app.supademo.com;
   form-action 'self';
 `;
 
