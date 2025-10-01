@@ -52,6 +52,9 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">
             {t("footer.copyright")}
           </p>
+          <p className="text-xs text-muted-foreground mt-2 sm:mt-0">
+            {t("footer.contactUs")}
+          </p>
         </div>
       </div>
     </footer>

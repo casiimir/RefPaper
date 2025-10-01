@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTheme } from "@/components/providers/theme-provider";
+import { useTranslation } from "@/components/providers/TranslationProvider";
 
 interface ChatRobotProps {
   isVisible: boolean;
@@ -10,6 +11,7 @@ interface ChatRobotProps {
 
 export function ChatRobot({ isVisible }: ChatRobotProps) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch
@@ -40,7 +42,7 @@ export function ChatRobot({ isVisible }: ChatRobotProps) {
           alt="AI thinking"
           className="w-8 h-8"
         />
-        <span className="text-sm text-muted-foreground">Thinking...</span>
+        <span className="text-sm text-muted-foreground">{t("chat.thinking")}</span>
       </div>
     </div>
   );

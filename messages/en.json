@@ -222,7 +222,8 @@
     "assistantNotReady": "Assistant is {status}... Please wait",
     "assistantNotReadyLong": "Assistant is {status}. Please wait for it to be ready before asking questions.",
     "monthlyLimitReachedTitle": "Monthly limit reached!",
-    "consultingDocs": "I'm consulting the documentation"
+    "consultingDocs": "I'm consulting the documentation",
+    "thinking": "Thinking..."
   },
   "assistant": {
     "createNew": "Create New Assistant",
@@ -312,7 +313,8 @@
   "footer": {
     "description": "Transform any documentation into an AI knowledge assistant in seconds. Boost support, reduce costs, and scale knowledge effortlessly.",
     "product": "Product",
-    "copyright": "© 2025 RefPaper."
+    "copyright": "© 2025 RefPaper.",
+    "contactUs": "Contact us: refpaper@writeme.com"
   },
   "notFound": {
     "title": "Resource not found in knowledge matrix",

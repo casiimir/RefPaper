@@ -179,7 +179,8 @@
     "assistantNotReady": "L'assistente è {status}... Attendi",
     "assistantNotReadyLong": "L'assistente è {status}. Attendi che sia pronto prima di fare domande.",
     "monthlyLimitReachedTitle": "Limite mensile raggiunto!",
-    "consultingDocs": "Sto consultando la documentazione"
+    "consultingDocs": "Sto consultando la documentazione",
+    "thinking": "Sto pensando..."
   },
   "assistant": {
     "createNew": "Crea Nuovo Assistente",
@@ -271,7 +272,8 @@
   "footer": {
     "description": "Trasforma qualsiasi documentazione in un assistente AI in pochi secondi. Migliora il supporto, riduci i costi e scala la conoscenza senza sforzo.",
     "product": "Prodotto",
-    "copyright": "© 2025 RefPaper."
+    "copyright": "© 2025 RefPaper.",
+    "contactUs": "Contattaci: refpaper@writeme.com"
   },
   "notFound": {
     "title": "Risorsa non trovata nella matrice di conoscenza",
