@@ -23,14 +23,7 @@ export function useWelcomeEmail() {
 
       // If user was created within the last 30 seconds, consider it a new signup
       if (timeDiffMinutes <= 0.5) {
-        triggerWelcomeEmail()
-          .then((result) => {
-            console.log("Welcome email triggered successfully:", result);
-          })
-          .catch((error) => {
-            console.error("Failed to trigger welcome email:", error);
-            // Don't block the user experience if email fails
-          });
+        triggerWelcomeEmail().then((result) => {});
 
         hasTriggeredRef.current = true;
       }

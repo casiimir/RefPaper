@@ -186,7 +186,6 @@ const priorities = {
 - **User Management**: Complete auth flow with social providers
 - **Subscription Billing**: Integrated Stripe payments
 - **Plan Management**: Free/Pro tier enforcement
-- **Webhooks**: Real-time user lifecycle events
 
 ### Resend Email Service
 
